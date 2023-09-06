@@ -5,6 +5,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from '@ap
 import Header from './components/header';  // This will automatically import from Header/index.js
 import Exercise from './pages/Exercise';
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -36,6 +37,8 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Exercise />} />
+          <Route path="/exercise" element={<Exercise />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
         </Routes>
       </Router>
