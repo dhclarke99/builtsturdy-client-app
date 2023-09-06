@@ -69,8 +69,8 @@ const resolvers = {
     createExercise: async (_, { name, sets, reps, weight, notes }) => {
       return await Exercise.create({ name, sets, reps, weight, notes });
     },
-    createWorkout: async (_, { name, exercises, date }) => {
-      return await Workout.create({ name, exercises, date });
+    createWorkout: async (_, { name, exercises }) => {
+      return await Workout.create({ name, exercises });
     },    
   },
 };

@@ -1,0 +1,23 @@
+[
+    {
+      "name": "Pull Up",
+      "sets": 3,
+      "reps": 8,
+      "weight": 60,
+      "notes": "Slow and controlled"
+    },
+    {
+        "name": "Squat",
+        "sets": 2,
+        "reps": 10,
+      "weight": 135,
+      "notes": "Slow and controlled"
+      },
+      {
+        "name": "Burpee",
+      "sets": 1,
+      "reps": 20,
+      "weight": 0,
+      "notes": "Fast paced - body weight"
+      }
+  ]

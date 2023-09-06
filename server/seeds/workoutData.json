@@ -1,0 +1,17 @@
+[
+    {
+      "name": "Upper Body",
+      "notes": "This is a long one",
+      "exercises": [1]
+    },
+    {
+        "name": "Lower Body",
+        "notes": "This is a painful one",
+        "exercises": [2]
+      },
+      {
+        "name": "Full Body",
+        "notes": "This is a fun one",
+        "exercises": [3]
+      }
+  ]

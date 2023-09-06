@@ -2,7 +2,7 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
 const { authMiddleware } = require('./utils/auth');
-require('dotenv').config();
+
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 
@@ -13,9 +13,6 @@ const server = new ApolloServer({
   resolvers,
   context: authMiddleware,
 });
-
-console.log("NODE_ENV is:", process.env.NODE_ENV);
-
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

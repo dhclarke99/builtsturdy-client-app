@@ -1,0 +1,28 @@
+[
+    {
+      "firstname": "David",
+      "lastname": "Clarke",
+      "username": "dhclarke99",
+      "email": "dave@gmail.com",
+      "password": "password123",
+      "workouts": [1]
+    },
+    {
+        "firstname": "John",
+      "lastname": "Jones",
+        "username": "jones99",
+        "email": "jones@gmail.com",
+        "password": "password123",
+        "workouts": [2]
+      },
+      {
+        "firstname": "Emma",
+      "lastname": "Watson",
+        "username": "emma99",
+        "email": "emma@gmail.com",
+        "password": "password123",
+        "workouts": [3]
+      }
+
+  ]
+  
