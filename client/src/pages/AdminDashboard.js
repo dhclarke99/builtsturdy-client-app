@@ -1,14 +1,25 @@
-// pages/AdminDashboard.js
 import React from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { FETCH_ALL_WORKOUTS, FETCH_ALL_USERS } from '../utils/queries';
+import { REMOVE_WORKOUT } from '../utils/mutations';
 
 const AdminDashboard = () => {
   const { loading: loadingWorkouts, error: errorWorkouts, data: dataWorkouts } = useQuery(FETCH_ALL_WORKOUTS);
   const { loading: loadingUsers, error: errorUsers, data: dataUsers } = useQuery(FETCH_ALL_USERS);
+  const [removeWorkout] = useMutation(REMOVE_WORKOUT, {
+    refetchQueries: [{ query: FETCH_ALL_WORKOUTS }],
+  });
 
   if (loadingWorkouts || loadingUsers) return <p>Loading...</p>;
   if (errorWorkouts || errorUsers) return <p>Error: {errorWorkouts?.message || errorUsers?.message}</p>;
+
+  const handleDelete = async (workoutId) => {
+    try {
+      await removeWorkout({ variables: { workoutId } });
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div>
@@ -25,12 +36,14 @@ const AdminDashboard = () => {
         {dataWorkouts.workouts.map((workout) => (
           <li key={workout._id}>
             {workout.name} - {workout.notes}
+            <button onClick={() => handleDelete(workout._id)}>Delete</button>
+            <button onClick={() => window.location.href = `/edit-workout/${workout._id}`}>Edit</button>
             <ul>
-            {workout.exercises ? workout.exercises.map((exercise) => (
-          <li key={exercise._id}>
-            {exercise.name}: Sets - {exercise.sets}, reps - {exercise.reps}
-          </li>
-        )): <li>No Exercises assigned</li>}
+              {workout.exercises ? workout.exercises.map((exercise) => (
+                <li key={exercise._id}>
+                  {exercise.name}: Sets - {exercise.sets}, reps - {exercise.reps}
+                </li>
+              )) : <li>No Exercises assigned</li>}
             </ul>
           </li>
         ))}
