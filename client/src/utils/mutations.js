@@ -23,3 +23,29 @@ mutation CreateUser($username: String!, $firstname: String!,
   }
 }
 `;
+
+
+export const CREATE_EXERCISE = gql`
+  mutation CreateExercise($name: String!, $sets: Int!, $reps: Int!) {
+    createExercise(name: $name, sets: $sets, reps: $reps) {
+      _id
+      name
+      sets
+      reps
+    }
+  }
+`;
+
+export const CREATE_WORKOUT = gql`
+  mutation CreateWorkout($name: String!, $notes: String!, $exercises: [ID!]!) {
+    createWorkout(name: $name, notes: $notes, exercises: $exercises) {
+      _id
+      name
+      notes
+      exercises {
+        _id
+        name
+      }
+    }
+  }
+`;

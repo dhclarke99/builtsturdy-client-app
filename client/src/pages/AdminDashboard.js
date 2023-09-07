@@ -17,6 +17,7 @@ const AdminDashboard = () => {
         <ul>
           <li><a href="/create-workout">Create Workout</a></li>
           <li><a href="/assign-workout">Assign Workout</a></li>
+          <li><a href="/create-exercise">Create Exercise</a></li>
         </ul>
       </nav>
       <h2>All Workouts</h2>

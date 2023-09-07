@@ -7,6 +7,9 @@ import Exercise from './pages/Exercise';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import AdminDashboard from './pages/AdminDashboard';
+import CreateExercise from './pages/CreateExercise';
+import CreateWorkout from './pages/CreateWorkout';
+import AssignWorkout from './pages/AssignWorkout';
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -41,6 +44,9 @@ const App = () => {
           <Route path="/exercise" element={<Exercise />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/create-exercise" element={<CreateExercise />} />
+          <Route path="/create-workout" element={<CreateWorkout />} />
+          <Route path="/assign-workout" element={<AssignWorkout />} />
         </Routes>
       </Router>
     </ApolloProvider>
