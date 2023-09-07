@@ -10,6 +10,7 @@ const typeDefs = gql`
     lastname: String
     email: String
     workouts: [Workout]!
+    schedule: Schedule
   }
 
   type Option {
@@ -33,6 +34,17 @@ const typeDefs = gql`
     notes: String
   }
 
+  type Schedule {
+    _id: ID
+    userId: ID
+    workouts: [ScheduledWorkout]
+  }
+  
+  type ScheduledWorkout {
+    workoutId: ID
+    day: String
+  }
+
   type Auth {
     token: ID!
     user: User
@@ -53,6 +65,8 @@ const typeDefs = gql`
     workout(workoutId: ID!): Workout
     exercises: [Exercise]
     exercise(exerciseId: ID!): Exercise
+    schedules: [Schedule]
+    schedule(scheduleId: ID!): Schedule
     me: User
   }
 
@@ -65,6 +79,8 @@ const typeDefs = gql`
     removeExercise(exerciseId: ID!): Exercise
     removeWorkout(workoutId: ID!): Workout
     updateWorkoutNotes(workoutId: ID!, notes: String!): Workout
+    createSchedule(userId: ID!): Schedule
+    addWorkoutToSchedule(scheduleId: ID!, workoutId: ID!, day: String!): Schedule
   }
 `;
 

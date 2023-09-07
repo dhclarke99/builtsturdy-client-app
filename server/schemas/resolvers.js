@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Workout, Exercise} = require('../models');
+const { User, Workout, Exercise, Schedule} = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -22,6 +22,12 @@ const resolvers = {
     },
     exercise: async (_, { exerciseId }) => {
       return await Exercise.findById(exerciseId);
+    },
+    schedules: async () => {
+      return await Schedule.find();
+    },
+    schedule: async (_, { scheduleId }) => {
+      return await Schedule.findById(scheduleId);
     },
     me: async (_parent, _args, context) => {
       if (!context.user) {
@@ -138,7 +144,29 @@ const resolvers = {
         throw new Error("Failed to update workout notes");
       }
     },
-        
+    createSchedule: async (_, { userId }) => {
+      try {
+        console.log(Schedule)
+        return await Schedule.create({ userId });
+      } catch (error) {
+        console.error("Error in createSchedule:", error);
+        throw new Error("Failed to create schedule");
+      }
+    },
+    addWorkoutToSchedule: async (_, { scheduleId, workoutId, day }) => {
+      try {
+        const schedule = await Schedule.findById(scheduleId);
+        if (!schedule) {
+          throw new Error('Schedule not found');
+        }
+        schedule.workouts.push({ workoutId, day });
+        await schedule.save();
+        return schedule;
+      } catch (error) {
+        console.error("Error in addWorkoutToSchedule:", error);
+        throw new Error("Failed to add workout to schedule");
+      }
+    },  
   },
 };
 
