@@ -49,8 +49,33 @@ query Query {
     _id
     name
     notes
+    exercises {
+      _id
+      name
+      sets
+      reps
+    }
   }
 }
 `;
+
+export const  FETCH_ALL_USERS = gql `
+  query Query {
+    users {
+      _id
+      email
+      firstname
+      lastname
+      username
+      workouts {
+        name
+      }
+    }
+  }
+`;
+
+
+
+
 
 
