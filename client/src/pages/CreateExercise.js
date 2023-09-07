@@ -15,12 +15,20 @@ const CreateExercise = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await createExercise({ variables: { ...exerciseData } });
+      const variables = {
+        ...exerciseData,
+        sets: parseInt(exerciseData.sets, 10),
+        reps: parseInt(exerciseData.reps, 10)
+      };
+      await createExercise({ variables });
+      window.alert("Success!")
       // Redirect or show success message
     } catch (err) {
       console.error(err);
     }
   };
+  
+  
 
   return (
     <div>

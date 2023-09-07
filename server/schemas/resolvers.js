@@ -73,11 +73,22 @@ const resolvers = {
       }
     },
     createExercise: async (_, { name, sets, reps, weight, notes }) => {
-      return await Exercise.create({ name, sets, reps, weight, notes });
+      try {
+        return await Exercise.create({ name, sets, reps, weight, notes });
+      } catch (error) {
+        console.error("Error in createExercise:", error);
+        throw new Error("Failed to create exercise");
+      }
     },
     createWorkout: async (_, { name, exercises }) => {
-      return await Workout.create({ name, exercises });
-    },    
+      try {
+        return await Workout.create({ name, exercises });
+      } catch (error) {
+        console.error("Error in createWorkout:", error);
+        throw new Error("Failed to create workout");
+      }
+    },
+        
   },
 };
 

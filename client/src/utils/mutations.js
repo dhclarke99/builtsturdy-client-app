@@ -26,14 +26,13 @@ mutation CreateUser($username: String!, $firstname: String!,
 
 
 export const CREATE_EXERCISE = gql`
-  mutation CreateExercise($name: String!, $sets: Int!, $reps: Int!) {
-    createExercise(name: $name, sets: $sets, reps: $reps) {
-      _id
-      name
-      sets
-      reps
-    }
+mutation Mutation($name: String!, $sets: Int!, $reps: Int!) {
+  createExercise(name: $name, sets: $sets, reps: $reps) {
+    name
+    sets
+    reps
   }
+}
 `;
 
 export const CREATE_WORKOUT = gql`
