@@ -75,8 +75,13 @@ export const  FETCH_ALL_USERS = gql `
   }
 `;
 
-
-
+export const FETCH_WORKOUT_BY_ID = gql`
+query findWorkoutById($workoutId: ID!) {
+  workout(workoutId: $workoutId) {
+    name
+  }
+}
+`;
 
 
 

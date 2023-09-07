@@ -124,6 +124,20 @@ const resolvers = {
         throw new Error("Failed to remove workout");
       }
     },
+    updateWorkoutNotes: async (_, { workoutId, notes }) => {
+      try {
+        const workout = await Workout.findById(workoutId);
+        if (!workout) {
+          throw new Error('Workout not found');
+        }
+        workout.notes = notes;
+        await workout.save();
+        return workout;
+      } catch (error) {
+        console.error("Error in updateWorkoutNotes:", error);
+        throw new Error("Failed to update workout notes");
+      }
+    },
         
   },
 };

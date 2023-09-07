@@ -61,3 +61,12 @@ mutation removeWorkout($workoutId: ID!) {
   }
 }
 `;
+
+export const UPDATE_WORKOUT_NOTES = gql `
+mutation updateWorkoutNotes($workoutId: ID!, $notes: String!) {
+  updateWorkoutNotes(workoutId: $workoutId, notes: $notes) {
+    name
+    notes
+  }
+}
+`;

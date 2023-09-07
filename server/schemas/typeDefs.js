@@ -64,6 +64,7 @@ const typeDefs = gql`
     assignExerciseToWorkout(workoutId: ID!, exerciseId: ID!): Workout 
     removeExercise(exerciseId: ID!): Exercise
     removeWorkout(workoutId: ID!): Workout
+    updateWorkoutNotes(workoutId: ID!, notes: String!): Workout
   }
 `;
 
