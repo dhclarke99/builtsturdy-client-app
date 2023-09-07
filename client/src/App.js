@@ -6,7 +6,7 @@ import Header from './components/header';  // This will automatically import fro
 import Exercise from './pages/Exercise';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-
+import AdminDashboard from './pages/AdminDashboard';
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -37,6 +37,7 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Exercise />} />
+          <Route path="/admindashboard" element={<AdminDashboard />} />
           <Route path="/exercise" element={<Exercise />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />

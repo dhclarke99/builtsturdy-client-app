@@ -43,3 +43,14 @@ query Query {
 }
 `;
 
+export const FETCH_ALL_WORKOUTS = gql`
+query Query {
+  workouts {
+    _id
+    name
+    notes
+  }
+}
+`;
+
+
