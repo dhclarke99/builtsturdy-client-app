@@ -88,6 +88,24 @@ const resolvers = {
         throw new Error("Failed to create workout");
       }
     },
+    removeExercise: async (_, { exerciseId }) => {
+      try {
+        return await Exercise.findByIdAndDelete(exerciseId);
+        
+      } catch (error) {
+        console.error("Error in removeExercise:", error);
+        throw new Error("Failed to remove exercise");
+      }
+    },
+
+    removeWorkout: async (_, { workoutId }) => {
+      try {
+        return await Workout.findByIdAndDelete(workoutId);
+      } catch (error) {
+        console.error("Error in removeWorkout:", error);
+        throw new Error("Failed to remove workout");
+      }
+    },
         
   },
 };
