@@ -15,7 +15,7 @@ const resolvers = {
   
     },
     workout: async (_parent, { workoutId }) => {
-      return await Workout.findOne({ _id: workoutId }.populate('exercises'))
+      return await Workout.findOne({ _id: workoutId }).populate('exercises');
     },
     exercises: async () => {
       return await Exercise.find();
@@ -80,12 +80,30 @@ const resolvers = {
         throw new Error("Failed to create exercise");
       }
     },
-    createWorkout: async (_, { name, exercises }) => {
+    createWorkout: async (_, { name }) => {
       try {
-        return await Workout.create({ name, exercises });
+        return await Workout.create({ name });
       } catch (error) {
         console.error("Error in createWorkout:", error);
         throw new Error("Failed to create workout");
+      }
+    },
+    assignExerciseToWorkout: async (_, { workoutId, exerciseId }) => {
+      try {
+        const workout = await Workout.findById(workoutId);
+        if (!workout) {
+          throw new Error('Workout not found');
+        }
+        const exercise = await Exercise.findById(exerciseId);
+        if (!exercise) {
+          throw new Error('Exercise not found');
+        }
+        workout.exercises.push(exercise);
+        await workout.save();
+        return workout;
+      } catch (error) {
+        console.error("Error in assignExerciseToWorkout:", error);
+        throw new Error("Failed to assign exercise to workout");
       }
     },
     removeExercise: async (_, { exerciseId }) => {
