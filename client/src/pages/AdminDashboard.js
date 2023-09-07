@@ -26,11 +26,11 @@ const AdminDashboard = () => {
           <li key={workout._id}>
             {workout.name} - {workout.notes}
             <ul>
-            {workout.exercises.map((exercise) => (
+            {workout.exercises ? workout.exercises.map((exercise) => (
           <li key={exercise._id}>
             {exercise.name}: Sets - {exercise.sets}, reps - {exercise.reps}
           </li>
-        ))}
+        )): <li>No Exercises assigned</li>}
             </ul>
           </li>
         ))}

@@ -36,15 +36,9 @@ mutation Mutation($name: String!, $sets: Int!, $reps: Int!) {
 `;
 
 export const CREATE_WORKOUT = gql`
-  mutation CreateWorkout($name: String!, $notes: String!, $exercises: [ID!]!) {
-    createWorkout(name: $name, notes: $notes, exercises: $exercises) {
-      _id
-      name
-      notes
-      exercises {
-        _id
-        name
-      }
-    }
+mutation createWorkout($name: String!) {
+  createWorkout(name: $name) {
+    name
   }
+}
 `;

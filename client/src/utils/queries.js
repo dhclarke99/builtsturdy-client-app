@@ -3,6 +3,7 @@ import { gql } from '@apollo/client';
 export const QUERY_EXERCISES = gql`
 query Query {
     exercises {
+      _id
       name
       reps
       sets
