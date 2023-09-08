@@ -61,25 +61,30 @@ const UniqueUser = () => {
                                         <h6 className="card-subtitle mb-2 text-muted">Schedule ID: {schedule._id}</h6>
                                         <h6 className="card-subtitle mb-2 text-muted">User ID: {schedule.userId}</h6>
                                         <ul>
-                                            {schedule.workouts.map((workout) => (
-                                                <li key={workout.workoutId}>
-                                                    Day: {workout.day}, Workout ID: {workout.workoutId}
-                                                    <ul>
-  {workoutDetails.map((workoutDetail, index) => (
-    <li key={index}>
-      Name: {workoutDetail.workout.name}, Notes: {workoutDetail.workout.notes}
-      <ul>
-        {workoutDetail.workout.exercises.map((exercise, exerciseIndex) => (
-          <li key={exerciseIndex}>
-            Exercise: {exercise.name} {/* Adapt this line based on the actual structure of your exercise details */}
-          </li>
-        ))}
-      </ul>
-    </li>
-  ))}
-</ul>
-                                                </li>
-                                            ))}
+                                            {schedule.workouts.map((workout) => {
+                                                const relevantWorkoutDetail = workoutDetails.find(
+                                                    (detail) => detail.workout._id === workout.workoutId
+                                                );
+                                                return (
+                                                    <li key={workout.workoutId}>
+                                                        Day: {workout.day}, Workout ID: {workout.workoutId}
+                                                        {relevantWorkoutDetail && (
+                                                            <ul>
+                                                                <li>Name: {relevantWorkoutDetail.workout.name}</li>
+                                                                <li>Notes: {relevantWorkoutDetail.workout.notes}</li>
+                                                                <li>
+                                                                    Exercises:
+                                                                    <ul>
+                                                                        {relevantWorkoutDetail.workout.exercises.map((exercise, index) => (
+                                                                            <li key={index}>Exercise: {exercise.name}</li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </li>
+                                                            </ul>
+                                                        )}
+                                                    </li>
+                                                );
+                                            })}
                                         </ul>
                                     </div>
                                 </div>

@@ -87,6 +87,7 @@ query findAllUsers {
 export const FETCH_WORKOUT_BY_ID = gql`
 query findWorkoutById($workoutId: ID!) {
   workout(workoutId: $workoutId) {
+    _id
     name
     notes
     exercises {
