@@ -2,6 +2,8 @@ import React from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { FETCH_ALL_WORKOUTS, FETCH_ALL_USERS } from '../utils/queries';
 import { DELETE_WORKOUT } from '../utils/mutations';
+import { Link } from 'react-router-dom';
+
 
 const AdminDashboard = () => {
   const { loading: loadingWorkouts, error: errorWorkouts, data: dataWorkouts } = useQuery(FETCH_ALL_WORKOUTS);
@@ -50,19 +52,21 @@ const AdminDashboard = () => {
       </ul>
       <h2>All Users</h2>
       <div className="row">
-        {dataUsers.users.map((user) => (
-          <div className="col-md-4" key={user._id}>
-            <div className="card mb-4">
-              <div className="card-body">
-                <h5 className="card-title">{user.firstname} {user.lastname}</h5>
-                <p className="card-text">{user.email}</p>
-                <p className="card-text">Username: {user.username}</p>
-                {/* Add more user details here */}
-              </div>
+    {dataUsers.users.map((user) => (
+      <div className="col-md-4" key={user._id}>
+        <Link to={`/user/${user._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <div className="card mb-4">
+            <div className="card-body">
+              <h5 className="card-title">{user.firstname} {user.lastname}</h5>
+              <p className="card-text">{user.email}</p>
+              <p className="card-text">Username: {user.username}</p>
+              {/* Add more user details here */}
             </div>
           </div>
-        ))}
+        </Link>
       </div>
+    ))}
+  </div>
     </div>
   );
 };

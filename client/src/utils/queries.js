@@ -14,10 +14,21 @@ query Query {
 `;
 
 export const QUERY_USER_by_id = gql`
-query Query($userId: String!) {
+query findUserById($userId: String!) {
   user(id: $userId) {
-    eggplants
     _id
+    email
+    firstname
+    lastname
+    schedules {
+      _id
+      userId
+      workouts {
+        day
+        workoutId
+      }
+    }
+    username
   }
 }
 `;
