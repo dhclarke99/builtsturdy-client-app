@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID } from '../utils/queries';
 
 const UniqueUser = () => {
+   
     const [workoutDetails, setWorkoutDetails] = useState([]);
 
     const client = new ApolloClient({
@@ -14,9 +15,11 @@ const UniqueUser = () => {
     });
 
     const { id } = useParams();
+    console.log(id)
 
     const { loading: loadingUser, error: errorUser, data: dataUser } = useQuery(QUERY_USER_by_id, {
         variables: { userId: id.toString() },
+        fetchPolicy: 'network-only'
     });
 
     useEffect(() => {

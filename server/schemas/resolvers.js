@@ -7,8 +7,9 @@ const resolvers = {
     users: async () => {
       return await User.find().populate('workouts').populate('schedules');
     },
-    user: async (_parent, { userId }) => {
-      return await User.findOne({ userId }).populate('workouts').populate('schedules');
+    user: async (_parent, { id }) => {
+      console.log("Querying for userId:", id);
+      return await User.findOne({ _id:  id }).populate('workouts').populate('schedules');
     },
     workouts: async () => {
       return await Workout.find().populate("exercises");
