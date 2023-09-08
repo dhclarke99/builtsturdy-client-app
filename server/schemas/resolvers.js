@@ -5,10 +5,10 @@ const { signToken } = require('../utils/auth');
 const resolvers = {
   Query: {
     users: async () => {
-      return await User.find().populate('workouts');
+      return await User.find().populate('workouts').populate('schedules');
     },
     user: async (_parent, { userId }) => {
-      return await User.findOne({ userId }).populate('workouts');
+      return await User.findOne({ userId }).populate('workouts').populate('schedules');
     },
     workouts: async () => {
       return await Workout.find().populate("exercises");
@@ -130,6 +130,14 @@ const resolvers = {
         throw new Error("Failed to remove workout");
       }
     },
+    removeSchedule: async (_, { scheduleId }) => {
+      try {
+        return await Schedule.findByIdAndDelete(scheduleId);
+      } catch (error) {
+        console.error("Error in removeSchedule:", error);
+        throw new Error("Failed to remove schedule");
+      }
+    },
     updateWorkoutNotes: async (_, { workoutId, notes }) => {
       try {
         const workout = await Workout.findById(workoutId);
@@ -146,8 +154,18 @@ const resolvers = {
     },
     createSchedule: async (_, { userId }) => {
       try {
-        console.log(Schedule)
-        return await Schedule.create({ userId });
+        // Create a new schedule
+        const newSchedule = await Schedule.create({ userId });
+
+        // Find the user by userId and update them to include the new schedule
+        await User.findByIdAndUpdate(
+          userId,
+          { $push: { schedules: newSchedule._id } },
+          { new: true }
+        );
+
+        return newSchedule;
+
       } catch (error) {
         console.error("Error in createSchedule:", error);
         throw new Error("Failed to create schedule");

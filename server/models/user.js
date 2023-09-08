@@ -32,10 +32,10 @@ const userSchema = new Schema({
         minlength: 5,
     },
     workouts: [{ type: Schema.Types.ObjectId, ref: 'Workout' }],
-    schedule: {
+    schedules: [{
         type: Schema.Types.ObjectId,
         ref: 'Schedule',
-      },
+      }],
 });
 
 

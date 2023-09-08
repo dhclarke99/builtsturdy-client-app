@@ -10,7 +10,7 @@ const typeDefs = gql`
     lastname: String
     email: String
     workouts: [Workout]!
-    schedule: Schedule
+    schedules: [Schedule]
   }
 
   type Option {
@@ -78,6 +78,7 @@ const typeDefs = gql`
     assignExerciseToWorkout(workoutId: ID!, exerciseId: ID!): Workout 
     removeExercise(exerciseId: ID!): Exercise
     removeWorkout(workoutId: ID!): Workout
+    removeSchedule(scheduleId: ID!): Schedule
     updateWorkoutNotes(workoutId: ID!, notes: String!): Workout
     createSchedule(userId: ID!): Schedule
     addWorkoutToSchedule(scheduleId: ID!, workoutId: ID!, day: String!): Schedule
