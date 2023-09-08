@@ -112,7 +112,7 @@ const resolvers = {
         throw new Error("Failed to assign exercise to workout");
       }
     },
-    removeExercise: async (_, { exerciseId }) => {
+    deleteExercise: async (_, { exerciseId }) => {
       try {
         return await Exercise.findByIdAndDelete(exerciseId);
         
@@ -122,7 +122,7 @@ const resolvers = {
       }
     },
 
-    removeWorkout: async (_, { workoutId }) => {
+    deleteWorkout: async (_, { workoutId }) => {
       try {
         return await Workout.findByIdAndDelete(workoutId);
       } catch (error) {
@@ -130,7 +130,7 @@ const resolvers = {
         throw new Error("Failed to remove workout");
       }
     },
-    removeSchedule: async (_, { scheduleId }) => {
+    deleteSchedule: async (_, { scheduleId }) => {
       try {
         return await Schedule.findByIdAndDelete(scheduleId);
       } catch (error) {
@@ -185,6 +185,40 @@ const resolvers = {
         throw new Error("Failed to add workout to schedule");
       }
     },  
+    addScheduleToUser: async (_, { userId, scheduleId }) => {
+      try {
+        const user = await User.findById(userId);
+        if (!user) {
+          throw new Error('User not found');
+        }
+        user.schedules.push(scheduleId);
+        await user.save();
+        return user;
+      } catch (error) {
+        console.error("Error in addScheduleToUser:", error);
+        throw new Error("Failed to add schedule to user");
+      }
+    },
+    removeScheduleFromUser: async (_, { userId, scheduleId }) => {
+      try {
+        // Find the user by userId and update them to remove the schedule
+        const updatedUser = await User.findByIdAndUpdate(
+          userId,
+          { $pull: { schedules: scheduleId } },
+          { new: true }
+        ).populate('schedules');
+
+        if (!updatedUser) {
+          throw new Error('User not found');
+        }
+
+        return updatedUser;
+
+      } catch (error) {
+        console.error("Error in removeScheduleFromUser:", error);
+        throw new Error("Failed to remove schedule from user");
+      }
+    },
   },
 };
 

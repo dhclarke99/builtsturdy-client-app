@@ -1,12 +1,12 @@
 import React from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { FETCH_ALL_WORKOUTS, FETCH_ALL_USERS } from '../utils/queries';
-import { REMOVE_WORKOUT } from '../utils/mutations';
+import { DELETE_WORKOUT } from '../utils/mutations';
 
 const AdminDashboard = () => {
   const { loading: loadingWorkouts, error: errorWorkouts, data: dataWorkouts } = useQuery(FETCH_ALL_WORKOUTS);
   const { loading: loadingUsers, error: errorUsers, data: dataUsers } = useQuery(FETCH_ALL_USERS);
-  const [removeWorkout] = useMutation(REMOVE_WORKOUT, {
+  const [deleteWorkout] = useMutation(DELETE_WORKOUT, {
     refetchQueries: [{ query: FETCH_ALL_WORKOUTS }],
   });
 
@@ -15,7 +15,7 @@ const AdminDashboard = () => {
 
   const handleDelete = async (workoutId) => {
     try {
-      await removeWorkout({ variables: { workoutId } });
+      await deleteWorkout({ variables: { workoutId } });
     } catch (err) {
       console.error(err);
     }

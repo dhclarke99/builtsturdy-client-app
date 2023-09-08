@@ -76,13 +76,16 @@ const typeDefs = gql`
     createExercise(name: String!, sets: Int!, reps: Int!, weight: Float, notes: String): Exercise
     createWorkout(name: String!): Workout
     assignExerciseToWorkout(workoutId: ID!, exerciseId: ID!): Workout 
-    removeExercise(exerciseId: ID!): Exercise
-    removeWorkout(workoutId: ID!): Workout
-    removeSchedule(scheduleId: ID!): Schedule
+    deleteExercise(exerciseId: ID!): Exercise
+    deleteWorkout(workoutId: ID!): Workout
+    deleteSchedule(scheduleId: ID!): Schedule
     updateWorkoutNotes(workoutId: ID!, notes: String!): Workout
     createSchedule(userId: ID!): Schedule
     addWorkoutToSchedule(scheduleId: ID!, workoutId: ID!, day: String!): Schedule
+    addScheduleToUser(userId: ID!, scheduleId: ID!): User
+    removeScheduleFromUser(userId: ID!, scheduleId: ID!): User
   }
+
 `;
 
 module.exports = typeDefs;

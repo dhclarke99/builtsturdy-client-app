@@ -54,9 +54,9 @@ mutation assignExercise($workoutId: ID!, $exerciseId: ID!) {
 }
 `;
 
-export const REMOVE_WORKOUT = gql `
-mutation removeWorkout($workoutId: ID!) {
-  removeWorkout(workoutId: $workoutId) {
+export const DELETE_WORKOUT = gql `
+mutation deleteWorkout($workoutId: ID!) {
+  deleteWorkout(workoutId: $workoutId) {
     name
   }
 }
