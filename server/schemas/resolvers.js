@@ -185,6 +185,28 @@ const resolvers = {
         throw new Error("Failed to add workout to schedule");
       }
     },  
+    removeWorkoutFromSchedule: async (_, { scheduleId, workoutId }) => {
+      try {
+        // Find the schedule by scheduleId
+        const schedule = await Schedule.findById(scheduleId);
+
+        if (!schedule) {
+          throw new Error('Schedule not found');
+        }
+
+        // Remove the workout from the schedule's workouts array
+        schedule.workouts = schedule.workouts.filter(workout => workout.workoutId.toString() !== workoutId);
+
+        // Save the updated schedule
+        await schedule.save();
+
+        return schedule;
+
+      } catch (error) {
+        console.error("Error in removeWorkoutFromSchedule:", error);
+        throw new Error("Failed to remove workout from schedule");
+      }
+    },
     addScheduleToUser: async (_, { userId, scheduleId }) => {
       try {
         const user = await User.findById(userId);
