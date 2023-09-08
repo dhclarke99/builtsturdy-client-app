@@ -49,13 +49,20 @@ const AdminDashboard = () => {
         ))}
       </ul>
       <h2>All Users</h2>
-      <ul>
+      <div className="row">
         {dataUsers.users.map((user) => (
-          <li key={user._id}>
-            {user.email} - {user.firstname} {user.lastname}
-          </li>
+          <div className="col-md-4" key={user._id}>
+            <div className="card mb-4">
+              <div className="card-body">
+                <h5 className="card-title">{user.firstname} {user.lastname}</h5>
+                <p className="card-text">{user.email}</p>
+                <p className="card-text">Username: {user.username}</p>
+                {/* Add more user details here */}
+              </div>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

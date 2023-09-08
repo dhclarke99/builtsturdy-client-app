@@ -12,13 +12,6 @@ query Query {
     }
   }
 `;
-export const QUERY_USER = gql`
-query Query($username: String!) {
-  user(username: $username) {
-    eggplants
-  }
-}
-`;
 
 export const QUERY_USER_by_id = gql`
 query Query($userId: String!) {
@@ -33,7 +26,7 @@ export const QUERY_ME = gql`
 query Query {
   me {
     eggplants
-    polls {
+    polls { 
       title
       description
       value
@@ -61,18 +54,23 @@ query Query {
 `;
 
 export const  FETCH_ALL_USERS = gql `
-  query Query {
-    users {
+query findAllUsers {
+  users {
+    _id
+    email
+    firstname
+    lastname
+    username
+    schedules {
       _id
-      email
-      firstname
-      lastname
-      username
       workouts {
-        name
+        day
+        workoutId
       }
     }
+    
   }
+}
 `;
 
 export const FETCH_WORKOUT_BY_ID = gql`
