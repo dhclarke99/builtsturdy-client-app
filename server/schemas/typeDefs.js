@@ -77,11 +77,9 @@ const typeDefs = gql`
     login(email: String!, password: String!): Auth
     createExercise(name: String!, sets: Int!, reps: Int!, weight: Float, notes: String): Exercise
     createWorkout(name: String!): Workout
-    assignExerciseToWorkout(workoutId: ID!, exerciseId: ID!): Workout 
     deleteExercise(exerciseId: ID!): Exercise
     deleteWorkout(workoutId: ID!): Workout
     deleteSchedule(scheduleId: ID!): Schedule
-    updateWorkoutNotes(workoutId: ID!, notes: String!): Workout
     createSchedule(name: String!): Schedule
     addWorkoutToSchedule(scheduleId: ID!, workoutId: ID!, day: String!): Schedule
     removeWorkoutFromSchedule(scheduleId: ID!, workoutId: ID!): Schedule

@@ -11,6 +11,7 @@ import CreateExercise from './pages/CreateExercise';
 import CreateWorkout from './pages/CreateWorkout';
 import AssignWorkout from './pages/AssignWorkout';
 import EditWorkout from './pages/EditWorkout';
+import EditExercise from './pages/EditExercise';
 import UniqueUser from './pages/UniqueUser';
 
 // Construct our main GraphQL API endpoint
@@ -51,6 +52,7 @@ const App = () => {
           <Route path="/create-workout" element={<CreateWorkout />} />
           <Route path="/assign-workout" element={<AssignWorkout />} />
           <Route path="/edit-workout/:id" element={<EditWorkout />} />
+          <Route path="/edit-exercise/:id" element={<EditExercise />} />
           <Route path="/user/:id" element={<UniqueUser />} />
         </Routes>
       </Router>

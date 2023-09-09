@@ -94,24 +94,6 @@ const resolvers = {
         throw new Error("Failed to create workout");
       }
     },
-    assignExerciseToWorkout: async (_, { workoutId, exerciseId }) => {
-      try {
-        const workout = await Workout.findById(workoutId);
-        if (!workout) {
-          throw new Error('Workout not found');
-        }
-        const exercise = await Exercise.findById(exerciseId);
-        if (!exercise) {
-          throw new Error('Exercise not found');
-        }
-        workout.exercises.push(exercise);
-        await workout.save();
-        return workout;
-      } catch (error) {
-        console.error("Error in assignExerciseToWorkout:", error);
-        throw new Error("Failed to assign exercise to workout");
-      }
-    },
     deleteExercise: async (_, { exerciseId }) => {
       try {
         return await Exercise.findByIdAndDelete(exerciseId);
@@ -136,20 +118,6 @@ const resolvers = {
       } catch (error) {
         console.error("Error in removeSchedule:", error);
         throw new Error("Failed to remove schedule");
-      }
-    },
-    updateWorkoutNotes: async (_, { workoutId, notes }) => {
-      try {
-        const workout = await Workout.findById(workoutId);
-        if (!workout) {
-          throw new Error('Workout not found');
-        }
-        workout.notes = notes;
-        await workout.save();
-        return workout;
-      } catch (error) {
-        console.error("Error in updateWorkoutNotes:", error);
-        throw new Error("Failed to update workout notes");
       }
     },
     updateWorkout: async (_, { workoutId, name, notes, exerciseIds }) => {

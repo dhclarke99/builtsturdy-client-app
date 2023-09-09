@@ -43,7 +43,7 @@ mutation createWorkout($name: String!) {
 }
 `;
 
-export const ASSIGN_EXERCISE_TO_WORKOUT = gql `
+export const UPDATE_WORKOUT = gql `
 mutation updateWorkout($workoutId: ID!, $name: String, $notes: String, $exerciseIds: [ID]) {
   updateWorkout(workoutId: $workoutId, name: $name, notes: $notes, exerciseIds: $exerciseIds) {
     _id

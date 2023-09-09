@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import { FETCH_WORKOUT_BY_ID, QUERY_EXERCISES } from '../utils/queries';
-import { ASSIGN_EXERCISE_TO_WORKOUT, UPDATE_WORKOUT_NOTES } from '../utils/mutations';
+import { UPDATE_WORKOUT } from '../utils/mutations';
 
 const EditWorkout = () => {
   const { id: workoutId } = useParams();
@@ -10,20 +10,33 @@ const EditWorkout = () => {
     variables: { workoutId },
   });
   const { loading: loadingExercises, error: errorExercises, data: dataExercises } = useQuery(QUERY_EXERCISES);
-  const [assignExerciseToWorkout] = useMutation(ASSIGN_EXERCISE_TO_WORKOUT);
+  const [assignExerciseToWorkout] = useMutation(UPDATE_WORKOUT);
 
   const [name, setName] = useState('');
   const [notes, setNotes] = useState('');
   const [selectedExercise, setSelectedExercise] = useState('');
-  const [updateWorkoutNotes] = useMutation(UPDATE_WORKOUT_NOTES);
+  const [updateWorkoutNotes] = useMutation(UPDATE_WORKOUT);
+  const [allExerciseIds, setAllExerciseIds] = useState([]);
+
+  // Initialize state variables once data is available
+  useEffect(() => {
+    if (data) {
+      setName(data.workout.name);
+      setNotes(data.workout.notes);
+      setAllExerciseIds(data.workout.exercises.map(e => e._id));
+    }
+  }, [data]);
 
   if (loading || loadingExercises) return <p>Loading...</p>;
   if (error || errorExercises) return <p>Error: {error?.message || errorExercises?.message}</p>;
 
   const handleAssignExercise = async () => {
     try {
-      await assignExerciseToWorkout({ variables: { workoutId, exerciseId: selectedExercise } });
+      const updatedExerciseIds = [...allExerciseIds, selectedExercise];
+      setAllExerciseIds(updatedExerciseIds); // Update the local state
+      await assignExerciseToWorkout({ variables: { workoutId, exerciseIds: updatedExerciseIds } });
       // Optionally, refresh the component to show the newly assigned exercise
+      window.location.href = '/admindashboard';
     } catch (err) {
       console.error(err);
     }
@@ -55,13 +68,21 @@ const EditWorkout = () => {
       <h2>{data.workout.name}</h2>
       <label>
         Name:
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+        <input type="text" value={data.workout.name} onChange={(e) => setName(e.target.value)} />
         <button onClick={handleUpdateName}>Update Name</button>
       </label>
       <label>
         Notes:
-        <input type="text" value={notes} onChange={(e) => setNotes(e.target.value)} />
+        <input type="text" value={data.workout.notes} onChange={(e) => setNotes(e.target.value)} />
         <button onClick={handleUpdateNotes}>Update Notes</button>
+      </label>
+      <label>
+        Current Exercises:
+        <ul>
+          {data.workout.exercises.map((exercise) => (
+            <li key={exercise._id}>{exercise.name}</li>
+          ))}
+        </ul>
       </label>
       <label>
         Assign Exercise:
