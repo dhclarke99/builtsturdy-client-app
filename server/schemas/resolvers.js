@@ -8,7 +8,6 @@ const resolvers = {
       return await User.find().populate('workouts').populate('schedules');
     },
     user: async (_parent, { id }) => {
-      console.log("Querying for userId:", id);
       return await User.findOne({ _id:  id }).populate('workouts').populate('schedules');
     },
     workouts: async () => {
@@ -153,10 +152,24 @@ const resolvers = {
         throw new Error("Failed to update workout notes");
       }
     },
-    createSchedule: async (_, { userId }) => {
+    updateWorkout: async (_, { workoutId, name, notes, exerciseIds }) => {
+      const updateFields = {};
+      if (name !== null && name !== undefined) {
+        updateFields.name = name;
+      }
+      if (notes !== null && notes !== undefined) {
+        updateFields.notes = notes;
+      }
+      if (exerciseIds !== null && exerciseIds !== undefined) {
+        updateFields.exercises = exerciseIds;
+      }
+
+      return await Workout.findByIdAndUpdate(workoutId, updateFields, { new: true }).populate('exercises');
+    },
+    createSchedule: async (_, { name }) => {
       try {
         // Create a new schedule
-        const newSchedule = await Schedule.create({ userId });
+        const newSchedule = await Schedule.create({ name });
 
         // Find the user by userId and update them to include the new schedule
         await User.findByIdAndUpdate(

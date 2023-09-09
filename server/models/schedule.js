@@ -6,6 +6,11 @@ const scheduleSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
+    name: {
+      type: String,
+      require: true,
+  },
+    notes: String,
     workouts: [
       {
         workoutId: {

@@ -30,7 +30,8 @@ const EditWorkout = () => {
 
   const handleUpdateNotes = async () => {
     try {
-      await updateWorkoutNotes({ variables: { workoutId, notes } });
+      
+      await updateWorkoutNotes({ variables: { workoutId: workoutId.toString(), notes } });
       // Optionally, refresh the component to show the updated notes
     } catch (err) {
       console.error(err);

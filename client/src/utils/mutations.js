@@ -44,12 +44,19 @@ mutation createWorkout($name: String!) {
 `;
 
 export const ASSIGN_EXERCISE_TO_WORKOUT = gql `
-mutation assignExercise($workoutId: ID!, $exerciseId: ID!) {
-  assignExerciseToWorkout(workoutId: $workoutId, exerciseId: $exerciseId) {
-    name
+mutation updateWorkout($workoutId: ID!, $name: String, $notes: String, $exerciseIds: [ID]) {
+  updateWorkout(workoutId: $workoutId, name: $name, notes: $notes, exerciseIds: $exerciseIds) {
+    _id
     exercises {
+      _id
       name
+      notes
+      reps
+      sets
+      weight
     }
+    name
+    notes
   }
 }
 `;
@@ -63,8 +70,17 @@ mutation deleteWorkout($workoutId: ID!) {
 `;
 
 export const UPDATE_WORKOUT_NOTES = gql `
-mutation updateWorkoutNotes($workoutId: ID!, $notes: String!) {
-  updateWorkoutNotes(workoutId: $workoutId, notes: $notes) {
+mutation updateWorkout($workoutId: ID!, $name: String, $notes: String, $exerciseIds: [ID]) {
+  updateWorkout(workoutId: $workoutId, name: $name, notes: $notes, exerciseIds: $exerciseIds) {
+    _id
+    exercises {
+      _id
+      name
+      notes
+      reps
+      sets
+      weight
+    }
     name
     notes
   }
