@@ -88,6 +88,14 @@ console.log(dataExercises)
           {dataExercises.exercises.map((exercise) => (
             <li key={exercise._id}>
               {exercise.name} - {exercise.notes}
+              <ul>
+                <li>Sets: {exercise.sets}
+                </li>
+                <li>Reps: {exercise.reps}
+                </li>
+                <li>Weight: {exercise.weight}
+                </li>
+              </ul>
               <button onClick={() => handleDelete(exercise._id)}>Delete</button>
               <button onClick={() => window.location.href = `/edit-exercise/${exercise._id}`}>Edit</button>
               <ul>
