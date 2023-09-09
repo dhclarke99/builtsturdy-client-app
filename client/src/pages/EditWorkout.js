@@ -42,6 +42,18 @@ const EditWorkout = () => {
     }
   };
 
+  const handleRemoveExercise = async (exerciseIdToRemove) => {
+    try {
+      const updatedExerciseIds = allExerciseIds.filter(id => id !== exerciseIdToRemove);
+      setAllExerciseIds(updatedExerciseIds); // Update the local state
+      await assignExerciseToWorkout({ variables: { workoutId, exerciseIds: updatedExerciseIds } });
+      // Optionally, refresh the component to show the updated list of exercises
+      window.location.href = '/admindashboard';
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleUpdateNotes = async () => {
     try {
       
@@ -80,7 +92,10 @@ const EditWorkout = () => {
         Current Exercises:
         <ul>
           {data.workout.exercises.map((exercise) => (
-            <li key={exercise._id}>{exercise.name}</li>
+            <li key={exercise._id}>
+              {exercise.name} 
+              <button onClick={() => handleRemoveExercise(exercise._id)}>Remove</button>
+            </li>
           ))}
         </ul>
       </label>
