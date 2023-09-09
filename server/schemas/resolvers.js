@@ -134,6 +134,26 @@ const resolvers = {
 
       return await Workout.findByIdAndUpdate(workoutId, updateFields, { new: true }).populate('exercises');
     },
+    updateExercise: async (_, { exerciseId, name, sets, reps, weight, notes }) => {
+      const updateFields = {};
+      if (name !== null && name !== undefined) {
+        updateFields.name = name;
+      }
+      if (sets !== null && sets !== undefined) {
+        updateFields.sets = sets;
+      }
+      if (reps !== null && reps !== undefined) {
+        updateFields.reps = reps;
+      }
+      if (weight !== null && weight !== undefined) {
+        updateFields.weight = weight;
+      }
+      if (notes !== null && notes !== undefined) {
+        updateFields.notes = notes;
+      }
+
+      return await Exercise.findByIdAndUpdate(exerciseId, updateFields, { new: true });
+    },
     createSchedule: async (_, { name }) => {
       try {
         // Create a new schedule

@@ -75,7 +75,8 @@ const typeDefs = gql`
   type Mutation {
     createUser(username: String!, firstname: String!, lastname: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    createExercise(name: String!, sets: Int!, reps: Int!, weight: Float, notes: String): Exercise
+    createExercise(name: String!, sets: Int, reps: Int, weight: Float, notes: String): Exercise
+    updateExercise(exerciseId: ID!, name: String, sets: Int, reps: Int, weight: Float, notes: String): Exercise
     createWorkout(name: String!): Workout
     deleteExercise(exerciseId: ID!): Exercise
     deleteWorkout(workoutId: ID!): Workout
