@@ -48,7 +48,7 @@ const EditWorkout = () => {
       setAllExerciseIds(updatedExerciseIds); // Update the local state
       await assignExerciseToWorkout({ variables: { workoutId, exerciseIds: updatedExerciseIds } });
       // Optionally, refresh the component to show the updated list of exercises
-      window.location.href = '/admindashboard';
+      window.location.reload()
     } catch (err) {
       console.error(err);
     }
@@ -80,12 +80,12 @@ const EditWorkout = () => {
       <h2>{data.workout.name}</h2>
       <label>
         Name:
-        <input type="text" value={data.workout.name} onChange={(e) => setName(e.target.value)} />
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
         <button onClick={handleUpdateName}>Update Name</button>
       </label>
       <label>
         Notes:
-        <input type="text" value={data.workout.notes} onChange={(e) => setNotes(e.target.value)} />
+        <input type="text" value={notes} onChange={(e) => setNotes(e.target.value)} />
         <button onClick={handleUpdateNotes}>Update Notes</button>
       </label>
       <label>
