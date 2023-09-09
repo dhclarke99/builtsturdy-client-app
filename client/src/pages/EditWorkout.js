@@ -12,6 +12,7 @@ const EditWorkout = () => {
   const { loading: loadingExercises, error: errorExercises, data: dataExercises } = useQuery(QUERY_EXERCISES);
   const [assignExerciseToWorkout] = useMutation(ASSIGN_EXERCISE_TO_WORKOUT);
 
+  const [name, setName] = useState('');
   const [notes, setNotes] = useState('');
   const [selectedExercise, setSelectedExercise] = useState('');
   const [updateWorkoutNotes] = useMutation(UPDATE_WORKOUT_NOTES);
@@ -38,10 +39,25 @@ const EditWorkout = () => {
     }
   };
 
+  const handleUpdateName = async () => {
+    try {
+      
+      await updateWorkoutNotes({ variables: { workoutId: workoutId.toString(), name } });
+      // Optionally, refresh the component to show the updated notes
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div>
       <h1>Edit Workout</h1>
       <h2>{data.workout.name}</h2>
+      <label>
+        Name:
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+        <button onClick={handleUpdateName}>Update Name</button>
+      </label>
       <label>
         Notes:
         <input type="text" value={notes} onChange={(e) => setNotes(e.target.value)} />
