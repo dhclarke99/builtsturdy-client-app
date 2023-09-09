@@ -115,6 +115,20 @@ query findWorkoutById($workoutId: ID!) {
 }
 `;
 
+export const FETCH_SCHEDULES = gql `
+query findSchedules {
+  schedules {
+    _id
+    name
+    notes
+    workouts {
+      day
+      workoutId
+    }
+  }
+}
+`;
+
 
 
 

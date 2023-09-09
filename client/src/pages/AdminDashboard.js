@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { FETCH_ALL_WORKOUTS, FETCH_ALL_USERS, QUERY_EXERCISES } from '../utils/queries';
+import { FETCH_ALL_WORKOUTS, FETCH_ALL_USERS, QUERY_EXERCISES, FETCH_SCHEDULES } from '../utils/queries';
 import { DELETE_WORKOUT } from '../utils/mutations';
 import { Link } from 'react-router-dom';
 
@@ -9,6 +9,7 @@ const AdminDashboard = () => {
   const { loading: loadingWorkouts, error: errorWorkouts, data: dataWorkouts } = useQuery(FETCH_ALL_WORKOUTS);
   const { loading: loadingUsers, error: errorUsers, data: dataUsers } = useQuery(FETCH_ALL_USERS);
   const { loading: loadingExercises, error: errorExercises, data: dataExercises } = useQuery(QUERY_EXERCISES);
+  const { loading: loadingSchedules, error: errorSchedules, data: dataSchedules } = useQuery(FETCH_SCHEDULES);
   const [deleteWorkout] = useMutation(DELETE_WORKOUT, {
     refetchQueries: [{ query: FETCH_ALL_WORKOUTS }],
   });
@@ -21,9 +22,9 @@ console.log(dataExercises)
     }
   };
 
-  if (loadingWorkouts || loadingUsers) return <p>Loading...</p>;
-  if (errorWorkouts || errorUsers) return <p>Error: {errorWorkouts?.message || errorUsers?.message}</p>;
-
+  if (loadingWorkouts || loadingUsers || loadingExercises) return <p>Loading...</p>;
+  if (errorWorkouts || errorUsers || errorExercises) return <p>Error: {errorWorkouts?.message || errorUsers?.message || errorExercises?.message}</p>;
+console.log(dataSchedules)
   return (
     <div>
       <h1>Admin Dashboard</h1>
@@ -32,8 +33,31 @@ console.log(dataExercises)
           <li onClick={() => setActiveTab('workouts')}>Workouts</li>
           <li onClick={() => setActiveTab('users')}>Users</li>
           <li onClick={() => setActiveTab('exercises')}>Exercises</li>
+          <li onClick={() => setActiveTab('schedules')}>Schedules</li>
         </ul>
       </nav>
+
+      {activeTab === 'schedules' && (
+        <div>
+          <h2>All Schedules</h2>
+          {/* Your Workouts code here */}
+          <ul>
+            {dataSchedules.schedules.map((schedule) => (
+              <li key={schedule._id}>
+                {schedule.name}
+               
+                <ul>
+                  {schedule.workouts ? schedule.workouts.map((workout) => (
+                    <li key={workout._id}>
+                      {workout.day}:
+                    </li>
+                  )) : <li>No Workouts assigned</li>}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {activeTab === 'workouts' && (
         <div>

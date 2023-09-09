@@ -158,14 +158,7 @@ const resolvers = {
       try {
         // Create a new schedule
         const newSchedule = await Schedule.create({ name });
-
-        // Find the user by userId and update them to include the new schedule
-        await User.findByIdAndUpdate(
-          userId,
-          { $push: { schedules: newSchedule._id } },
-          { new: true }
-        );
-
+        
         return newSchedule;
 
       } catch (error) {
