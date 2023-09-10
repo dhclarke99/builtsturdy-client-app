@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { FETCH_ALL_WORKOUTS, FETCH_ALL_USERS, QUERY_EXERCISES, FETCH_SCHEDULES } from '../utils/queries';
+import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
+import { FETCH_ALL_WORKOUTS, FETCH_ALL_USERS, QUERY_EXERCISES, FETCH_SCHEDULES, FETCH_WORKOUT_BY_ID } from '../utils/queries';
 import { DELETE_WORKOUT } from '../utils/mutations';
 import { Link } from 'react-router-dom';
 
@@ -13,7 +14,30 @@ const AdminDashboard = () => {
   const [deleteWorkout] = useMutation(DELETE_WORKOUT, {
     refetchQueries: [{ query: FETCH_ALL_WORKOUTS }],
   });
-console.log(dataExercises)
+  const client = new ApolloClient({
+    link: createHttpLink({ uri: '/graphql' }),
+    cache: new InMemoryCache(),
+});
+  const [workoutDetails, setWorkoutDetails] = useState([]);
+console.log(dataSchedules)
+useEffect(() => {
+  if (dataSchedules) {
+      const workoutIds = dataSchedules.schedules.flatMap(schedule => schedule.workouts.map(w => w.workoutId));
+
+      const fetchWorkoutDetails = async () => {
+          const details = await Promise.all(workoutIds.map(async workoutId => {
+              const { data } = await client.query({
+                  query: FETCH_WORKOUT_BY_ID,
+                  variables: { workoutId: workoutId.toString() },
+              });
+              return data;
+          }));
+          setWorkoutDetails(details);
+      };
+
+      fetchWorkoutDetails();
+  }
+}, [dataSchedules]);
   const handleDelete = async (workoutId) => {
     try {
       await deleteWorkout({ variables: { workoutId } });
@@ -24,7 +48,7 @@ console.log(dataExercises)
 
   if (loadingWorkouts || loadingUsers || loadingExercises) return <p>Loading...</p>;
   if (errorWorkouts || errorUsers || errorExercises) return <p>Error: {errorWorkouts?.message || errorUsers?.message || errorExercises?.message}</p>;
-console.log(dataSchedules)
+
   return (
     <div>
       <h1>Admin Dashboard</h1>
@@ -45,14 +69,32 @@ console.log(dataSchedules)
             {dataSchedules.schedules.map((schedule) => (
               <li key={schedule._id}>
                 {schedule.name}
-               
-                <ul>
-                  {schedule.workouts ? schedule.workouts.map((workout) => (
-                    <li key={workout._id}>
-                      {workout.day}:
-                    </li>
-                  )) : <li>No Workouts assigned</li>}
-                </ul>
+               <ul>
+                {schedule.workouts.map((workout) => {
+                                                const relevantWorkoutDetail = workoutDetails.find(
+                                                    (detail) => detail.workout._id === workout.workoutId
+                                                );
+                                                return (
+                                                    <li key={workout.workoutId}>
+                                                        Day: {workout.day}, Workout ID: {workout.workoutId}
+                                                        {relevantWorkoutDetail && (
+                                                            <ul>
+                                                                <li>Name: {relevantWorkoutDetail.workout.name}</li>
+                                                                <li>Notes: {relevantWorkoutDetail.workout.notes}</li>
+                                                                <li>
+                                                                    Exercises:
+                                                                    <ul>
+                                                                        {relevantWorkoutDetail.workout.exercises.map((exercise, index) => (
+                                                                            <li key={index}>Exercise: {exercise.name}</li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </li>
+                                                            </ul>
+                                                        )}
+                                                    </li>
+                                                );
+                                            })}
+                                            </ul>
               </li>
             ))}
           </ul>
