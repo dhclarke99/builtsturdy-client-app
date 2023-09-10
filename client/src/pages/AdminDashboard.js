@@ -62,44 +62,50 @@ useEffect(() => {
       </nav>
 
       {activeTab === 'schedules' && (
-        <div>
-          <h2>All Schedules</h2>
-          {/* Your Workouts code here */}
-          <ul>
-            {dataSchedules.schedules.map((schedule) => (
-              <li key={schedule._id}>
-                {schedule.name}
-               <ul>
+  <div>
+    <h2>All Schedules</h2>
+    <div className="row">
+      {dataSchedules.schedules.map((schedule) => (
+        <div className="col-md-6" key={schedule._id}>
+          <div className="card mb-4">
+            <div className="card-header">
+              {schedule.name}
+            </div>
+            <div className="card-body">
+              <ul className="list-group list-group-flush">
                 {schedule.workouts.map((workout) => {
-                                                const relevantWorkoutDetail = workoutDetails.find(
-                                                    (detail) => detail.workout._id === workout.workoutId
-                                                );
-                                                return (
-                                                    <li key={workout.workoutId}>
-                                                        Day: {workout.day}, Workout ID: {workout.workoutId}
-                                                        {relevantWorkoutDetail && (
-                                                            <ul>
-                                                                <li>Name: {relevantWorkoutDetail.workout.name}</li>
-                                                                <li>Notes: {relevantWorkoutDetail.workout.notes}</li>
-                                                                <li>
-                                                                    Exercises:
-                                                                    <ul>
-                                                                        {relevantWorkoutDetail.workout.exercises.map((exercise, index) => (
-                                                                            <li key={index}>Exercise: {exercise.name}</li>
-                                                                        ))}
-                                                                    </ul>
-                                                                </li>
-                                                            </ul>
-                                                        )}
-                                                    </li>
-                                                );
-                                            })}
-                                            </ul>
-              </li>
-            ))}
-          </ul>
+                  const relevantWorkoutDetail = workoutDetails.find(
+                    (detail) => detail.workout._id === workout.workoutId
+                  );
+                  return (
+                    <li className="list-group-item" key={workout.workoutId}>
+                      <strong>Day:</strong> {workout.day}, <strong>Workout ID:</strong> {workout.workoutId}
+                      {relevantWorkoutDetail && (
+                        <ul className="list-group list-group-flush mt-2">
+                          <li className="list-group-item">Name: {relevantWorkoutDetail.workout.name}</li>
+                          <li className="list-group-item">Notes: {relevantWorkoutDetail.workout.notes}</li>
+                          <li className="list-group-item">
+                            Exercises:
+                            <ul className="list-group list-group-flush mt-2">
+                              {relevantWorkoutDetail.workout.exercises.map((exercise, index) => (
+                                <li className="list-group-item" key={index}>Exercise: {exercise.name}</li>
+                              ))}
+                            </ul>
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
         </div>
-      )}
+      ))}
+    </div>
+  </div>
+)}
+
 
       {activeTab === 'workouts' && (
         <div>
