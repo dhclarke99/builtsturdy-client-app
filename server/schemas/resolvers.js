@@ -134,6 +134,17 @@ const resolvers = {
 
       return await Workout.findByIdAndUpdate(workoutId, updateFields, { new: true }).populate('exercises');
     },
+    updateSchedule: async (_, { scheduleId, name, workoutIds }) => {
+      const updateFields = {};
+      if (name !== null && name !== undefined) {
+        updateFields.name = name;
+      }
+      if (workoutIds !== null && workoutIds !== undefined) {
+        updateFields.exercises = workoutIds;
+      }
+
+      return await Schedule.findByIdAndUpdate(scheduleId, updateFields, { new: true }).populate('workouts');
+    },
     updateExercise: async (_, { exerciseId, name, sets, reps, weight, notes }) => {
       const updateFields = {};
       if (name !== null && name !== undefined) {
