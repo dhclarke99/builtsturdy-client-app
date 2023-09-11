@@ -72,6 +72,7 @@ useEffect(() => {
             <div className="card-header">
               {schedule.name}
             </div>
+            <button onClick={() => window.location.href = `/edit-schedule/${schedule._id}`}>Edit</button>
             <div className="card-body">
               <ul className="list-group list-group-flush">
                 {schedule.workouts.map((workout) => {
@@ -102,6 +103,7 @@ useEffect(() => {
             </div>
           </div>
         </div>
+        
       ))}
     </div>
     <Link to={`/create-schedule`}>
