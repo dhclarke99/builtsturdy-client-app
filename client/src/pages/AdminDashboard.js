@@ -54,10 +54,10 @@ useEffect(() => {
       <h1>Admin Dashboard</h1>
       <nav>
         <ul>
-          <li onClick={() => setActiveTab('users')}>Users</li>
-          <li onClick={() => setActiveTab('schedules')}>Schedules</li>
-          <li onClick={() => setActiveTab('workouts')}>Workouts</li>
-          <li onClick={() => setActiveTab('exercises')}>Exercises</li>
+          <button onClick={() => setActiveTab('users')}>Users</button>
+          <button onClick={() => setActiveTab('schedules')}>Schedules</button>
+          <button onClick={() => setActiveTab('workouts')}>Workouts</button>
+          <button onClick={() => setActiveTab('exercises')}>Exercises</button>
           
         </ul>
       </nav>
@@ -104,6 +104,9 @@ useEffect(() => {
         </div>
       ))}
     </div>
+    <Link to={`/create-schedule`}>
+        <button>Create Schedule</button>
+        </Link>
   </div>
 )}
 
