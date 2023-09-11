@@ -129,6 +129,20 @@ query findSchedules {
 }
 `;
 
+export const FETCH_SCHEDULE_BY_ID = gql `
+query Query($scheduleId: ID!) {
+  schedule(scheduleId: $scheduleId) {
+    _id
+    name
+    notes
+    workouts {
+      day
+      workoutId
+    }
+  }
+}
+`;
+
 
 
 
