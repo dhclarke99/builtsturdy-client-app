@@ -38,7 +38,6 @@ const typeDefs = gql`
     _id: ID
     name: String
     notes: String
-    userId: ID
     workouts: [ScheduledWorkout]
   }
   
@@ -58,6 +57,17 @@ const typeDefs = gql`
     reps: Int!
     weight: Float
     notes: String
+  }
+
+  input UpdateWorkoutInput {
+    workoutId: ID
+    day: String
+  }
+  
+  input UpdateScheduleInput {
+    name: String
+    notes: String
+    workouts: [UpdateWorkoutInput]
   }
 
   type Query {
@@ -87,7 +97,7 @@ const typeDefs = gql`
     addScheduleToUser(userId: ID!, scheduleId: ID!): User
     removeScheduleFromUser(userId: ID!, scheduleId: ID!): User
     updateWorkout(workoutId: ID!, name: String, notes: String, exerciseIds: [ID]): Workout
-    updateSchedule(scheduleId: ID!, name: String, workoutIds: [ID]): Schedule
+    updateSchedule(scheduleId: ID!, input: UpdateScheduleInput!): Schedule
     }
     
   

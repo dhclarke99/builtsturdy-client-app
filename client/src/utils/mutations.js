@@ -106,7 +106,6 @@ mutation createSchedule($name: String!) {
     _id
     name
     notes
-    userId
     workouts {
       day
       workoutId

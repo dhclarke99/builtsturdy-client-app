@@ -2,10 +2,6 @@ const { Schema, model } = require('mongoose');
 const Workout = require('./workout');
 
 const scheduleSchema = new Schema({
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    },
     name: {
       type: String,
       require: true,

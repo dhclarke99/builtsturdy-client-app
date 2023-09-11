@@ -134,17 +134,22 @@ const resolvers = {
 
       return await Workout.findByIdAndUpdate(workoutId, updateFields, { new: true }).populate('exercises');
     },
-    updateSchedule: async (_, { scheduleId, name, workoutIds }) => {
-      const updateFields = {};
-      if (name !== null && name !== undefined) {
-        updateFields.name = name;
-      }
-      if (workoutIds !== null && workoutIds !== undefined) {
-        updateFields.exercises = workoutIds;
+    updateSchedule: async (_, { scheduleId, input }) => {
+      // Find the schedule by ID and update it
+      const updatedSchedule = await Schedule.findByIdAndUpdate(
+        scheduleId,
+        { $set: input },
+        { new: true, runValidators: true }
+      );
+
+      // If the schedule doesn't exist, throw an error
+      if (!updatedSchedule) {
+        throw new Error('Schedule not found');
       }
 
-      return await Schedule.findByIdAndUpdate(scheduleId, updateFields, { new: true }).populate('workouts');
+      return updatedSchedule;
     },
+  
     updateExercise: async (_, { exerciseId, name, sets, reps, weight, notes }) => {
       const updateFields = {};
       if (name !== null && name !== undefined) {
