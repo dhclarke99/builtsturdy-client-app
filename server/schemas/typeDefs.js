@@ -87,6 +87,7 @@ const typeDefs = gql`
     addScheduleToUser(userId: ID!, scheduleId: ID!): User
     removeScheduleFromUser(userId: ID!, scheduleId: ID!): User
     updateWorkout(workoutId: ID!, name: String, notes: String, exerciseIds: [ID]): Workout
+    updateSchedule(scheduleId: ID!, name: String, workoutIds: [ID]): Schedule
     }
     
   
