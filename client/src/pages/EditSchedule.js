@@ -1,40 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
-import { FETCH_WORKOUT_BY_ID, QUERY_EXERCISES } from '../utils/queries';
-import { UPDATE_WORKOUT } from '../utils/mutations';
+import { FETCH_SCHEDULE_BY_ID, FETCH_ALL_WORKOUTS } from '../utils/queries';
+import { UPDATE_SCHEDULE } from '../utils/mutations';
 
-const EditWorkout = () => {
-  const { id: workoutId } = useParams();
-  const { loading, error, data } = useQuery(FETCH_WORKOUT_BY_ID, {
-    variables: { workoutId },
+const EditSchedule = () => {
+  const { id: scheduleId } = useParams();
+  const { loading, error, data } = useQuery(FETCH_SCHEDULE_BY_ID, {
+    variables: { scheduleId },
   });
-  const { loading: loadingExercises, error: errorExercises, data: dataExercises } = useQuery(QUERY_EXERCISES);
-  const [assignExerciseToWorkout] = useMutation(UPDATE_WORKOUT);
+  const { loading: loadingWorkouts, error: errorWorkouts, data: dataWorkouts } = useQuery(FETCH_ALL_WORKOUTS);
+  const [updateSchedule] = useMutation(UPDATE_SCHEDULE);
 
   const [name, setName] = useState('');
   const [notes, setNotes] = useState('');
-  const [selectedExercise, setSelectedExercise] = useState('');
-  const [updateWorkoutNotes] = useMutation(UPDATE_WORKOUT);
-  const [allExerciseIds, setAllExerciseIds] = useState([]);
+  const [selectedWorkout, setSelectedWorkout] = useState('');
+  const [allWorkoutIds, setAllWorkoutIds] = useState([]);
 
   // Initialize state variables once data is available
   useEffect(() => {
     if (data) {
-      setName(data.workout.name);
-      setNotes(data.workout.notes);
-      setAllExerciseIds(data.workout.exercises.map(e => e._id));
+      setName(data.schedule.name);
+      setNotes(data.schedule.notes);
+      setAllWorkoutIds(data.schedule.workouts.map(e => e._id));
     }
   }, [data]);
 
-  if (loading || loadingExercises) return <p>Loading...</p>;
-  if (error || errorExercises) return <p>Error: {error?.message || errorExercises?.message}</p>;
+  if (loading || loadingWorkouts) return <p>Loading...</p>;
+  if (error || errorWorkouts) return <p>Error: {error?.message || errorWorkouts?.message}</p>;
 
-  const handleAssignExercise = async () => {
+  const handleAssignWorkout = async () => {
     try {
-      const updatedExerciseIds = [...allExerciseIds, selectedExercise];
-      setAllExerciseIds(updatedExerciseIds); // Update the local state
-      await assignExerciseToWorkout({ variables: { workoutId, exerciseIds: updatedExerciseIds } });
+      const updatedWorkoutIds = [...allWorkoutIds, selectedWorkout];
+      setAllWorkoutIds(updatedWorkoutIds); // Update the local state
+      await updateSchedule({ variables: { scheduleId, workoutIds: updatedWorkoutIds } });
       // Optionally, refresh the component to show the newly assigned exercise
       window.location.href = '/admindashboard';
     } catch (err) {
@@ -42,11 +41,11 @@ const EditWorkout = () => {
     }
   };
 
-  const handleRemoveExercise = async (exerciseIdToRemove) => {
+  const handleRemoveWorkout = async (workoutIdToRemove) => {
     try {
-      const updatedExerciseIds = allExerciseIds.filter(id => id !== exerciseIdToRemove);
-      setAllExerciseIds(updatedExerciseIds); // Update the local state
-      await assignExerciseToWorkout({ variables: { workoutId, exerciseIds: updatedExerciseIds } });
+      const updatedWorkoutIds = allWorkoutIds.filter(id => id !== workoutIdToRemove);
+      setAllWorkoutIds(updatedWorkoutIds); // Update the local state
+      await updateSchedule({ variables: { scheduleId, workoutIds: updatedWorkoutIds } });
       // Optionally, refresh the component to show the updated list of exercises
       window.location.reload()
     } catch (err) {
@@ -57,7 +56,7 @@ const EditWorkout = () => {
   const handleUpdateNotes = async () => {
     try {
       
-      await updateWorkoutNotes({ variables: { workoutId: workoutId.toString(), notes } });
+      await updateSchedule({ variables: { scheduleId: scheduleId.toString(), notes } });
       // Optionally, refresh the component to show the updated notes
     } catch (err) {
       console.error(err);
@@ -67,17 +66,17 @@ const EditWorkout = () => {
   const handleUpdateName = async () => {
     try {
       
-      await updateWorkoutNotes({ variables: { workoutId: workoutId.toString(), name } });
+      await updateSchedule({ variables: { scheduleId: scheduleId.toString(), name } });
       // Optionally, refresh the component to show the updated notes
     } catch (err) {
       console.error(err);
     }
   };
-
+console.log(data)
   return (
     <div>
-      <h1>Edit Workout</h1>
-      <h2>{data.workout.name}</h2>
+      <h1>Edit Schedule</h1>
+      <h2>{data.schedule.name}</h2>
       <label>
         Name:
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
@@ -89,30 +88,30 @@ const EditWorkout = () => {
         <button onClick={handleUpdateNotes}>Update Notes</button>
       </label>
       <label>
-        Current Exercises:
+        Current Workouts:
         <ul>
-          {data.workout.exercises.map((exercise) => (
-            <li key={exercise._id}>
-              {exercise.name} 
-              <button onClick={() => handleRemoveExercise(exercise._id)}>Remove</button>
+          {data.schedule.workouts.map((workout) => (
+            <li key={workout.workoutId}>
+              {workout.day} 
+              <button onClick={() => handleRemoveWorkout(workout._id)}>Remove</button>
             </li>
           ))}
         </ul>
       </label>
       <label>
-        Assign Exercise:
-        <select value={selectedExercise} onChange={(e) => setSelectedExercise(e.target.value)}>
-          <option value="" disabled>Select an exercise</option>
-          {dataExercises.exercises.map((exercise) => (
-            <option key={exercise._id} value={exercise._id}>
-              {exercise.name}
+        Assign Workout:
+        <select value={selectedWorkout} onChange={(e) => setSelectedWorkout(e.target.value)}>
+          <option value="" disabled>Select a workout</option>
+          {dataWorkouts.workouts.map((workout) => (
+            <option key={workout._id} value={workout._id}>
+              {workout.name}
             </option>
           ))}
         </select>
       </label>
-      <button onClick={handleAssignExercise}>Assign Exercise</button>
+      <button onClick={handleAssignWorkout}>Assign Workout</button>
     </div>
   );
 };
 
-export default EditWorkout;
+export default EditSchedule;
