@@ -113,3 +113,17 @@ mutation createSchedule($name: String!) {
   }
 }
 `;
+
+export const UPDATE_SCHEDULE = gql `
+mutation updateSchedule($scheduleId: ID!, $input: UpdateScheduleInput!) {
+  updateSchedule(scheduleId: $scheduleId, input: $input) {
+    _id
+    name
+    notes
+    workouts {
+      day
+      workoutId
+    }
+  }
+}
+`;
