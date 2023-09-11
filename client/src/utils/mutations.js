@@ -99,3 +99,18 @@ mutation updateWorkout($workoutId: ID!, $name: String, $notes: String, $exercise
   }
 }
 `;
+
+export const CREATE_SCHEDULE =  gql `
+mutation createSchedule($name: String!) {
+  createSchedule(name: $name) {
+    _id
+    name
+    notes
+    userId
+    workouts {
+      day
+      workoutId
+    }
+  }
+}
+`;
