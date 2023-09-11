@@ -14,6 +14,7 @@ import EditWorkout from './pages/EditWorkout';
 import EditExercise from './pages/EditExercise';
 import UniqueUser from './pages/UniqueUser';
 import CreateSchedule from './pages/CreateSchedule'
+import EditSchedule from './pages/EditSchedule'
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -54,6 +55,7 @@ const App = () => {
           <Route path="/assign-workout" element={<AssignWorkout />} />
           <Route path="/edit-workout/:id" element={<EditWorkout />} />
           <Route path="/edit-exercise/:id" element={<EditExercise />} />
+          <Route path="/edit-schedule/:id" element={<EditSchedule />} />
           <Route path="/user/:id" element={<UniqueUser />} />
           <Route path="/create-schedule" element={<CreateSchedule />} />
         </Routes>
