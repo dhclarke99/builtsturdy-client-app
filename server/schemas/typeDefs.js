@@ -3,15 +3,52 @@ const { gql } = require('apollo-server-express');
 const typeDefs = gql`
 
 
-  type User {
-    _id: ID
-    username: String
-    firstname: String
-    lastname: String
-    email: String
-    workouts: [Workout]!
-    schedules: [Schedule]
-  }
+type User {
+  _id: ID
+  username: String
+  firstname: String
+  lastname: String
+  email: String
+  workouts: [Workout]!
+  schedules: [Schedule]
+  gender: String
+  height: Int
+  currentWeight: Float
+  estimatedBodyFat: Float
+  age: Int
+  trainingExperience: String
+  mainPhysiqueGoal: String
+}
+
+input CreateUserInput {
+  username: String!
+  firstname: String!
+  lastname: String!
+  email: String!
+  password: String!
+  gender: String
+  height: Int
+  currentWeight: Float
+  estimatedBodyFat: Float
+  age: Int
+  trainingExperience: String
+  mainPhysiqueGoal: String
+}
+
+input UpdateUserInput {
+  username: String
+  firstname: String
+  lastname: String
+  email: String
+  password: String
+  gender: String
+  height: Int
+  currentWeight: Float
+  estimatedBodyFat: Float
+  age: Int
+  trainingExperience: String
+  mainPhysiqueGoal: String
+}
 
   type Option {
     optionText: String
@@ -83,7 +120,8 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createUser(username: String!, firstname: String!, lastname: String!, email: String!, password: String!): Auth
+    createUser(input: CreateUserInput!): Auth
+    updateUser(userId: ID!, input: UpdateUserInput!): User
     login(email: String!, password: String!): Auth
     createExercise(name: String!, sets: Int, reps: Int, weight: Float, notes: String): Exercise
     updateExercise(exerciseId: ID!, name: String, sets: Int, reps: Int, weight: Float, notes: String): Exercise

@@ -46,14 +46,39 @@ const resolvers = {
 
   },
   Mutation: {
-    createUser: async (_parent, { username, firstname, lastname, email, password }) => {
+    createUser: async (_parent, { input }) => {
       try {
-        const user = await User.create({ username, firstname, lastname, email, password });
+        const { username, firstname, lastname, email, password, gender, height, currentWeight, estimatedBodyFat, age, trainingExperience, mainPhysiqueGoal } = input;
+        const user = await User.create({
+          username,
+          firstname,
+          lastname,
+          email,
+          password,
+          gender,
+          height,
+          currentWeight,
+          estimatedBodyFat,
+          age,
+          trainingExperience,
+          mainPhysiqueGoal
+        });
         const token = signToken(user);
         return { token, user };
       } catch (err) {
         console.log(err);
         throw new Error('Failed to create user');
+      }
+    },
+    updateUser: async (_parent, { userId, input }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('Not authenticated');
+      }
+      try {
+        return await User.findByIdAndUpdate(userId, input, { new: true });
+      } catch (err) {
+        console.log(err);
+        throw new Error('Failed to update user');
       }
     },
     login: async (_parent, { email, password }) => {
