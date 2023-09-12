@@ -70,15 +70,29 @@ const resolvers = {
         throw new Error('Failed to create user');
       }
     },
-    updateUser: async (_parent, { userId, input }, context) => {
-      if (!context.user) {
-        throw new AuthenticationError('Not authenticated');
-      }
+    updateUser: async (_, { userId, input }) => {
       try {
-        return await User.findByIdAndUpdate(userId, input, { new: true });
-      } catch (err) {
-        console.log(err);
-        throw new Error('Failed to update user');
+        // Filter out any fields that are null or undefined
+        const updateFields = Object.fromEntries(
+          Object.entries(input).filter(([_, value]) => value != null)
+        );
+  
+        // Find the user by ID and update it
+        const updatedUser = await User.findByIdAndUpdate(
+          userId,
+          { $set: updateFields },
+          { new: true, runValidators: true }
+        );
+  
+        // If the user doesn't exist, throw an error
+        if (!updatedUser) {
+          throw new Error('User not found');
+        }
+  
+        return updatedUser;
+      } catch (error) {
+        console.error("Error in updateUser:", error);
+        throw new Error("Failed to update user");
       }
     },
     login: async (_parent, { email, password }) => {

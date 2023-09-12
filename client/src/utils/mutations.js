@@ -36,6 +36,47 @@ mutation CreateUser($username: String!, $firstname: String!,
 }
 `;
 
+export const UPDATE_USER = gql `
+mutation updateUser($userId: ID!, $input: UpdateUserInput!) {
+  updateUser(userId: $userId, input: $input) {
+    _id
+    age
+    currentWeight
+    email
+    estimatedBodyFat
+    firstname
+    gender
+    height
+    lastname
+    mainPhysiqueGoal
+    trainingExperience
+    username
+    schedules {
+      _id
+      name
+      notes
+      workouts {
+        day
+        workoutId
+      }
+    }
+    workouts {
+      _id
+      name
+      notes
+      exercises {
+        _id
+        name
+        notes
+        sets
+        reps
+        weight
+      }
+    }
+  }
+}
+`;
+
 
 export const CREATE_EXERCISE = gql`
 mutation Mutation($name: String!, $sets: Int!, $reps: Int!) {
