@@ -18,6 +18,7 @@ const EditSchedule = () => {
   const [selectedWorkout, setSelectedWorkout] = useState('');
   const [selectedWorkoutDay, setSelectedWorkoutDay] = useState('');
   const [allWorkoutIds, setAllWorkoutIds] = useState([]);
+  const [allWorkouts, setAllWorkouts] = useState([]);
   const client = new ApolloClient({
     link: createHttpLink({ uri: '/graphql' }),
     cache: new InMemoryCache(),
@@ -45,7 +46,12 @@ useEffect(() => {
     }
   }, [dataSchedule]);
   
-
+  useEffect(() => {
+    if (dataSchedule) {
+      setAllWorkouts(dataSchedule.schedule.workouts);
+    }
+  }, [dataSchedule]);
+console.log(allWorkouts)
   // Initialize state variables once data is available
   useEffect(() => {
     if (dataSchedule) {
@@ -58,17 +64,39 @@ useEffect(() => {
   if (loading || loadingWorkouts) return <p>Loading...</p>;
   if (error || errorWorkouts) return <p>Error: {error?.message || errorWorkouts?.message}</p>;
 
+  const cleanedWorkouts = allWorkouts.map(({ workoutId, day }) => ({ workoutId, day }));
+
   const handleAssignWorkout = async () => {
     try {
-      const updatedWorkoutIds = [...allWorkoutIds, selectedWorkout];
-      setAllWorkoutIds(updatedWorkoutIds); // Update the local state
-      await updateSchedule({ variables: { scheduleId, workoutIds: updatedWorkoutIds } });
+      // Create a new workout object with the selected workout and day
+      const newWorkout = {
+        workoutId: selectedWorkout,
+        day: selectedWorkoutDay // Assume you have a state variable or some way to select the day
+      };
+  
+      // Add the new workout to the existing list of workouts
+      const updatedWorkouts = [...allWorkouts, newWorkout];
+      const cleanedWorkouts = updatedWorkouts.map(({ workoutId, day }) => ({ workoutId, day }));
+      // Update the local state
+      setAllWorkouts(updatedWorkouts);
+  
+      // Prepare the input for the GraphQL mutation
+      const input = {
+        name,
+        notes,
+        workouts: cleanedWorkouts
+      };
+  
+      // Execute the GraphQL mutation
+      await updateSchedule({ variables: { scheduleId, input } });
+  
       // Optionally, refresh the component to show the newly assigned exercise
       window.location.href = '/admindashboard';
     } catch (err) {
       console.error(err);
     }
   };
+  
 
   const handleEditWorkout = async (workoutIdToEdit) => {
     console.log(workoutIdToEdit)
@@ -155,7 +183,7 @@ console.log(dataSchedule)
           ))}
         </select>
         <label> Select Day:
-        <select>
+        <select value={selectedWorkoutDay} onChange={(e) => setSelectedWorkoutDay(e.target.value)}>
             <option value="" disabled>Select a day</option>
             <option value="Monday">Monday</option>
             <option value="Tuesday">Tuesday</option>
