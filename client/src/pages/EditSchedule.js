@@ -65,7 +65,7 @@ console.log(allWorkouts)
   if (error || errorWorkouts) return <p>Error: {error?.message || errorWorkouts?.message}</p>;
 
 
-  const handleAssignWorkout = async () => {
+  const handleUpdateWorkout = async () => {
     try {
       // Create a new workout object with the selected workout and day
       const newWorkout = {
@@ -126,15 +126,29 @@ console.log(allWorkouts)
 
   const handleRemoveWorkout = async (workoutIdToRemove) => {
     try {
-      const updatedWorkoutIds = allWorkoutIds.filter(id => id !== workoutIdToRemove);
-      setAllWorkoutIds(updatedWorkoutIds); // Update the local state
-      await updateSchedule({ variables: { scheduleId, workoutIds: updatedWorkoutIds } });
+      // Filter out the workout with the ID to remove
+      const updatedWorkouts = allWorkouts.filter(workout => workout.workoutId !== workoutIdToRemove);
+  
+      // Create a cleaned-up array without the __typename field
+      const cleanedWorkouts = updatedWorkouts.map(({ workoutId, day }) => ({ workoutId, day }));
+  
+      setAllWorkouts(updatedWorkouts); // Update the local state
+  
+      const input = {
+        name,
+        notes,
+        workouts: cleanedWorkouts
+      };
+  
+      await updateSchedule({ variables: { scheduleId, input } });
+  
       // Optionally, refresh the component to show the updated list of exercises
-      window.location.reload()
+      window.location.reload();
     } catch (err) {
       console.error(err);
     }
   };
+  
 
   const handleUpdateNotes = async () => {
     try {
@@ -218,7 +232,7 @@ console.log(dataSchedule)
         </label>
         
       </label>
-      <button onClick={handleAssignWorkout}>Assign Workout</button>
+      <button onClick={handleUpdateWorkout}>Update Workout</button>
     </div>
   );
 };
