@@ -118,12 +118,22 @@ console.log(dataSchedule)
       <label>
         Current Workouts:
         <ul>
-          {dataSchedule.schedule.workouts.map((workout) => (
-            <li key={workout.workoutId}>
-              {workout.day} 
-              <button onClick={() => handleRemoveWorkout(workout._id)}>Remove</button>
-            </li>
-          ))}
+        {dataSchedule.schedule.workouts.map((workout) => {
+                  const relevantWorkoutDetail = workoutDetails.find(
+                    (detail) => detail.workout._id === workout.workoutId
+                  );
+                  return (
+                    <li className="list-group-item" key={workout.workoutId}>
+                      <strong>Day:</strong> {workout.day}, <strong>Workout ID:</strong> {workout.workoutId}
+                      {relevantWorkoutDetail && (
+                        <ul className="list-group list-group-flush mt-2">
+                          <li className="list-group-item">Name: {relevantWorkoutDetail.workout.name}</li>
+                          <li className="list-group-item">Notes: {relevantWorkoutDetail.workout.notes}</li>
+                        </ul>
+                      )}
+                    </li>
+                  );
+                })}
         </ul>
       </label>
       <label>
