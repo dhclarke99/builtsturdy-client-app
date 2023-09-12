@@ -16,6 +16,7 @@ const EditSchedule = () => {
   const [name, setName] = useState('');
   const [notes, setNotes] = useState('');
   const [selectedWorkout, setSelectedWorkout] = useState('');
+  const [selectedWorkoutDay, setSelectedWorkoutDay] = useState('');
   const [allWorkoutIds, setAllWorkoutIds] = useState([]);
   const client = new ApolloClient({
     link: createHttpLink({ uri: '/graphql' }),
@@ -68,6 +69,10 @@ useEffect(() => {
       console.error(err);
     }
   };
+
+  const handleEditWorkout = async (workoutIdToEdit) => {
+    console.log(workoutIdToEdit)
+  }
 
   const handleRemoveWorkout = async (workoutIdToRemove) => {
     try {
@@ -131,7 +136,10 @@ console.log(dataSchedule)
                           <li className="list-group-item">Notes: {relevantWorkoutDetail.workout.notes}</li>
                         </ul>
                       )}
+                      <button onClick={() => handleEditWorkout(workout.workoutId)}>Edit</button>
+                      <button onClick={() => handleRemoveWorkout(workout.workoutId)}>Remove</button>
                     </li>
+                     
                   );
                 })}
         </ul>
@@ -146,6 +154,19 @@ console.log(dataSchedule)
             </option>
           ))}
         </select>
+        <label> Select Day:
+        <select>
+            <option value="" disabled>Select a day</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+        </select>
+        </label>
+        
       </label>
       <button onClick={handleAssignWorkout}>Assign Workout</button>
     </div>
