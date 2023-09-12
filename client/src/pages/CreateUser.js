@@ -1,118 +1,68 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-
 import { useMutation } from '@apollo/client';
-import { ADD_USER } from '../utils/mutations';
+import { CREATE_USER } from '../utils/mutations';
 
-import Auth from '../utils/auth';
-
-const Signup = () => {
-  const [formState, setFormState] = useState({
+const AdminCreateUser = () => {
+  const [formData, setFormData] = useState({
     username: '',
-    firstname: '',
-    lastname: '',
     email: '',
     password: '',
+    role: 'user', // default role
   });
-  const [addUser, { error, data }] = useMutation(ADD_USER);
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
+  const [createUser] = useMutation(CREATE_USER);
 
-    setFormState({
-      ...formState,
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
       [name]: value,
     });
   };
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-    console.log(formState);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
     try {
-      const { data } = await addUser({
-        variables: { ...formState },
+      const { data } = await createUser({
+        variables: { input: formData },
       });
-
-      Auth.login(data.addUser.token);
-    } catch (e) {
-      console.error(e);
+      console.log('User created:', data);
+    } catch (err) {
+      console.error('Error creating user:', err);
     }
   };
 
   return (
-    <main className="flex-row justify-center mb-4">
-      <div className="col-12 col-lg-10">
-        <div className="card" id="signupform">
-          <h3 className="card-header bg-dark text-light p-2" id="signUp">Sign Up</h3>
-          <div className="card-body" >
-            {data ? (
-              <p>
-                Success! You may now head{' '}
-                <Link to="/">back to the homepage.</Link>
-              </p>
-            ) : (
-              <form onSubmit={handleFormSubmit}>
-                <input
-                  className="form-input" 
-                  placeholder="Your username"
-                  name="username"
-                  type="text"
-                  value={formState.name}
-                  onChange={handleChange}
-                />
-                <input
-                  className="form-input" 
-                  placeholder="First Name"
-                  name="firstname"
-                  type="text"
-                  value={formState.name}
-                  onChange={handleChange}
-                />
-                <input
-                  className="form-input" 
-                  placeholder="Last Name"
-                  name="lastname"
-                  type="text"
-                  value={formState.name}
-                  onChange={handleChange}
-                />
-                <input
-                  className="form-input" 
-                  placeholder="Your email"
-                  name="email"
-                  type="email"
-                  value={formState.email}
-                  onChange={handleChange}
-                />
-                <input
-                  className="form-input" 
-                  placeholder="******"
-                  name="password"
-                  type="password"
-                  value={formState.password}
-                  onChange={handleChange}
-                />
-                <button
-                  className="btn btn-block btn-primary" 
-                  style={{ cursor: 'pointer' }}
-                  type="submit"
-                >
-                  Submit
-                </button>
-              </form>
-            )}
-
-            {error && (
-              <div className="my-3 p-3 bg-danger text-white">
-                {error.message}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </main>
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        name="username"
+        placeholder="Username"
+        value={formData.username}
+        onChange={handleChange}
+      />
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        value={formData.email}
+        onChange={handleChange}
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        value={formData.password}
+        onChange={handleChange}
+      />
+      <select name="role" value={formData.role} onChange={handleChange}>
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+      <button type="submit">Create User</button>
+    </form>
   );
 };
 
-export default Signup;
+export default AdminCreateUser;
