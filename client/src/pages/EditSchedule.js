@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
+import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { useParams } from 'react-router-dom';
-import { FETCH_SCHEDULE_BY_ID, FETCH_ALL_WORKOUTS } from '../utils/queries';
+import { FETCH_SCHEDULE_BY_ID, FETCH_ALL_WORKOUTS, FETCH_WORKOUT_BY_ID } from '../utils/queries';
 import { UPDATE_SCHEDULE } from '../utils/mutations';
 
 const EditSchedule = () => {
   const { id: scheduleId } = useParams();
-  const { loading, error, data } = useQuery(FETCH_SCHEDULE_BY_ID, {
+  const { loading, error, data: dataSchedule } = useQuery(FETCH_SCHEDULE_BY_ID, {
     variables: { scheduleId },
   });
   const { loading: loadingWorkouts, error: errorWorkouts, data: dataWorkouts } = useQuery(FETCH_ALL_WORKOUTS);
@@ -16,15 +17,42 @@ const EditSchedule = () => {
   const [notes, setNotes] = useState('');
   const [selectedWorkout, setSelectedWorkout] = useState('');
   const [allWorkoutIds, setAllWorkoutIds] = useState([]);
+  const client = new ApolloClient({
+    link: createHttpLink({ uri: '/graphql' }),
+    cache: new InMemoryCache(),
+});
+
+const [workoutDetails, setWorkoutDetails] = useState([]);
+console.log("data:", dataSchedule)
+
+useEffect(() => {
+    if (dataSchedule && dataSchedule.schedule && Array.isArray(dataSchedule.schedule.workouts)) {
+      const workoutIds = dataSchedule.schedule.workouts.map(w => w.workoutId);
+  
+      const fetchWorkoutDetails = async () => {
+        const details = await Promise.all(workoutIds.map(async workoutId => {
+          const { data } = await client.query({
+            query: FETCH_WORKOUT_BY_ID,
+            variables: { workoutId: workoutId.toString() },
+          });
+          return data;
+        }));
+        setWorkoutDetails(details);
+      };
+  
+      fetchWorkoutDetails();
+    }
+  }, [dataSchedule]);
+  
 
   // Initialize state variables once data is available
   useEffect(() => {
-    if (data) {
-      setName(data.schedule.name);
-      setNotes(data.schedule.notes);
-      setAllWorkoutIds(data.schedule.workouts.map(e => e._id));
+    if (dataSchedule) {
+      setName(dataSchedule.schedule.name);
+      setNotes(dataSchedule.schedule.notes);
+      setAllWorkoutIds(dataSchedule.schedule.workouts.map(e => e._id));
     }
-  }, [data]);
+  }, [dataSchedule]);
 
   if (loading || loadingWorkouts) return <p>Loading...</p>;
   if (error || errorWorkouts) return <p>Error: {error?.message || errorWorkouts?.message}</p>;
@@ -72,11 +100,11 @@ const EditSchedule = () => {
       console.error(err);
     }
   };
-console.log(data)
+console.log(dataSchedule)
   return (
     <div>
       <h1>Edit Schedule</h1>
-      <h2>{data.schedule.name}</h2>
+      <h2>{dataSchedule.schedule.name}</h2>
       <label>
         Name:
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
@@ -90,7 +118,7 @@ console.log(data)
       <label>
         Current Workouts:
         <ul>
-          {data.schedule.workouts.map((workout) => (
+          {dataSchedule.schedule.workouts.map((workout) => (
             <li key={workout.workoutId}>
               {workout.day} 
               <button onClick={() => handleRemoveWorkout(workout._id)}>Remove</button>
