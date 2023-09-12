@@ -158,6 +158,9 @@ useEffect(() => {
               </div>
             ))}
           </div>
+          <Link to={`/create-user`}>
+        <button>Create User</button>
+        </Link>
         </div>
       )}
 
