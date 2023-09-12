@@ -30,9 +30,17 @@ export const QUERY_USER_by_id = gql`
 query findUserById($userId: String!) {
   user(id: $userId) {
     _id
+    age
+    currentWeight
     email
+    estimatedBodyFat
     firstname
+    gender
+    height
     lastname
+    mainPhysiqueGoal
+    trainingExperience
+    username
     schedules {
       _id
       name
@@ -42,7 +50,19 @@ query findUserById($userId: String!) {
         workoutId
       }
     }
-    username
+    workouts {
+      _id
+      name
+      notes
+      exercises {
+        _id
+        name
+        notes
+        reps
+        sets
+        weight
+      }
+    }
   }
 }
 `;
