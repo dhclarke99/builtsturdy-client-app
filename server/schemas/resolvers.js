@@ -48,13 +48,14 @@ const resolvers = {
   Mutation: {
     createUser: async (_parent, { input }) => {
       try {
-        const { username, firstname, lastname, email, password, gender, height, currentWeight, estimatedBodyFat, age, trainingExperience, mainPhysiqueGoal } = input;
+        const { username, firstname, lastname, email, password, role, gender, height, currentWeight, estimatedBodyFat, age, trainingExperience, mainPhysiqueGoal } = input;
         const user = await User.create({
           username,
           firstname,
           lastname,
           email,
           password,
+          role,
           gender,
           height,
           currentWeight,

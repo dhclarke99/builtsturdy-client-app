@@ -35,31 +35,35 @@ const userSchema = new Schema({
     schedules: [{
         type: Schema.Types.ObjectId,
         ref: 'Schedule',
-      }],
-      gender: {
+    }],
+    gender: {
         type: String,
         enum: ['Male', 'Female'],
-      },
-      height: {
+    },
+    role: {
+        type: String,
+        enum: ['User', 'Admin'],
+    },
+    height: {
         type: Number, // in inches
-      },
-      currentWeight: {
+    },
+    currentWeight: {
         type: Number, // in lbs
-      },
-      estimatedBodyFat: {
+    },
+    estimatedBodyFat: {
         type: Number, // in percentage
-      },
-      age: {
+    },
+    age: {
         type: Number,
-      },
-      trainingExperience: {
+    },
+    trainingExperience: {
         type: String,
         enum: ['Beginner', 'Intermediate'],
-      },
-      mainPhysiqueGoal: {
+    },
+    mainPhysiqueGoal: {
         type: String,
         enum: ['Burn Fat', 'Build Muscle', 'Recomp'],
-      },
+    },
 });
 
 

@@ -56,6 +56,16 @@ const UniqueUser = () => {
                 <div className="card-body">
                     <h5 className="card-title">Email: {user.email}</h5>
                     <h5 className="card-title">Username: {user.username}</h5>
+                    <h5> Personal Stats:</h5>
+                    <ul>
+                        <li>Age: {user.age}</li>
+                        <li>Gender: {user.gender}</li>
+                        <li>Height: {user.height} inches</li>
+                        <li>Weight: {user.currentWeight} lbs</li>
+                        <li>Body Fat: {user.estimatedBodyFat} %</li>
+                        <li>Experience: {user.trainingExperience}</li>
+                        <li>Goal: {user.mainPhysiqueGoal}</li>
+                        </ul>
                     <h5 className="card-title">Schedules:</h5>
                     <ul>
                         {user.schedules.map((schedule) => (

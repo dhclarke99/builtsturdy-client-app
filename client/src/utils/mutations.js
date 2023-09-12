@@ -25,12 +25,45 @@ mutation CreateUser($username: String!, $firstname: String!,
 `;
 
 export const CREATE_USER = gql`
-mutation CreateUser($username: String!, $firstname: String!, 
-  $lastname: String!, $email: String!, $password: String!) {
-  createUser(username: $username, firstname: $firstname, lastname: $lastname, email: $email, password: $password) {
+mutation createUser($input: CreateUserInput!) {
+  createUser(input: $input) {
     token
     user {
       _id
+      age
+      currentWeight
+      email
+      estimatedBodyFat
+      firstname
+      gender
+      height
+      lastname
+      mainPhysiqueGoal
+      role
+      schedules {
+        _id
+        name
+        notes
+        workouts {
+          day
+          workoutId
+        }
+      }
+      trainingExperience
+      username
+      workouts {
+        _id
+        exercises {
+          _id
+          notes
+          name
+          reps
+          sets
+          weight
+        }
+        name
+        notes
+      }
     }
   }
 }

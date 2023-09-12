@@ -12,6 +12,7 @@ type User {
   workouts: [Workout]!
   schedules: [Schedule]
   gender: String
+  role: String
   height: Int
   currentWeight: Float
   estimatedBodyFat: Float
@@ -26,6 +27,7 @@ input CreateUserInput {
   lastname: String!
   email: String!
   password: String!
+  role: String!
   gender: String
   height: Int
   currentWeight: Float
@@ -41,6 +43,7 @@ input UpdateUserInput {
   lastname: String
   email: String
   password: String
+  role: String
   gender: String
   height: Int
   currentWeight: Float
