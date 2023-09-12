@@ -46,6 +46,7 @@ const UniqueUser = () => {
 
     const user = dataUser.user;
     console.log(workoutDetails)
+    console.log(user)
     return (
         <div className="container mt-5">
             <div className="card">
@@ -62,7 +63,7 @@ const UniqueUser = () => {
                                 <div className="card mt-2">
                                     <div className="card-body">
                                         <h6 className="card-subtitle mb-2 text-muted">Schedule ID: {schedule._id}</h6>
-                                        <h6 className="card-subtitle mb-2 text-muted">User ID: {schedule.userId}</h6>
+                                        <h6 className="card-subtitle mb-2 text-muted">Schedule Name: {schedule.name}</h6>
                                         <ul>
                                             {schedule.workouts.map((workout) => {
                                                 const relevantWorkoutDetail = workoutDetails.find(

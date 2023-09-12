@@ -35,7 +35,8 @@ query findUserById($userId: String!) {
     lastname
     schedules {
       _id
-      userId
+      name
+      notes
       workouts {
         day
         workoutId
