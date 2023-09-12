@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID } from '../utils/queries';
+import { UPDATE_USER } from '../utils/mutations';
 
 const UniqueUser = () => {
    
@@ -21,6 +22,35 @@ const UniqueUser = () => {
         variables: { userId: id.toString() },
         fetchPolicy: 'network-only'
     });
+
+    const [formData, setFormData] = useState({});
+    const [updateUser] = useMutation(UPDATE_USER);
+
+  useEffect(() => {
+    if (dataUser && dataUser.user) {
+      setFormData(dataUser.user);
+    }
+  }, [dataUser]);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await updateUser({
+        variables: { userId: id, input: formData },
+      });
+      alert('User updated successfully');
+    } catch (err) {
+      console.error('Failed to update user:', err);
+    }
+  };
 
     useEffect(() => {
         if (dataUser) {
@@ -45,7 +75,7 @@ const UniqueUser = () => {
     if (errorUser) return <p>Error: {errorUser.message}</p>;
 
     const user = dataUser.user;
-    console.log(workoutDetails)
+    console.log(formData)
     console.log(user)
     return (
         <div className="container mt-5">
@@ -107,7 +137,124 @@ const UniqueUser = () => {
                     </ul>
                 </div>
             </div>
+            <div>
+      <h1>Edit User</h1>
+      <form onSubmit={handleSubmit}>
+        {/* Add form fields here based on your schema. For example: */}
+        <label> First Name:
+            <input
+          type="text"
+          name="firstname"
+          placeholder="First Name"
+          value={formData.firstname || ''}
+          onChange={handleChange}
+        />
+        </label>
+        <label> Last Name:
+            <input
+          type="text"
+          name="lastname"
+          placeholder="Last Name"
+          value={formData.lastname || ''}
+          onChange={handleChange}
+        />
+        </label>
+        <label> Username:
+            <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          value={formData.username || ''}
+          onChange={handleChange}
+        />
+        </label>
+        <label> Email:
+            <input
+          type="text"
+          name="email"
+          placeholder="Email"
+          value={formData.email || ''}
+          onChange={handleChange}
+        />
+        </label>
+        <label> Age:
+            <input
+          type="text"
+          name="age"
+          placeholder="Age"
+          value={formData.age || ''}
+          onChange={handleChange}
+        />
+        </label>
+        <label> Gender:
+            <input
+          type="text"
+          name="gender"
+          placeholder="Gender"
+          value={formData.gender || ''}
+          onChange={handleChange}
+        />
+        </label>
+        <label> Height (inches):
+            <input
+          type="text"
+          name="height"
+          placeholder="Height"
+          value={formData.height || ''}
+          onChange={handleChange}
+        />
+        </label>
+        <label> Weight (lbs):
+            <input
+          type="text"
+          name="currentWeight"
+          placeholder="Current Weight"
+          value={formData.currentWeight || ''}
+          onChange={handleChange}
+        />
+        </label>
+        <label> Body Fat (%):
+            <input
+          type="text"
+          name="estimatedBodyFat"
+          placeholder="Body Fat %"
+          value={formData.estimatedBodyFat || ''}
+          onChange={handleChange}
+        />
+        </label>
+        <label> Training Experience:
+            <input
+          type="text"
+          name="trainingExperience"
+          placeholder="Training Experience"
+          value={formData.trainingExperience || ''}
+          onChange={handleChange}
+        />
+        </label>
+        <label> Phsyique Goal:
+            <input
+          type="text"
+          name="mainPhysiqueGoal"
+          placeholder="Phsyique Goal"
+          value={formData.mainPhysiqueGoal || ''}
+          onChange={handleChange}
+        />
+        </label>
+        <label> Schedule:
+            <input
+          type="text"
+          name="schedules"
+          placeholder="Schedule"
+          value={formData.schedules || ''}
+          onChange={handleChange}
+        />
+        </label>
+        {/* Add more form fields similarly */}
+        <button type="submit">Update User</button>
+      </form>
+    </div>
         </div>
+        
     );
 };
 
