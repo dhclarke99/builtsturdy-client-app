@@ -64,7 +64,6 @@ console.log(allWorkouts)
   if (loading || loadingWorkouts) return <p>Loading...</p>;
   if (error || errorWorkouts) return <p>Error: {error?.message || errorWorkouts?.message}</p>;
 
-  const cleanedWorkouts = allWorkouts.map(({ workoutId, day }) => ({ workoutId, day }));
 
   const handleAssignWorkout = async () => {
     try {
@@ -73,10 +72,12 @@ console.log(allWorkouts)
         workoutId: selectedWorkout,
         day: selectedWorkoutDay // Assume you have a state variable or some way to select the day
       };
+      console.log(newWorkout)
   
       // Add the new workout to the existing list of workouts
-      const updatedWorkouts = [...allWorkouts, newWorkout];
-      const cleanedWorkouts = updatedWorkouts.map(({ workoutId, day }) => ({ workoutId, day }));
+      if (newWorkout.workoutId !== "") {
+        const updatedWorkouts = [...allWorkouts, newWorkout];
+        const cleanedWorkouts = updatedWorkouts.map(({ workoutId, day }) => ({ workoutId, day }));
       // Update the local state
       setAllWorkouts(updatedWorkouts);
   
@@ -92,6 +93,27 @@ console.log(allWorkouts)
   
       // Optionally, refresh the component to show the newly assigned exercise
       window.location.href = '/admindashboard';
+    } else {
+        const updatedWorkouts =  [...allWorkouts]
+        const cleanedWorkouts = updatedWorkouts.map(({ workoutId, day }) => ({ workoutId, day }));
+      // Update the local state
+      setAllWorkouts(updatedWorkouts);
+  
+      // Prepare the input for the GraphQL mutation
+      const input = {
+        name,
+        notes,
+        workouts: cleanedWorkouts
+      };
+  
+      // Execute the GraphQL mutation
+      await updateSchedule({ variables: { scheduleId, input } });
+  
+      // Optionally, refresh the component to show the newly assigned exercise
+      window.location.href = '/admindashboard';
+    }
+      
+      
     } catch (err) {
       console.error(err);
     }
