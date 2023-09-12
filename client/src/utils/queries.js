@@ -82,18 +82,39 @@ export const  FETCH_ALL_USERS = gql `
 query findAllUsers {
   users {
     _id
+    age
+    currentWeight
     email
+    estimatedBodyFat
     firstname
+    gender
+    height
     lastname
+    mainPhysiqueGoal
+    trainingExperience
     username
     schedules {
       _id
+      name
+      notes
       workouts {
         day
         workoutId
       }
     }
-    
+    workouts {
+      _id
+      name
+      notes
+      exercises {
+        _id
+        name
+        notes
+        reps
+        sets
+        weight
+      }
+    }
   }
 }
 `;
