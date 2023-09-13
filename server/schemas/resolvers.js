@@ -77,6 +77,10 @@ const resolvers = {
         const updateFields = Object.fromEntries(
           Object.entries(input).filter(([_, value]) => value != null)
         );
+
+        // if (input.scheduleId) {
+        //   updatedFields.schedule = input.scheduleId.map(id => /* logic to convert ID to schedule object */);
+        // }
   
         // Find the user by ID and update it
         const updatedUser = await User.findByIdAndUpdate(

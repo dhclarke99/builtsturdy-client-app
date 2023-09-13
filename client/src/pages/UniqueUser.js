@@ -3,12 +3,13 @@ import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 
 import { useQuery, useMutation } from '@apollo/client';
 import { useParams } from 'react-router-dom';
-import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID } from '../utils/queries';
+import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID, FETCH_SCHEDULES } from '../utils/queries';
 import { UPDATE_USER } from '../utils/mutations';
 
 const UniqueUser = () => {
    
     const [workoutDetails, setWorkoutDetails] = useState([]);
+    const { loading: loadingSchedules, error: errorSchedules, data: dataSchedules } = useQuery(FETCH_SCHEDULES);
 
     const client = new ApolloClient({
         link: createHttpLink({ uri: '/graphql' }),
@@ -25,6 +26,25 @@ const UniqueUser = () => {
 
     const [formData, setFormData] = useState({});
     const [updateUser] = useMutation(UPDATE_USER);
+
+    useEffect(() => {
+        if (dataSchedules) {
+            const workoutIds = dataSchedules.schedules.flatMap(schedule => schedule.workouts.map(w => w.workoutId));
+      
+            const fetchWorkoutDetails = async () => {
+                const details = await Promise.all(workoutIds.map(async workoutId => {
+                    const { data } = await client.query({
+                        query: FETCH_WORKOUT_BY_ID,
+                        variables: { workoutId: workoutId.toString() },
+                    });
+                    return data;
+                }));
+                setWorkoutDetails(details);
+            };
+      
+            fetchWorkoutDetails();
+        }
+      }, [dataSchedules]);
 
   useEffect(() => {
     if (dataUser && dataUser.user) {
@@ -43,8 +63,18 @@ const UniqueUser = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+        const { __typename, _id, workouts, schedules, ...cleanedFormData } = formData; // Remove __typename
+        cleanedFormData.scheduleId = schedules._id; // Use the correct field name 'scheduleId'
+        const formattedData = {
+            ...cleanedFormData,
+            height: parseFloat(cleanedFormData.height),
+            currentWeight: parseFloat(cleanedFormData.currentWeight),
+            estimatedBodyFat: parseFloat(cleanedFormData.estimatedBodyFat),
+            age: parseInt(cleanedFormData.age, 10),
+          };
+        console.log("userid", id, "Form Data:", formattedData)
       await updateUser({
-        variables: { userId: id, input: formData },
+        variables: { userId: id, input: formattedData },
       });
       alert('User updated successfully');
     } catch (err) {
@@ -71,8 +101,8 @@ const UniqueUser = () => {
         }
     }, [dataUser]);
 
-    if (loadingUser) return <p>Loading...</p>;
-    if (errorUser) return <p>Error: {errorUser.message}</p>;
+    if (loadingUser || loadingSchedules) return <p>Loading...</p>;
+    if (errorUser || errorSchedules) return <p>Error: {errorUser.message}</p>;
 
     const user = dataUser.user;
     console.log(formData)
@@ -187,13 +217,15 @@ const UniqueUser = () => {
         />
         </label>
         <label> Gender:
-            <input
-          type="text"
+            <select type="text"
           name="gender"
           placeholder="Gender"
           value={formData.gender || ''}
-          onChange={handleChange}
-        />
+          onChange={handleChange}>
+            <option value="Male"> Male</option>
+            <option value="Female"> Female</option>
+             </select>
+            
         </label>
         <label> Height (inches):
             <input
@@ -223,33 +255,37 @@ const UniqueUser = () => {
         />
         </label>
         <label> Training Experience:
-            <input
-          type="text"
+            <select type="text"
           name="trainingExperience"
           placeholder="Training Experience"
           value={formData.trainingExperience || ''}
-          onChange={handleChange}
-        />
+          onChange={handleChange}>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            </select>
+           
         </label>
         <label> Phsyique Goal:
-            <input
-          type="text"
+            <select type="text"
           name="mainPhysiqueGoal"
           placeholder="Phsyique Goal"
           value={formData.mainPhysiqueGoal || ''}
-          onChange={handleChange}
-        />
+          onChange={handleChange}>
+            <option value='Burn Fat'>Burn Fat</option>
+            <option value='Build Muscle'>Build Muscle</option>
+            <option value='Recomp'>Recomp</option>
+        
+          </select>
+           
         </label>
         <label> Schedule:
-            <input
-          type="text"
-          name="schedules"
-          placeholder="Schedule"
-          value={formData.schedules || ''}
-          onChange={handleChange}
-        />
+        <select name="scheduleId" onChange={handleChange}>
+                <option value="" disabled>Select a Schedule</option>
+            {dataSchedules?.schedules?.map((schedule)=> (
+                <option key={schedule._id} value={schedule._id}>{schedule.name}</option>
+            ))} 
+            </select>
         </label>
-        {/* Add more form fields similarly */}
         <button type="submit">Update User</button>
       </form>
     </div>

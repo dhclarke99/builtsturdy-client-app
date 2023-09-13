@@ -51,6 +51,7 @@ input UpdateUserInput {
   age: Int
   trainingExperience: String
   mainPhysiqueGoal: String
+  scheduleId: ID
 }
 
   type Option {
