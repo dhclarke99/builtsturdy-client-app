@@ -40,7 +40,7 @@ mutation createUser($input: CreateUserInput!) {
       lastname
       mainPhysiqueGoal
       role
-      schedules {
+      schedule {
         _id
         name
         notes
@@ -67,6 +67,8 @@ mutation createUser($input: CreateUserInput!) {
     }
   }
 }
+
+     
 `;
 
 export const UPDATE_USER = gql `
@@ -84,7 +86,7 @@ mutation updateUser($userId: ID!, $input: UpdateUserInput!) {
     mainPhysiqueGoal
     trainingExperience
     username
-    schedules {
+    schedule {
       _id
       name
       notes

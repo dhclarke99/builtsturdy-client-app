@@ -41,7 +41,7 @@ query findUserById($userId: String!) {
     mainPhysiqueGoal
     trainingExperience
     username
-    schedules {
+    schedule {
       _id
       name
       notes
@@ -105,15 +105,14 @@ query findAllUsers {
     age
     currentWeight
     email
-    estimatedBodyFat
     firstname
+    estimatedBodyFat
     gender
     height
     lastname
     mainPhysiqueGoal
-    trainingExperience
-    username
-    schedules {
+    role
+    schedule {
       _id
       name
       notes
@@ -122,6 +121,8 @@ query findAllUsers {
         workoutId
       }
     }
+    trainingExperience
+    username
     workouts {
       _id
       name

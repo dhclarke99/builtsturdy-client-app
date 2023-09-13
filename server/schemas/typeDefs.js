@@ -10,7 +10,7 @@ type User {
   lastname: String
   email: String
   workouts: [Workout]!
-  schedules: [Schedule]
+  schedule: Schedule
   gender: String
   role: String
   height: Int
@@ -136,8 +136,6 @@ input UpdateUserInput {
     createSchedule(name: String!): Schedule
     addWorkoutToSchedule(scheduleId: ID!, workoutId: ID!, day: String!): Schedule
     removeWorkoutFromSchedule(scheduleId: ID!, workoutId: ID!): Schedule
-    addScheduleToUser(userId: ID!, scheduleId: ID!): User
-    removeScheduleFromUser(userId: ID!, scheduleId: ID!): User
     updateWorkout(workoutId: ID!, name: String, notes: String, exerciseIds: [ID]): Workout
     updateSchedule(scheduleId: ID!, input: UpdateScheduleInput!): Schedule
     }

@@ -44,7 +44,7 @@ const UniqueUser = () => {
       
             fetchWorkoutDetails();
         }
-      }, [dataSchedules]);
+      }, [dataSchedules, client]);
 
   useEffect(() => {
     if (dataUser && dataUser.user) {
@@ -73,6 +73,8 @@ const UniqueUser = () => {
             age: parseInt(cleanedFormData.age, 10),
           };
         console.log("userid", id, "Form Data:", formattedData)
+        console.log(dataSchedules)
+        console.log(dataSchedules.schedules)
       await updateUser({
         variables: { userId: id, input: formattedData },
       });
@@ -105,7 +107,7 @@ const UniqueUser = () => {
     if (errorUser || errorSchedules) return <p>Error: {errorUser.message}</p>;
 
     const user = dataUser.user;
-    console.log(formData)
+    console.log(dataSchedules)
     console.log(user)
     return (
         <div className="container mt-5">
@@ -260,6 +262,7 @@ const UniqueUser = () => {
           placeholder="Training Experience"
           value={formData.trainingExperience || ''}
           onChange={handleChange}>
+            <option value='' disabled>Select One</option>
             <option value="Beginner">Beginner</option>
             <option value="Intermediate">Intermediate</option>
             </select>
@@ -271,6 +274,7 @@ const UniqueUser = () => {
           placeholder="Phsyique Goal"
           value={formData.mainPhysiqueGoal || ''}
           onChange={handleChange}>
+            <option value='' disabled>Select One</option>
             <option value='Burn Fat'>Burn Fat</option>
             <option value='Build Muscle'>Build Muscle</option>
             <option value='Recomp'>Recomp</option>
@@ -280,7 +284,7 @@ const UniqueUser = () => {
         </label>
         <label> Schedule:
         <select name="scheduleId" onChange={handleChange}>
-                <option value="" disabled>Select a Schedule</option>
+        <option value='' disabled>Select One</option>
             {dataSchedules?.schedules?.map((schedule)=> (
                 <option key={schedule._id} value={schedule._id}>{schedule.name}</option>
             ))} 

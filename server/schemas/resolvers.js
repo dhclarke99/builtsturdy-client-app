@@ -5,10 +5,10 @@ const { signToken } = require('../utils/auth');
 const resolvers = {
   Query: {
     users: async () => {
-      return await User.find().populate('workouts').populate('schedules');
+      return await User.find().populate('workouts').populate('schedule');
     },
     user: async (_parent, { id }) => {
-      return await User.findOne({ _id:  id }).populate('workouts').populate('schedules');
+      return await User.findOne({ _id:  id }).populate('workouts').populate('schedule');
     },
     workouts: async () => {
       return await Workout.find().populate("exercises");
@@ -77,10 +77,6 @@ const resolvers = {
         const updateFields = Object.fromEntries(
           Object.entries(input).filter(([_, value]) => value != null)
         );
-
-        // if (input.scheduleId) {
-        //   updatedFields.schedule = input.scheduleId.map(id => /* logic to convert ID to schedule object */);
-        // }
   
         // Find the user by ID and update it
         const updatedUser = await User.findByIdAndUpdate(
@@ -262,40 +258,7 @@ const resolvers = {
         throw new Error("Failed to remove workout from schedule");
       }
     },
-    addScheduleToUser: async (_, { userId, scheduleId }) => {
-      try {
-        const user = await User.findById(userId);
-        if (!user) {
-          throw new Error('User not found');
-        }
-        user.schedules.push(scheduleId);
-        await user.save();
-        return user;
-      } catch (error) {
-        console.error("Error in addScheduleToUser:", error);
-        throw new Error("Failed to add schedule to user");
-      }
-    },
-    removeScheduleFromUser: async (_, { userId, scheduleId }) => {
-      try {
-        // Find the user by userId and update them to remove the schedule
-        const updatedUser = await User.findByIdAndUpdate(
-          userId,
-          { $pull: { schedules: scheduleId } },
-          { new: true }
-        ).populate('schedules');
-
-        if (!updatedUser) {
-          throw new Error('User not found');
-        }
-
-        return updatedUser;
-
-      } catch (error) {
-        console.error("Error in removeScheduleFromUser:", error);
-        throw new Error("Failed to remove schedule from user");
-      }
-    },
+   
   },
 };
 
