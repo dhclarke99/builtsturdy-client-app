@@ -153,6 +153,14 @@ const resolvers = {
         throw new Error("Failed to remove workout");
       }
     },
+    deleteUser: async (_, { userId }) => {
+      try {
+        return await User.findByIdAndDelete(userId);
+      } catch (error) {
+        console.error("Error in deleteUser:", error);
+        throw new Error("Failed to delete User");
+      }
+    },
     deleteSchedule: async (_, { scheduleId }) => {
       try {
         return await Schedule.findByIdAndDelete(scheduleId);

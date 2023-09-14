@@ -134,6 +134,7 @@ input UpdateUserInput {
   type Mutation {
     createUser(input: CreateUserInput!): Auth
     updateUser(userId: ID!, input: UpdateUserInput!): User
+    deleteUser(userId: ID!): User
     login(email: String!, password: String!): Auth
     createExercise(name: String!, sets: Int, reps: Int, weight: Float, notes: String): Exercise
     updateExercise(exerciseId: ID!, input: updateExerciseInput!): Exercise

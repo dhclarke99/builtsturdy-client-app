@@ -127,6 +127,7 @@ console.log(formData)
         <ul>
           <button onClick={() => setActiveTab('view')}>View</button>
           <button onClick={() => setActiveTab('edit')}>Edit</button>
+          <button onClick={() => setActiveTab('delete')}>Delete</button>
         </ul>
       </nav>
       {activeTab === 'view' && (
@@ -334,6 +335,13 @@ console.log(formData)
         <button type="submit">Update User</button>
       </form>
     </div>
+            )}
+            {activeTab === 'delete' && (
+              <div>
+                <h2>Are you sure you want to delete this user?</h2>
+                <button>Yes, Delete</button>
+              </div>
+    
             )}
         </div>
         
