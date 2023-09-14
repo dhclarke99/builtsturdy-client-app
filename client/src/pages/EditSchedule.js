@@ -177,12 +177,10 @@ console.log(dataSchedule)
       <label>
         Name:
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-        <button onClick={handleUpdateName}>Update Name</button>
       </label>
       <label>
         Notes:
         <input type="text" value={notes} onChange={(e) => setNotes(e.target.value)} />
-        <button onClick={handleUpdateNotes}>Update Notes</button>
       </label>
       <label>
         Current Workouts:
@@ -232,7 +230,7 @@ console.log(dataSchedule)
         </label>
         
       </label>
-      <button onClick={handleUpdateWorkout}>Update Workout</button>
+      <button onClick={handleUpdateWorkout}>Update Schedule</button>
     </div>
   );
 };

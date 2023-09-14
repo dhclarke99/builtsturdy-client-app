@@ -70,7 +70,7 @@ useEffect(() => {
         <div className="col-md-6" key={schedule._id}>
           <div className="card mb-4">
             <div className="card-header">
-              {schedule.name}
+              {schedule.name}: {schedule.notes}
             </div>
             <button onClick={() => window.location.href = `/edit-schedule/${schedule._id}`}>Edit</button>
             <div className="card-body">
