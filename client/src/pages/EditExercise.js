@@ -18,6 +18,7 @@ const EditExercise = () => {
   const [weight, setWeight] = useState('');
 
   const [updateExercise] = useMutation(UPDATE_EXERCISE);
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
     if (data) {
@@ -28,60 +29,51 @@ const EditExercise = () => {
       setWeight(data.exercise.weight || '');  // Use empty string if weight is null
     }
   }, [data]);
+console.log(data)
+  useEffect(() => {
+    if (data) {
+      const dataExercise = data.exercise;
+      
+      setFormData(dataExercise);
+    }
+  }, [data]);
 
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+console.log(formData)
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error?.message}</p>;
 
 
-  const handleUpdateName = async () => {
+  const handleUpdate = async () => {
     try {
-      
-      await updateExercise({ variables: { exerciseId: exerciseId.toString(), name } });
-      // Optionally, refresh the component to show the updated notes
-    } catch (err) {
-      console.error(err);
-    }
-  };
+      console.log(formData)
+      const { __typename, _id,  ...cleanedFormData } = formData; // Remove __typename
 
-  const handleUpdateSets = async () => {
-    try {
-      
-      await updateExercise({ variables: { exerciseId: exerciseId.toString(), sets: parseInt(sets) } });
-      // Optionally, refresh the component to show the updated notes
-    } catch (err) {
-      console.error(err);
-    }
+      const formattedData = {
+          ...cleanedFormData,
+          weight: parseFloat(cleanedFormData.weight),
+          reps: parseFloat(cleanedFormData.reps),
+  
+        };
+        
+    await updateExercise({
+      variables: { exerciseId: exerciseId, input: formattedData },
+    });
+   
+    window.location.reload()
+    
+  } catch (err) {
+    console.error('Failed to update exercise:', err);
+  }
   };
+  
 
-  const handleUpdateReps = async () => {
-    try {
-      
-      await updateExercise({ variables: { exerciseId: exerciseId.toString(), reps: parseInt(reps) } });
-      // Optionally, refresh the component to show the updated notes
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleUpdateWeight = async () => {
-    try {
-      
-      await updateExercise({ variables: { exerciseId: exerciseId.toString(), weight: parseInt(weight) } });
-      // Optionally, refresh the component to show the updated notes
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleUpdateNotes = async () => {
-    try {
-      
-      await updateExercise({ variables: { exerciseId: exerciseId.toString(), notes } });
-      // Optionally, refresh the component to show the updated notes
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   return (
     <div>
@@ -89,29 +81,30 @@ const EditExercise = () => {
       <h2>{data.exercise.name}</h2>
       <label>
         Name:
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-        <button onClick={handleUpdateName}>Update Name</button>
+        <input type="text" name="name" value={formData.name || ''} onChange={handleChange} />
+        
       </label>
       <label>
         Sets:
-        <input type="text" value={sets} onChange={(e) => setSets(e.target.value)} />
-        <button onClick={handleUpdateSets}>Update Sets</button>
+        <input type="text" name="sets" value={formData.sets || ''} onChange={handleChange} />
+       
       </label>
       <label>
         Reps:
-        <input type="text" value={reps} onChange={(e) => setReps(e.target.value)} />
-        <button onClick={handleUpdateReps}>Update Reps</button>
+        <input type="text" name="reps" value={formData.reps || ''} onChange={handleChange} />
+       
       </label>
       <label>
         Weight:
-        <input type="text" value={weight} onChange={(e) => setWeight(e.target.value)} />
-        <button onClick={handleUpdateWeight}>Update Weight</button>
+        <input type="text" name="weight" value={formData.weight || ''} onChange={handleChange} />
+       
       </label>
       <label>
         Notes:
-        <input type="text" value={notes} onChange={(e) => setNotes(e.target.value)} />
-        <button onClick={handleUpdateNotes}>Update Notes</button>
+        <input type="text"  name="notes" value={formData.notes || ''} onChange={handleChange} />
+        
       </label>
+      <button onClick={handleUpdate}>Update Exercise</button>
     </div>
   );
 };
