@@ -124,8 +124,8 @@ mutation Mutation($name: String!, $sets: Int!, $reps: Int!) {
 `;
 
 export const UPDATE_EXERCISE = gql `
-mutation updateExercise($exerciseId: ID!, $name: String, $sets: Int, $reps: Int, $weight: Float, $notes: String) {
-  updateExercise(exerciseId: $exerciseId, name: $name, sets: $sets, reps: $reps, weight: $weight, notes: $notes) {
+mutation updateExercise($exerciseId: ID!, $input: updateExerciseInput!) {
+  updateExercise(exerciseId: $exerciseId, input: $input) {
     _id
     name
     notes
