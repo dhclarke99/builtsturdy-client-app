@@ -12,6 +12,12 @@ mutation login($email: String!, $password: String!) {
 }
 `;
 
+export const LOGOUT_USER = gql `
+mutation logout {
+  logout
+}
+`;
+
 export const ADD_USER = gql`
 mutation CreateUser($username: String!, $firstname: String!, 
   $lastname: String!, $email: String!, $password: String!) {
@@ -224,6 +230,19 @@ mutation deleteUser($userId: ID!) {
     email
     username
     role
+  }
+}
+`;
+
+export const DELETE_EXERCISE = gql `
+mutation deleteExercise($exerciseId: ID!) {
+  deleteExercise(exerciseId: $exerciseId) {
+    _id
+    name
+    notes
+    reps
+    sets
+    weight
   }
 }
 `;

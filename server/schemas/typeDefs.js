@@ -136,6 +136,7 @@ input UpdateUserInput {
     updateUser(userId: ID!, input: UpdateUserInput!): User
     deleteUser(userId: ID!): User
     login(email: String!, password: String!): Auth
+    logout: Boolean
     createExercise(name: String!, sets: Int, reps: Int, weight: Float, notes: String): Exercise
     updateExercise(exerciseId: ID!, input: updateExerciseInput!): Exercise
     createWorkout(name: String!): Workout

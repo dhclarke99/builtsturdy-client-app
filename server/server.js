@@ -2,6 +2,7 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
 const { authMiddleware } = require('./utils/auth');
+const cors = require('cors');
 require('dotenv').config();
 
 
@@ -13,12 +14,18 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: authMiddleware,
+  context: ({ req, res }) => ({
+    ...authMiddleware({ req }),
+    res,
+  }),
   cache: "bounded"
 });
 
+app.use(cors());
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));

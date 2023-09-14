@@ -5,6 +5,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from '@ap
 import Header from './components/header';  // This will automatically import from Header/index.js
 import Exercise from './pages/Exercise';
 import Login from './pages/Login';
+import Logout from './pages/Logout';
 import Signup from './pages/Signup';
 import AdminDashboard from './pages/AdminDashboard';
 import CreateExercise from './pages/CreateExercise';
@@ -50,6 +51,7 @@ const App = () => {
           <Route path="/exercise" element={<Exercise />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
           <Route path="/admin/create-exercise" element={<CreateExercise />} />
           <Route path="/admin/create-workout" element={<CreateWorkout />} />
           <Route path="/admin/create-user" element={<CreateUser />} />

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { FETCH_ALL_WORKOUTS, FETCH_ALL_USERS, QUERY_EXERCISES, FETCH_SCHEDULES, FETCH_WORKOUT_BY_ID } from '../utils/queries';
-import { DELETE_WORKOUT } from '../utils/mutations';
+import { DELETE_WORKOUT, DELETE_EXERCISE } from '../utils/mutations';
 import { Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
@@ -13,6 +13,9 @@ const AdminDashboard = () => {
   const { loading: loadingSchedules, error: errorSchedules, data: dataSchedules } = useQuery(FETCH_SCHEDULES);
   const [deleteWorkout] = useMutation(DELETE_WORKOUT, {
     refetchQueries: [{ query: FETCH_ALL_WORKOUTS }],
+  });
+  const [deleteExercise] = useMutation(DELETE_EXERCISE, {
+    refetchQueries: [{ query: QUERY_EXERCISES }],
   });
   const client = new ApolloClient({
     link: createHttpLink({ uri: '/graphql' }),
@@ -38,9 +41,19 @@ useEffect(() => {
       fetchWorkoutDetails();
   }
 }, [dataSchedules]);
-  const handleDelete = async (workoutId) => {
+
+  const handleDeleteWorkout = async (workoutId) => {
     try {
       await deleteWorkout({ variables: { workoutId } });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDeleteExercise = async (exerciseId) => {
+    try {
+      await deleteExercise({ variables: { exerciseId } });
+      window.location.href = "/admin/admindashboard"
     } catch (err) {
       console.error(err);
     }
@@ -121,7 +134,7 @@ useEffect(() => {
             {dataWorkouts.workouts.map((workout) => (
               <li key={workout._id}>
                 {workout.name} - {workout.notes}
-                <button onClick={() => handleDelete(workout._id)}>Delete</button>
+                <button onClick={() => handleDeleteWorkout(workout._id)}>Delete</button>
                 <button onClick={() => window.location.href = `/admin/edit-workout/${workout._id}`}>Edit</button>
                 <ul>
                   {workout.exercises ? workout.exercises.map((exercise) => (
@@ -180,7 +193,7 @@ useEffect(() => {
                 <li>Weight: {exercise.weight}
                 </li>
               </ul>
-              <button onClick={() => handleDelete(exercise._id)}>Delete</button>
+              <button onClick={() => handleDeleteExercise(exercise._id)}>Delete</button>
               <button onClick={() => window.location.href = `/admin/edit-exercise/${exercise._id}`}>Edit</button>
               <ul>
                 

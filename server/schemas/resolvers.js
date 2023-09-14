@@ -4,13 +4,31 @@ const { signToken } = require('../utils/auth');
 
 const resolvers = {
   Query: {
-    users: async () => {
-      return await User.find().populate('workouts').populate('schedule');
+    users: async (_parent, _args, context) => {
+      console.log("Context:", context)
+      console.log("Context.user:", context.user)
+      console.log("Context.user.role:", context.role)
+      console.log("Debugging context.user:", JSON.stringify(context.user, null, 2));
+      console.log("Debugging context.user.role:", context.user.role);
+      console.log("Debugging typeof context.user.role:", typeof context.user.role);
+      if (context.user.role !== 'Admin') {
+        throw new AuthenticationError('You are not authorized to access this resource.');
+      }
+      return await User.find().populate('schedule');
     },
     user: async (_parent, { id }) => {
       return await User.findOne({ _id:  id }).populate('workouts').populate('schedule');
     },
-    workouts: async () => {
+    workouts: async (_parent, _args, context) => {
+      console.log("Context:", context)
+      console.log("Context.user:", context.user)
+      console.log("Context.user.role:", context.role)
+      console.log("Debugging context.user:", JSON.stringify(context.user, null, 2));
+      console.log("Debugging context.user.role:", context.user.role);
+      console.log("Debugging typeof context.user.role:", typeof context.user.role);
+      if (context.user.role !== 'Admin') {
+        throw new AuthenticationError('You are not authorized to access this resource.');
+      }
       return await Workout.find().populate("exercises");
   
     },
@@ -23,7 +41,16 @@ const resolvers = {
     exercise: async (_, { exerciseId }) => {
       return await Exercise.findById(exerciseId);
     },
-    schedules: async () => {
+    schedules: async (_parent, _args, context) => {
+      console.log("Context:", context)
+      console.log("Context.user:", context.user)
+      console.log("Context.user.role:", context.role)
+      console.log("Debugging context.user:", JSON.stringify(context.user, null, 2));
+      console.log("Debugging context.user.role:", context.user.role);
+      console.log("Debugging typeof context.user.role:", typeof context.user.role);
+      if (context.user.role !== 'Admin') {
+        throw new AuthenticationError('You are not authorized to access this resource.');
+      }
       return await Schedule.find();
     },
     schedule: async (_, { scheduleId }) => {
@@ -118,6 +145,14 @@ const resolvers = {
         console.log(err);
         throw new Error('Failed to login');
       }
+    },
+    logout: (_, __, context) => {
+      // If using cookies
+      context.res.clearCookie('token');
+      
+      // Additional server-side logic if needed
+      
+      return true;
     },
     createExercise: async (_, { name, sets, reps, weight, notes }) => {
       try {
