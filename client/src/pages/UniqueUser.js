@@ -44,7 +44,7 @@ const UniqueUser = () => {
       
             fetchWorkoutDetails();
         }
-      }, [dataSchedules, client]);
+      }, [dataSchedules]);
 
   useEffect(() => {
     if (dataUser && dataUser.user) {
@@ -63,8 +63,8 @@ const UniqueUser = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-        const { __typename, _id, workouts, schedules, ...cleanedFormData } = formData; // Remove __typename
-        cleanedFormData.scheduleId = schedules._id; // Use the correct field name 'scheduleId'
+        const { __typename, _id, workouts, schedule, ...cleanedFormData } = formData; // Remove __typename
+        cleanedFormData.scheduleId = schedule?._id; // Use the correct field name 'scheduleId'
         const formattedData = {
             ...cleanedFormData,
             height: parseFloat(cleanedFormData.height),
@@ -83,23 +83,25 @@ const UniqueUser = () => {
       console.error('Failed to update user:', err);
     }
   };
-
+  console.log(dataUser)
     useEffect(() => {
         if (dataUser) {
-            const workoutIds = dataUser.user.schedules.flatMap(schedule => schedule.workouts.map(w => w.workoutId));
+            const workoutIds = dataUser.user.schedule?.flatMap(schedule => schedule.workouts.map(w => w.workoutId));
 
-            const fetchWorkoutDetails = async () => {
-                const details = await Promise.all(workoutIds.map(async workoutId => {
-                    const { data } = await client.query({
-                        query: FETCH_WORKOUT_BY_ID,
-                        variables: { workoutId: workoutId.toString() },
-                    });
-                    return data;
-                }));
-                setWorkoutDetails(details);
-            };
-
-            fetchWorkoutDetails();
+            if (workoutIds && workoutIds.length > 0) {
+                const fetchWorkoutDetails = async () => {
+                    const details = await Promise.all(workoutIds.map(async workoutId => {
+                        const { data } = await client.query({
+                            query: FETCH_WORKOUT_BY_ID,
+                            variables: { workoutId: workoutId.toString() },
+                        });
+                        return data;
+                    }));
+                    setWorkoutDetails(details);
+                };
+    
+                fetchWorkoutDetails();
+            }
         }
     }, [dataUser]);
 
@@ -129,15 +131,17 @@ const UniqueUser = () => {
                         <li>Goal: {user.mainPhysiqueGoal}</li>
                         </ul>
                     <h5 className="card-title">Schedules:</h5>
+                    
                     <ul>
-                        {user.schedules.map((schedule) => (
-                            <li key={schedule._id}>
+                        {user.schedule? (
+                        
+                            <li key={user.schedule._id}>
                                 <div className="card mt-2">
                                     <div className="card-body">
-                                        <h6 className="card-subtitle mb-2 text-muted">Schedule ID: {schedule._id}</h6>
-                                        <h6 className="card-subtitle mb-2 text-muted">Schedule Name: {schedule.name}</h6>
+                                        <h6 className="card-subtitle mb-2 text-muted">Schedule ID: {user.schedule._id}</h6>
+                                        <h6 className="card-subtitle mb-2 text-muted">Schedule Name: {user.schedule.name}</h6>
                                         <ul>
-                                            {schedule.workouts.map((workout) => {
+                                            {user.schedule.workouts.map((workout) => {
                                                 const relevantWorkoutDetail = workoutDetails.find(
                                                     (detail) => detail.workout._id === workout.workoutId
                                                 );
@@ -165,7 +169,9 @@ const UniqueUser = () => {
                                     </div>
                                 </div>
                             </li>
-                        ))}
+                        ): (
+                            <li>No Schedule Assigned</li>
+                        )}
                     </ul>
                 </div>
             </div>
