@@ -33,6 +33,7 @@ query findUserById($userId: String!) {
     age
     currentWeight
     email
+    role
     estimatedBodyFat
     firstname
     gender

@@ -137,6 +137,7 @@ console.log(formData)
                 <div className="card-body">
                     <h5 className="card-title">Email: {user.email}</h5>
                     <h5 className="card-title">Username: {user.username}</h5>
+                    <h5 className="card-title">Role: {user.role} </h5>
                     <h5> Personal Stats:</h5>
                     <ul>
                         <li>Age: {user.age}</li>
@@ -235,6 +236,18 @@ console.log(formData)
           value={formData.email || ''}
           onChange={handleChange}
         />
+        </label>
+        <label> Role:
+            <select type="text"
+          name="role"
+          placeholder="Role"
+          value={formData.role || ''}
+          onChange={handleChange}>
+            <option value='' disabled>Select One</option>
+            <option value="User">User</option>
+            <option value="Admin">Admin</option>
+            </select>
+           
         </label>
         <label> Age:
             <input
