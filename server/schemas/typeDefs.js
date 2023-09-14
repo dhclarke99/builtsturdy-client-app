@@ -100,6 +100,14 @@ input UpdateUserInput {
     notes: String
   }
 
+  input updateExerciseInput {
+    name: String
+    sets: Int
+    reps: Int
+    weight: Float
+    notes: String
+  }
+
   input UpdateWorkoutInput {
     workoutId: ID
     day: String
@@ -128,7 +136,7 @@ input UpdateUserInput {
     updateUser(userId: ID!, input: UpdateUserInput!): User
     login(email: String!, password: String!): Auth
     createExercise(name: String!, sets: Int, reps: Int, weight: Float, notes: String): Exercise
-    updateExercise(exerciseId: ID!, name: String, sets: Int, reps: Int, weight: Float, notes: String): Exercise
+    updateExercise(exerciseId: ID!, input: updateExerciseInput!): Exercise
     createWorkout(name: String!): Workout
     deleteExercise(exerciseId: ID!): Exercise
     deleteWorkout(workoutId: ID!): Workout

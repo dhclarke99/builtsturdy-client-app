@@ -191,25 +191,31 @@ const resolvers = {
       return updatedSchedule;
     },
   
-    updateExercise: async (_, { exerciseId, name, sets, reps, weight, notes }) => {
-      const updateFields = {};
-      if (name !== null && name !== undefined) {
-        updateFields.name = name;
+    updateExercise: async (_, { exerciseId, input }) => {
+      try {
+        // Filter out any fields that are null or undefined
+        const updateFields = Object.fromEntries(
+          Object.entries(input).filter(([_, value]) => value != null)
+        );
+        console.log(updateFields)
+        // Find the user by ID and update it
+        const updatedExercise = await Exercise.findByIdAndUpdate(
+          exerciseId,
+          { $set: updateFields },
+          { new: true, runValidators: true }
+        );
+        console.log(updatedExercise)
+  
+        // If the user doesn't exist, throw an error
+        if (!updatedExercise) {
+          throw new Error('Exercise not found');
+        }
+  
+        return updatedExercise;
+      } catch (error) {
+        console.error("Error in updateExercise:", error);
+        throw new Error("Failed to update exercise");
       }
-      if (sets !== null && sets !== undefined) {
-        updateFields.sets = sets;
-      }
-      if (reps !== null && reps !== undefined) {
-        updateFields.reps = reps;
-      }
-      if (weight !== null && weight !== undefined) {
-        updateFields.weight = weight;
-      }
-      if (notes !== null && notes !== undefined) {
-        updateFields.notes = notes;
-      }
-
-      return await Exercise.findByIdAndUpdate(exerciseId, updateFields, { new: true });
     },
     createSchedule: async (_, { name }) => {
       try {
