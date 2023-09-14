@@ -7,7 +7,7 @@ import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID, FETCH_SCHEDULES } from '../utils
 import { UPDATE_USER } from '../utils/mutations';
 
 const UniqueUser = () => {
-   
+   const [activeTab, setActiveTab] = useState('view')
     const [workoutDetails, setWorkoutDetails] = useState([]);
     const { loading: loadingSchedules, error: errorSchedules, data: dataSchedules } = useQuery(FETCH_SCHEDULES);
 
@@ -121,7 +121,15 @@ const UniqueUser = () => {
     const user = dataUser.user;
 console.log(formData)
     return (
+        
         <div className="container mt-5">
+            <nav>
+        <ul>
+          <button onClick={() => setActiveTab('view')}>View</button>
+          <button onClick={() => setActiveTab('edit')}>Edit</button>
+        </ul>
+      </nav>
+      {activeTab === 'view' && (
             <div className="card">
                 <div className="card-header">
                     <h3>{user.firstname} {user.lastname}</h3>
@@ -185,7 +193,10 @@ console.log(formData)
                     </ul>
                 </div>
             </div>
+            )}
+            {activeTab === 'edit' && (
             <div>
+                
       <h1>Edit User</h1>
       <form onSubmit={handleSubmit}>
         {/* Add form fields here based on your schema. For example: */}
@@ -310,6 +321,7 @@ console.log(formData)
         <button type="submit">Update User</button>
       </form>
     </div>
+            )}
         </div>
         
     );
