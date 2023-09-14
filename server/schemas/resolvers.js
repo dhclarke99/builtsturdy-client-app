@@ -77,13 +77,14 @@ const resolvers = {
         const updateFields = Object.fromEntries(
           Object.entries(input).filter(([_, value]) => value != null)
         );
-  
+        console.log(updateFields)
         // Find the user by ID and update it
         const updatedUser = await User.findByIdAndUpdate(
           userId,
           { $set: updateFields },
           { new: true, runValidators: true }
         );
+        console.log(updatedUser)
   
         // If the user doesn't exist, throw an error
         if (!updatedUser) {

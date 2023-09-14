@@ -17,7 +17,7 @@ const UniqueUser = () => {
     });
 
     const { id } = useParams();
-    console.log(id)
+   
 
     const { loading: loadingUser, error: errorUser, data: dataUser } = useQuery(QUERY_USER_by_id, {
         variables: { userId: id.toString() },
@@ -28,9 +28,11 @@ const UniqueUser = () => {
     const [updateUser] = useMutation(UPDATE_USER);
 
     useEffect(() => {
-        if (dataSchedules) {
-            const workoutIds = dataSchedules.schedules.flatMap(schedule => schedule.workouts.map(w => w.workoutId));
-      
+        console.log(dataSchedules)
+        if (dataSchedules && dataSchedules.schedules) {
+            const workoutIds = dataSchedules.schedules.flatMap(schedule => 
+              schedule.workouts ? schedule.workouts.map(w => w.workoutId) : []
+            );
             const fetchWorkoutDetails = async () => {
                 const details = await Promise.all(workoutIds.map(async workoutId => {
                     const { data } = await client.query({
@@ -46,11 +48,16 @@ const UniqueUser = () => {
         }
       }, [dataSchedules]);
 
-  useEffect(() => {
-    if (dataUser && dataUser.user) {
-      setFormData(dataUser.user);
-    }
-  }, [dataUser]);
+      useEffect(() => {
+        if (dataUser && dataUser.user) {
+          const { schedule, ...restOfUserData } = dataUser.user;
+          const formattedUser = {
+            ...restOfUserData,
+            schedule: schedule ? schedule._id : null,  // set only the ID
+          };
+          setFormData(prevState => ({ ...prevState, ...formattedUser }));
+        }
+      }, [dataUser]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -63,8 +70,9 @@ const UniqueUser = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-        const { __typename, _id, workouts, schedule, ...cleanedFormData } = formData; // Remove __typename
-        cleanedFormData.scheduleId = schedule?._id; // Use the correct field name 'scheduleId'
+      
+        const { __typename, _id, workouts, ...cleanedFormData } = formData; // Remove __typename
+        // cleanedFormData.scheduleId = schedule?._id; // Use the correct field name 'scheduleId'
         const formattedData = {
             ...cleanedFormData,
             height: parseFloat(cleanedFormData.height),
@@ -72,45 +80,46 @@ const UniqueUser = () => {
             estimatedBodyFat: parseFloat(cleanedFormData.estimatedBodyFat),
             age: parseInt(cleanedFormData.age, 10),
           };
-        console.log("userid", id, "Form Data:", formattedData)
-        console.log(dataSchedules)
-        console.log(dataSchedules.schedules)
+          console.log(formattedData)
       await updateUser({
         variables: { userId: id, input: formattedData },
       });
-      alert('User updated successfully');
+     
+      window.location.reload()
+      
     } catch (err) {
       console.error('Failed to update user:', err);
     }
   };
-  console.log(dataUser)
-    useEffect(() => {
-        if (dataUser) {
-            const workoutIds = dataUser.user.schedule?.flatMap(schedule => schedule.workouts.map(w => w.workoutId));
 
-            if (workoutIds && workoutIds.length > 0) {
-                const fetchWorkoutDetails = async () => {
-                    const details = await Promise.all(workoutIds.map(async workoutId => {
-                        const { data } = await client.query({
-                            query: FETCH_WORKOUT_BY_ID,
-                            variables: { workoutId: workoutId.toString() },
-                        });
-                        return data;
-                    }));
-                    setWorkoutDetails(details);
-                };
-    
-                fetchWorkoutDetails();
-            }
+  useEffect(() => {
+    console.log(dataUser)
+    if (dataUser && dataUser.user.schedule && Array.isArray(dataUser.user.schedule.workouts)) {
+        const workoutIds = dataUser.user.schedule.workouts.map(w => w.workoutId);
+
+        if (workoutIds && workoutIds.length > 0) {
+            const fetchWorkoutDetails = async () => {
+                const details = await Promise.all(workoutIds.map(async workoutId => {
+                    const { data } = await client.query({
+                        query: FETCH_WORKOUT_BY_ID,
+                        variables: { workoutId: workoutId.toString() },
+                    });
+                    return data;
+                }));
+                setWorkoutDetails(details);
+            };
+
+            fetchWorkoutDetails();
         }
-    }, [dataUser]);
+    }
+}, [dataUser]);
+
 
     if (loadingUser || loadingSchedules) return <p>Loading...</p>;
     if (errorUser || errorSchedules) return <p>Error: {errorUser.message}</p>;
 
     const user = dataUser.user;
-    console.log(dataSchedules)
-    console.log(user)
+console.log(formData)
     return (
         <div className="container mt-5">
             <div className="card">
@@ -141,6 +150,7 @@ const UniqueUser = () => {
                                         <h6 className="card-subtitle mb-2 text-muted">Schedule ID: {user.schedule._id}</h6>
                                         <h6 className="card-subtitle mb-2 text-muted">Schedule Name: {user.schedule.name}</h6>
                                         <ul>
+                                            
                                             {user.schedule.workouts.map((workout) => {
                                                 const relevantWorkoutDetail = workoutDetails.find(
                                                     (detail) => detail.workout._id === workout.workoutId
@@ -277,7 +287,7 @@ const UniqueUser = () => {
         <label> Phsyique Goal:
             <select type="text"
           name="mainPhysiqueGoal"
-          placeholder="Phsyique Goal"
+          placeholder="Physique Goal"
           value={formData.mainPhysiqueGoal || ''}
           onChange={handleChange}>
             <option value='' disabled>Select One</option>
@@ -289,7 +299,8 @@ const UniqueUser = () => {
            
         </label>
         <label> Schedule:
-        <select name="scheduleId" onChange={handleChange}>
+        <select name="schedule" placeholder="Physique Goal"
+          value={formData.schedule || ''} onChange={handleChange}>
         <option value='' disabled>Select One</option>
             {dataSchedules?.schedules?.map((schedule)=> (
                 <option key={schedule._id} value={schedule._id}>{schedule.name}</option>
