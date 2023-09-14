@@ -24,6 +24,13 @@ module.exports = {
 
     return req;
   },
+  adminMiddleware: function (req, res, next) {
+    if (req.user && req.user.role === 'admin') {
+      next();
+    } else {
+      res.status(403).json({ message: 'You are not authorized to access this resource.' });
+    }
+  },
   signToken: function ({ email, username, _id}) {
     const payload = { email, username, _id};
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });

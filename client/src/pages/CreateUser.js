@@ -44,7 +44,7 @@ const AdminCreateUser = () => {
         variables: { input: formattedData },
       });
       console.log('User created:', data);
-      window.location.href = '/admindashboard';
+      window.location.href = '/admin/admindashboard';
     } catch (err) {
       console.error('Error creating user:', err);
     }

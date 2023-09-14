@@ -9,7 +9,6 @@ import Signup from './pages/Signup';
 import AdminDashboard from './pages/AdminDashboard';
 import CreateExercise from './pages/CreateExercise';
 import CreateWorkout from './pages/CreateWorkout';
-import AssignWorkout from './pages/AssignWorkout';
 import EditWorkout from './pages/EditWorkout';
 import EditExercise from './pages/EditExercise';
 import UniqueUser from './pages/UniqueUser';
@@ -47,19 +46,18 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Exercise />} />
-          <Route path="/admindashboard" element={<AdminDashboard />} />
+          <Route path="/admin/admindashboard" element={<AdminDashboard />} />
           <Route path="/exercise" element={<Exercise />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/create-exercise" element={<CreateExercise />} />
-          <Route path="/create-workout" element={<CreateWorkout />} />
-          <Route path="/create-user" element={<CreateUser />} />
-          <Route path="/assign-workout" element={<AssignWorkout />} />
-          <Route path="/edit-workout/:id" element={<EditWorkout />} />
-          <Route path="/edit-exercise/:id" element={<EditExercise />} />
-          <Route path="/edit-schedule/:id" element={<EditSchedule />} />
-          <Route path="/user/:id" element={<UniqueUser />} />
-          <Route path="/create-schedule" element={<CreateSchedule />} />
+          <Route path="/admin/create-exercise" element={<CreateExercise />} />
+          <Route path="/admin/create-workout" element={<CreateWorkout />} />
+          <Route path="/admin/create-user" element={<CreateUser />} />
+          <Route path="/admin/edit-workout/:id" element={<EditWorkout />} />
+          <Route path="/admin/edit-exercise/:id" element={<EditExercise />} />
+          <Route path="/admin/edit-schedule/:id" element={<EditSchedule />} />
+          <Route path="/admin/user/:id" element={<UniqueUser />} />
+          <Route path="/admin/create-schedule" element={<CreateSchedule />} />
         </Routes>
       </Router>
     </ApolloProvider>

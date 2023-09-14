@@ -72,7 +72,7 @@ useEffect(() => {
             <div className="card-header">
               {schedule.name}: {schedule.notes}
             </div>
-            <button onClick={() => window.location.href = `/edit-schedule/${schedule._id}`}>Edit</button>
+            <button onClick={() => window.location.href = `/admin/edit-schedule/${schedule._id}`}>Edit</button>
             <div className="card-body">
               <ul className="list-group list-group-flush">
                 {schedule.workouts.map((workout) => {
@@ -106,7 +106,7 @@ useEffect(() => {
         
       ))}
     </div>
-    <Link to={`/create-schedule`}>
+    <Link to={`/admin/create-schedule`}>
         <button>Create Schedule</button>
         </Link>
   </div>
@@ -122,7 +122,7 @@ useEffect(() => {
               <li key={workout._id}>
                 {workout.name} - {workout.notes}
                 <button onClick={() => handleDelete(workout._id)}>Delete</button>
-                <button onClick={() => window.location.href = `/edit-workout/${workout._id}`}>Edit</button>
+                <button onClick={() => window.location.href = `/admin/edit-workout/${workout._id}`}>Edit</button>
                 <ul>
                   {workout.exercises ? workout.exercises.map((exercise) => (
                     <li key={exercise._id}>
@@ -133,7 +133,7 @@ useEffect(() => {
               </li>
             ))}
           </ul>
-          <Link to={`/create-workout`}>
+          <Link to={`/admin/create-workout`}>
         <button>Create Workout</button>
         </Link>
         </div>
@@ -146,7 +146,7 @@ useEffect(() => {
           <div className="row">
             {dataUsers.users.map((user) => (
               <div className="col-md-4" key={user._id}>
-                <Link to={`/user/${user._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <Link to={`/admin/user/${user._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                   <div className="card mb-4">
                     <div className="card-body">
                       <h5 className="card-title">{user.firstname} {user.lastname}</h5>
@@ -158,7 +158,7 @@ useEffect(() => {
               </div>
             ))}
           </div>
-          <Link to={`/create-user`}>
+          <Link to={`/admin/create-user`}>
         <button>Create User</button>
         </Link>
         </div>
@@ -181,14 +181,14 @@ useEffect(() => {
                 </li>
               </ul>
               <button onClick={() => handleDelete(exercise._id)}>Delete</button>
-              <button onClick={() => window.location.href = `/edit-exercise/${exercise._id}`}>Edit</button>
+              <button onClick={() => window.location.href = `/admin/edit-exercise/${exercise._id}`}>Edit</button>
               <ul>
                 
               </ul>
             </li>
           ))}
         </ul>
-        <Link to={`/create-exercise`}>
+        <Link to={`/admin/create-exercise`}>
         <button>Create Exercise</button>
         </Link>
         

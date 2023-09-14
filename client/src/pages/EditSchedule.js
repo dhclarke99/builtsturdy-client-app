@@ -92,7 +92,7 @@ console.log(allWorkouts)
       await updateSchedule({ variables: { scheduleId, input } });
   
       // Optionally, refresh the component to show the newly assigned exercise
-      window.location.href = '/admindashboard';
+      window.location.href = '/admin/admindashboard';
     } else {
         const updatedWorkouts =  [...allWorkouts]
         const cleanedWorkouts = updatedWorkouts.map(({ workoutId, day }) => ({ workoutId, day }));
@@ -110,7 +110,7 @@ console.log(allWorkouts)
       await updateSchedule({ variables: { scheduleId, input } });
   
       // Optionally, refresh the component to show the newly assigned exercise
-      window.location.href = '/admindashboard';
+      window.location.href = '/admin/admindashboard';
     }
       
       
@@ -150,25 +150,9 @@ console.log(allWorkouts)
   };
   
 
-  const handleUpdateNotes = async () => {
-    try {
-      
-      await updateSchedule({ variables: { scheduleId: scheduleId.toString(), notes } });
-      // Optionally, refresh the component to show the updated notes
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  
 
-  const handleUpdateName = async () => {
-    try {
-      
-      await updateSchedule({ variables: { scheduleId: scheduleId.toString(), name } });
-      // Optionally, refresh the component to show the updated notes
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  
 console.log(dataSchedule)
   return (
     <div>

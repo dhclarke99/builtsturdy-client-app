@@ -66,7 +66,7 @@ console.log(formData)
       variables: { exerciseId: exerciseId, input: formattedData },
     });
    
-    window.location.reload()
+    window.location.href = '/admin/admindashboard';
     
   } catch (err) {
     console.error('Failed to update exercise:', err);

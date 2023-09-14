@@ -74,7 +74,7 @@ const UniqueUser = () => {
       await deleteUser({
         variables: { userId: id },
       });
-      window.location.href = '/admindashboard';
+      window.location.href = '/admin/admindashboard';
     } catch (err) {
       console.error('Failed to delete user:', err);
     }

@@ -21,7 +21,7 @@ const CreateExercise = () => {
         reps: parseInt(exerciseData.reps, 10)
       };
       await createExercise({ variables });
-      window.location.href('/admindashboard')
+      window.location.href('/admin/admindashboard')
       // Redirect or show success message
     } catch (err) {
       console.error(err);

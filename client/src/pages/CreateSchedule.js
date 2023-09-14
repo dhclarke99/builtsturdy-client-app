@@ -16,7 +16,7 @@ const CreateSchedule = () => {
     try {
       await createSchedule({ variables: { name: scheduleData.name } });
       // Redirect or show success message
-      window.location.href = '/admindashboard';
+      window.location.href = '/admin/admindashboard';
     } catch (err) {
       console.error(err);
     }

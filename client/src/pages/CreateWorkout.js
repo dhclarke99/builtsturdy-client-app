@@ -16,7 +16,7 @@ const CreateWorkout = () => {
     try {
       await createWorkout({ variables: { name: workoutData.name } });
       // Redirect or show success message
-      window.location.href = '/admindashboard';
+      window.location.href = '/admin/admindashboard';
     } catch (err) {
       console.error(err);
     }
