@@ -18,6 +18,8 @@ const resolvers = {
         throw new AuthenticationError('You are not authorized to access this resource.');
         
       }
+      console.log("Context.user:", context.user)
+        console.log("Context.user.role:", context.user.role)
       return await User.find().populate('schedule');
     },
     user: async (_parent, { id }) => {

@@ -9,17 +9,8 @@ const Logout = () => {
     const [logout] = useMutation(LOGOUT_USER);
 
     const handleLogout = async () => {
-      try {
-        const { data } = await logout();
-        if (data.logout) {
-          // Remove token from client storage
-          localStorage.removeItem('token');
-          window.location.href = "/login"
-          // Redirect user to login page or do other clean-up
-        }
-      } catch (error) {
-        console.error('Logout failed', error);
-      }
+      Auth.logout();
+      
     };
 
   return (
