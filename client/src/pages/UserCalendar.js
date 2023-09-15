@@ -12,6 +12,7 @@ const localizer = momentLocalizer(moment);
 const UserCalendar = () => {
   const [events, setEvents] = useState([]);
   const client = useApolloClient();
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const { loading: userLoading, error: userError, data: userData } = useQuery(QUERY_USER_by_id, {
     variables: { userId: Auth.getProfile().data._id },
   });
@@ -46,17 +47,32 @@ const UserCalendar = () => {
     fetchWorkouts();
   }, [userData, client]);
 
+  const handleEventClick = (event) => {
+    // Fetch more details about the clicked event here
+    // For demonstration, we'll just set the clicked event to the state
+    setSelectedEvent(event);
+  };
+
   if (userLoading) return <p>Loading...</p>;
   if (userError) return <p>Error: {userError.message}</p>;
 
   return (
-    <div style={{ height: '500px' }}>
-      <Calendar
-        localizer={localizer}
-        events={events}
-        startAccessor="start"
-        endAccessor="end"
-      />
+    <div>
+      <div style={{ height: '500px' }}>
+        <Calendar
+          localizer={localizer}
+          events={events}
+          startAccessor="start"
+          endAccessor="end"
+          onSelectEvent={handleEventClick}
+        />
+      </div>
+      {selectedEvent && (
+        <div>
+          <h2>Workout Details for {selectedEvent.title}</h2>
+          {/* Render more details about the selected event here */}
+        </div>
+      )}
     </div>
   );
 };
