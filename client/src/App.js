@@ -16,6 +16,7 @@ import UniqueUser from './pages/UniqueUser';
 import CreateSchedule from './pages/CreateSchedule'
 import EditSchedule from './pages/EditSchedule'
 import CreateUser from './pages/CreateUser'
+import UserCalendar from './pages/UserCalendar'
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -60,6 +61,7 @@ const App = () => {
           <Route path="/admin/edit-schedule/:id" element={<EditSchedule />} />
           <Route path="/admin/user/:id" element={<UniqueUser />} />
           <Route path="/admin/create-schedule" element={<CreateSchedule />} />
+          <Route path="/calendar" element={<UserCalendar />} />
         </Routes>
       </Router>
     </ApolloProvider>

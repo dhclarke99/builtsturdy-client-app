@@ -6,7 +6,6 @@ const Header = () => {
   const isLoggedIn = Auth.loggedIn();
   const isAdmin = Auth.isLoggedInAndAdmin();
 
-  console.log(isAdmin)
   return (
     <header>
       <h1>Built Sturdy Blueprint</h1>
@@ -18,6 +17,11 @@ const Header = () => {
           {isAdmin && (
             <li>
               <Link to="/admin/admindashboard">Admin Dashboard</Link>
+            </li>
+          )}
+           {isLoggedIn && (
+            <li>
+              <Link to="/calendar">Calendar</Link>
             </li>
           )}
           <li>

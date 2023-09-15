@@ -29,7 +29,7 @@ class AuthService {
 
   getToken() {
     const token = localStorage.getItem('id_token');
-    console.log("Retrieved token:", token);
+   
     return localStorage.getItem('id_token');
   }
 
@@ -45,18 +45,18 @@ class AuthService {
 
   isAdmin() {
     const profile = this.getProfile();
-    console.log(profile)
+    
     return profile && profile.role === 'Admin';
   }
 
   isLoggedInAndAdmin() {
     const profile = this.getProfile();
-    console.log(profile)
+   
     if (!profile) {
-      console.log("No profile found");
+     
       return false;
     }
-    console.log("Profile role:", profile.role);
+  
     return profile.data.role === "Admin";
   }
 
