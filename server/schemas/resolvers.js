@@ -13,7 +13,10 @@ const resolvers = {
       // console.log("Debugging context.user.role:", context.user.role);
       // console.log("Debugging typeof context.user.role:", typeof context.user.role);
       if (context.user.role !== 'Admin') {
+        console.log("Context.user:", context.user)
+        console.log("Context.user.role:", context.user.role)
         throw new AuthenticationError('You are not authorized to access this resource.');
+        
       }
       return await User.find().populate('schedule');
     },
