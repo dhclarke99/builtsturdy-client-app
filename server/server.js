@@ -5,7 +5,6 @@ const { authMiddleware } = require('./utils/auth');
 const cors = require('cors');
 require('dotenv').config();
 
-
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 
@@ -14,18 +13,14 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req, res }) => ({
-    ...authMiddleware({ req }),
-    res,
-  }),
-  cache: "bounded"
+  context: authMiddleware,
 });
-
-app.use(cors());
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+// Serve up static assets
+app.use('/images', express.static(path.join(__dirname, '../client/images')));
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
