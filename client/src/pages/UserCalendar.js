@@ -4,31 +4,50 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Auth from '../utils/auth';
 import { useQuery } from '@apollo/client';
-import { QUERY_USER_by_id } from '../utils/queries';
+import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID } from '../utils/queries';
+import { useApolloClient } from '@apollo/client';
 
 const localizer = momentLocalizer(moment);
 
 const UserCalendar = () => {
   const [events, setEvents] = useState([]);
-  const { loading, error, data } = useQuery(QUERY_USER_by_id, {
+  const client = useApolloClient();
+  const { loading: userLoading, error: userError, data: userData } = useQuery(QUERY_USER_by_id, {
     variables: { userId: Auth.getProfile().data._id },
   });
-  console.log(data)
 
   useEffect(() => {
-    if (data) {
-      // Transform the user's schedule data into a format suitable for the calendar
-      const calendarEvents = data.userSchedule.map((scheduleItem) => ({
-        start: new Date(scheduleItem.start),
-        end: new Date(scheduleItem.end),
-        title: scheduleItem.title,
-      }));
-      setEvents(calendarEvents);
-    }
-  }, [data]);
+    const fetchWorkouts = async () => {
+      if (userData && userData.user && userData.user.schedule) {
+        const workoutIds = userData.user.schedule.workouts.map(w => w.workoutId);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+        const workouts = await Promise.all(workoutIds.map(async id => {
+          const { data } = await client.query({
+            query: FETCH_WORKOUT_BY_ID,
+            variables: { workoutId: id },
+          });
+          return data.workout;
+        }));
+
+        const calendarEvents = workouts.map((workout, index) => {
+          const date = moment().day(userData.user.schedule.workouts[index].day);
+          return {
+            id: index,
+            title: workout.name, // Replace with actual workout name
+            start: date.toDate(),
+            end: date.toDate(),
+            allDay: true,
+          };
+        });
+        setEvents(calendarEvents);
+      }
+    };
+
+    fetchWorkouts();
+  }, [userData, client]);
+
+  if (userLoading) return <p>Loading...</p>;
+  if (userError) return <p>Error: {userError.message}</p>;
 
   return (
     <div style={{ height: '500px' }}>
