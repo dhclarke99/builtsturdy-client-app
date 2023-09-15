@@ -13,6 +13,7 @@ const UserCalendar = () => {
   const [events, setEvents] = useState([]);
   const client = useApolloClient();
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedWorkout, setSelectedWorkout] = useState(null);
   const { loading: userLoading, error: userError, data: userData } = useQuery(QUERY_USER_by_id, {
     variables: { userId: Auth.getProfile().data._id },
   });
@@ -33,8 +34,10 @@ const UserCalendar = () => {
         const calendarEvents = workouts.map((workout, index) => {
           const date = moment().day(userData.user.schedule.workouts[index].day);
           return {
+            workoutId: workout,
             id: index,
             title: workout.name, // Replace with actual workout name
+            notes: workout.notes,
             start: date.toDate(),
             end: date.toDate(),
             allDay: true,
@@ -47,10 +50,17 @@ const UserCalendar = () => {
     fetchWorkouts();
   }, [userData, client]);
 
-  const handleEventClick = (event) => {
-    // Fetch more details about the clicked event here
-    // For demonstration, we'll just set the clicked event to the state
+  console.log(events)
+
+  const handleEventClick = async (event) => {
     setSelectedEvent(event);
+    console.log(event)
+    // Fetch more details about the clicked event here
+    const { data } = await client.query({
+      query: FETCH_WORKOUT_BY_ID,
+      variables: { workoutId: event.workoutId._id }, // Assuming workoutId is stored in the title
+    });
+    setSelectedWorkout(data.workout);
   };
 
   if (userLoading) return <p>Loading...</p>;
@@ -70,7 +80,16 @@ const UserCalendar = () => {
       {selectedEvent && (
         <div>
           <h2>Workout Details for {selectedEvent.title}</h2>
-          {/* Render more details about the selected event here */}
+          {selectedWorkout && (
+            <div>
+              <h3>Exercises:</h3>
+              <ul>
+                {selectedWorkout.exercises.map((exercise, index) => (
+                  <li key={index}>{exercise.name}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
     </div>
