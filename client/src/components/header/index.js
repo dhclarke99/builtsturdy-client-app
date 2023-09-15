@@ -1,37 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-// import AuthService from '../../utils/auth';
-// import { QUERY_USER_by_id } from '../../utils/queries';
-// import { useQuery } from '@apollo/client';
+import Auth from '../../utils/auth';
 
 const Header = () => {
-    return (
-      <header>
-        <h1>Built Sturdy Blueprint</h1>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
+  const isLoggedIn = Auth.loggedIn();
+  const isAdmin = Auth.isLoggedInAndAdmin();
+
+  console.log(isAdmin)
+  return (
+    <header>
+      <h1>Built Sturdy Blueprint</h1>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          {isAdmin && (
             <li>
               <Link to="/admin/admindashboard">Admin Dashboard</Link>
             </li>
-            <li>
-              <Link to="/exercise">Exercise</Link>
-            </li>
+          )}
+          <li>
+            <Link to="/exercise">Exercise</Link>
+          </li>
+          {!isLoggedIn && (
             <li>
               <Link to="/login">Login</Link>
             </li>
+          )}
+          {isLoggedIn && (
             <li>
               <Link to="/logout">Logout</Link>
             </li>
+          )}
+          {!isLoggedIn && (
             <li>
               <Link to="/signup">Signup</Link>
             </li>
-          </ul>
-        </nav>
-      </header>
-    );
-  };
-  
-  export default Header;
+          )}
+        </ul>
+      </nav>
+    </header>
+  );
+};
+
+export default Header;
