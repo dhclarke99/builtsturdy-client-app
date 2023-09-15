@@ -84,7 +84,7 @@ const resolvers = {
   Mutation: {
     createUser: async (_parent, { input }) => {
       try {
-        const { username, firstname, lastname, email, password, role, gender, height, currentWeight, estimatedBodyFat, age, trainingExperience, mainPhysiqueGoal } = input;
+        const { username, firstname, lastname, email, password, role, gender, height, currentWeight, estimatedBodyFat, age, trainingExperience, mainPhysiqueGoal, startDate, weeks } = input;
         const user = await User.create({
           username,
           firstname,
@@ -98,7 +98,9 @@ const resolvers = {
           estimatedBodyFat,
           age,
           trainingExperience,
-          mainPhysiqueGoal
+          mainPhysiqueGoal,
+          startDate,
+          weeks
         });
         const token = signToken(user);
         return { token, user };

@@ -17,6 +17,8 @@ const AdminCreateUser = () => {
     age: '',
     trainingExperience: '',
     mainPhysiqueGoal: '',
+    startDate: '',
+    weeks: ''
   });
 
   const [createUser] = useMutation(CREATE_USER);
@@ -37,6 +39,7 @@ const AdminCreateUser = () => {
         currentWeight: parseFloat(formData.currentWeight),
         estimatedBodyFat: parseFloat(formData.estimatedBodyFat),
         age: parseInt(formData.age, 10),
+        weeks: parseFloat(formData.weeks),
       };
 
     try {
@@ -141,6 +144,20 @@ const AdminCreateUser = () => {
         <option value="Build Muscle">Build Muscle</option>
         <option value="Recomp">Recomp</option>
       </select>
+      <input
+        type="text"
+        name="startDate"
+        placeholder="Start Date (MM/DD/YYYY)"
+        value={formData.startDate}
+        onChange={handleChange}
+      />
+      <input
+        type="number"
+        name="weeks"
+        placeholder="weeks"
+        value={formData.weeks}
+        onChange={handleChange}
+      />
 
       <button type="submit">Create User</button>
     </form>

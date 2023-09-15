@@ -42,6 +42,8 @@ query findUserById($userId: String!) {
     mainPhysiqueGoal
     trainingExperience
     username
+    startDate
+    weeks
     schedule {
       _id
       name
@@ -113,6 +115,8 @@ query findAllUsers {
     lastname
     mainPhysiqueGoal
     role
+    startDate
+    weeks
     schedule {
       _id
       name

@@ -19,6 +19,8 @@ type User {
   age: Int
   trainingExperience: String
   mainPhysiqueGoal: String
+  startDate: String
+  weeks: Int
 }
 
 input CreateUserInput {
@@ -35,6 +37,8 @@ input CreateUserInput {
   age: Int
   trainingExperience: String
   mainPhysiqueGoal: String
+  startDate: String
+  weeks: Int
 }
 
 input UpdateUserInput {
@@ -52,6 +56,8 @@ input UpdateUserInput {
   trainingExperience: String
   mainPhysiqueGoal: String
   schedule: ID
+  startDate: String
+  weeks: Int
 }
 
   type Option {

@@ -64,6 +64,12 @@ const userSchema = new Schema({
         type: String,
         enum: ['Burn Fat', 'Build Muscle', 'Recomp'],
     },
+    startDate: {
+        type: String
+    },
+    weeks: {
+        type: Number
+    },
 });
 
 

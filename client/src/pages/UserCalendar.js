@@ -3,9 +3,8 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Auth from '../utils/auth';
-import { useQuery } from '@apollo/client';
+import { useQuery, useApolloClient } from '@apollo/client';
 import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID } from '../utils/queries';
-import { useApolloClient } from '@apollo/client';
 
 const localizer = momentLocalizer(moment);
 
@@ -21,8 +20,13 @@ const UserCalendar = () => {
   useEffect(() => {
     const fetchWorkouts = async () => {
       if (userData && userData.user && userData.user.schedule) {
+        const startDate = moment(userData.user.startDate); // Make sure this is in the correct format
+        const weeks = userData.user.weeks; // Number of weeks
+        console.log("Start Date:", startDate);
+        console.log("Weeks:", weeks);
+  
         const workoutIds = userData.user.schedule.workouts.map(w => w.workoutId);
-
+  
         const workouts = await Promise.all(workoutIds.map(async id => {
           const { data } = await client.query({
             query: FETCH_WORKOUT_BY_ID,
@@ -30,19 +34,25 @@ const UserCalendar = () => {
           });
           return data.workout;
         }));
-
-        const calendarEvents = workouts.map((workout, index) => {
-          const date = moment().day(userData.user.schedule.workouts[index].day);
-          return {
-            workoutId: workout,
-            id: index,
-            title: workout.name, // Replace with actual workout name
-            notes: workout.notes,
-            start: date.toDate(),
-            end: date.toDate(),
-            allDay: true,
-          };
-        });
+  
+        const calendarEvents = [];
+  
+        for (let i = 0; i < weeks; i++) {
+          workouts.forEach((workout, index) => {
+            const workoutDate = moment(startDate).add(i, 'weeks').day(userData.user.schedule.workouts[index].day);
+            calendarEvents.push({
+              workoutId: workout,
+              id: index,
+              title: workout.name,
+              notes: workout.notes,
+              start: workoutDate.toDate(),
+              end: workoutDate.toDate(),
+              allDay: true,
+            });
+          });
+        }
+  
+        console.log("Calendar Events:", calendarEvents);
         setEvents(calendarEvents);
       }
     };
@@ -54,20 +64,19 @@ const UserCalendar = () => {
 
   const handleEventClick = async (event) => {
     setSelectedEvent(event);
-    console.log(event)
-    // Fetch more details about the clicked event here
     const { data } = await client.query({
       query: FETCH_WORKOUT_BY_ID,
-      variables: { workoutId: event.workoutId._id }, // Assuming workoutId is stored in the title
+      variables: { workoutId: event.workoutId._id },
     });
     setSelectedWorkout(data.workout);
   };
 
   if (userLoading) return <p>Loading...</p>;
   if (userError) return <p>Error: {userError.message}</p>;
-
+console.log(userData.user)
   return (
     <div>
+        <h1>{userData.user.firstname}'s Calendar</h1>
       <div style={{ height: '500px' }}>
         <Calendar
           localizer={localizer}
