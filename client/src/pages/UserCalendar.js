@@ -94,10 +94,10 @@ console.log(userData.user)
             
             <div>
               <h3>Exercises:</h3>
-              <ul>
+              <ol>
                 {selectedWorkout.exercises.map((exercise, index) => (
                   <div key={exercise._id}>
-                  <h2>{exercise.name}</h2>
+                  <h2>{index +1}. {exercise.name}</h2>
                   <p>Sets: {exercise.sets}, Reps: {exercise.reps}</p>
                   <p>Notes: {exercise.notes}</p>
                   <video controls width="250">
@@ -106,7 +106,7 @@ console.log(userData.user)
                   </video>
                 </div>
                 ))}
-              </ul>
+              </ol>
             </div>
           )}
         </div>
