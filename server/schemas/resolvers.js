@@ -165,9 +165,9 @@ const resolvers = {
       
       return true;
     },
-    createExercise: async (_, { name, sets, reps, weight, notes, videoURL }) => {
+    createExercise: async (_, { name, sets, reps, weight, notes, adminNotes, videoURL }) => {
       try {
-        return await Exercise.create({ name, sets, reps, weight, notes, videoURL });
+        return await Exercise.create({ name, sets, reps, weight, notes, adminNotes, videoURL });
       } catch (error) {
         console.error("Error in createExercise:", error);
         throw new Error("Failed to create exercise");

@@ -15,6 +15,7 @@ const EditExercise = () => {
   const [sets, setSets] = useState('');
   const [reps, setReps] = useState('');
   const [notes, setNotes] = useState('');
+  const [adminNotes, setAdminNotes] = useState('');
   const [weight, setWeight] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
 
@@ -27,6 +28,7 @@ const EditExercise = () => {
       setSets(data.exercise.sets || '');
       setReps(data.exercise.reps || '');
       setNotes(data.exercise.notes || '');
+      setAdminNotes(data.exercise.adminNotes || '');
       setWeight(data.exercise.weight || '');  // Use empty string if weight is null
       setVideoUrl(data.exercise.videoUrl || '');
     }
@@ -104,6 +106,11 @@ console.log(formData)
       <label>
         Notes:
         <input type="text"  name="notes" value={formData.notes || ''} onChange={handleChange} />
+        
+      </label>
+      <label>
+        Admin Notes:
+        <input type="text"  name="adminNotes" value={formData.adminNotes || ''} onChange={handleChange} />
         
       </label>
       <label>

@@ -79,6 +79,7 @@ input UpdateUserInput {
     reps: Int
     weight: Float
     notes: String
+    adminNotes: String
     videoUrl: String
   }
 
@@ -105,6 +106,7 @@ input UpdateUserInput {
     reps: Int!
     weight: Float
     notes: String
+    adminNotes: String
     videoUrl: String
   }
 
@@ -114,6 +116,7 @@ input UpdateUserInput {
     reps: Int
     weight: Float
     notes: String
+    adminNotes: String
     videoUrl: String
   }
 

@@ -69,6 +69,7 @@ const UserCalendar = () => {
       variables: { workoutId: event.workoutId._id },
     });
     setSelectedWorkout(data.workout);
+    console.log(data.workout)
   };
 
   if (userLoading) return <p>Loading...</p>;
@@ -90,11 +91,20 @@ console.log(userData.user)
         <div>
           <h2>Workout Details for {selectedEvent.title}</h2>
           {selectedWorkout && (
+            
             <div>
               <h3>Exercises:</h3>
               <ul>
                 {selectedWorkout.exercises.map((exercise, index) => (
-                  <li key={index}>{exercise.name}</li>
+                  <div key={exercise._id}>
+                  <h2>{exercise.name}</h2>
+                  <p>Sets: {exercise.sets}, Reps: {exercise.reps}</p>
+                  <p>Notes: {exercise.notes}</p>
+                  <video controls width="250">
+                    <source src={exercise.videoUrl} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
                 ))}
               </ul>
             </div>
@@ -106,3 +116,4 @@ console.log(userData.user)
 };
 
 export default UserCalendar;
+

@@ -6,6 +6,7 @@ const exerciseSchema = new Schema({
   reps: Number,
   weight: Number,
   notes: String,
+  adminNotes: String,
   videoUrl: String,
 });
 

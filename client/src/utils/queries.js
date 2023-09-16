@@ -6,6 +6,7 @@ query findAllExercises {
     _id
     name
     notes
+    adminNotes
     sets
     reps
     weight
@@ -14,12 +15,13 @@ query findAllExercises {
 }
 `;
 
-export const FIND_EXERCISE_BY_ID = gql `
+export const FIND_EXERCISE_BY_ID = gql`
 query findExerciseById($exerciseId: ID!) {
   exercise(exerciseId: $exerciseId) {
     _id
     name
     notes
+    adminNotes
     sets
     reps
     weight
@@ -95,15 +97,19 @@ query Query {
     notes
     exercises {
       _id
-      name
-      sets
-      reps
+    name
+    notes
+    adminNotes
+    sets
+    reps
+    weight
+    videoUrl
     }
   }
 }
 `;
 
-export const  FETCH_ALL_USERS = gql `
+export const FETCH_ALL_USERS = gql`
 query findAllUsers {
   users {
     _id
@@ -138,9 +144,11 @@ query findAllUsers {
         _id
         name
         notes
-        reps
+        adminNotes
         sets
+        reps
         weight
+        videoUrl
       }
     }
   }
@@ -157,15 +165,18 @@ query findWorkoutById($workoutId: ID!) {
       _id
       name
       notes
-      reps
+      adminNotes
       sets
+      reps
+      weight
+      videoUrl
     }
     
   }
 }
 `;
 
-export const FETCH_SCHEDULES = gql `
+export const FETCH_SCHEDULES = gql`
 query findSchedules {
   schedules {
     _id
@@ -179,7 +190,7 @@ query findSchedules {
 }
 `;
 
-export const FETCH_SCHEDULE_BY_ID = gql `
+export const FETCH_SCHEDULE_BY_ID = gql`
 query findScheduleById($scheduleId: ID!) {
   schedule(scheduleId: $scheduleId) {
     _id
