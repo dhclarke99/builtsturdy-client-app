@@ -10,6 +10,10 @@
   color: #c6a10d;
 }
 
+.rbc-off-range-bg {
+    background-color: rgb(35, 33, 33);
+  }
+
   #user-name {
     text-align: center;
     font-size: 2em;
