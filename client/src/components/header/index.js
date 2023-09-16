@@ -24,6 +24,11 @@ const Header = () => {
               <Link to="/calendar">Calendar</Link>
             </li>
           )}
+          {isLoggedIn && (
+            <li>
+              <Link to="/nutrition">Nutrition</Link>
+            </li>
+          )}
           <li>
             <Link to="/exercise">Exercise</Link>
           </li>
