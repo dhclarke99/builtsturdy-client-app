@@ -138,6 +138,7 @@ mutation updateExercise($exerciseId: ID!, $input: updateExerciseInput!) {
     reps
     sets
     weight
+    videoUrl
   }
 }
 `;

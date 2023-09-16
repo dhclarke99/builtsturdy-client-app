@@ -16,6 +16,7 @@ const EditExercise = () => {
   const [reps, setReps] = useState('');
   const [notes, setNotes] = useState('');
   const [weight, setWeight] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
 
   const [updateExercise] = useMutation(UPDATE_EXERCISE);
   const [formData, setFormData] = useState({});
@@ -27,6 +28,7 @@ const EditExercise = () => {
       setReps(data.exercise.reps || '');
       setNotes(data.exercise.notes || '');
       setWeight(data.exercise.weight || '');  // Use empty string if weight is null
+      setVideoUrl(data.exercise.videoUrl || '');
     }
   }, [data]);
 console.log(data)
@@ -102,6 +104,11 @@ console.log(formData)
       <label>
         Notes:
         <input type="text"  name="notes" value={formData.notes || ''} onChange={handleChange} />
+        
+      </label>
+      <label>
+        Video:
+        <input type="text"  name="videoUrl" value={formData.videoUrl || ''} onChange={handleChange} />
         
       </label>
       <button onClick={handleUpdate}>Update Exercise</button>

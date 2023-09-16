@@ -79,6 +79,7 @@ input UpdateUserInput {
     reps: Int
     weight: Float
     notes: String
+    videoUrl: String
   }
 
   type Schedule {
@@ -104,6 +105,7 @@ input UpdateUserInput {
     reps: Int!
     weight: Float
     notes: String
+    videoUrl: String
   }
 
   input updateExerciseInput {
@@ -112,6 +114,7 @@ input UpdateUserInput {
     reps: Int
     weight: Float
     notes: String
+    videoUrl: String
   }
 
   input UpdateWorkoutInput {
@@ -143,7 +146,7 @@ input UpdateUserInput {
     deleteUser(userId: ID!): User
     login(email: String!, password: String!): Auth
     logout: Boolean
-    createExercise(name: String!, sets: Int, reps: Int, weight: Float, notes: String): Exercise
+    createExercise(name: String!, sets: Int, reps: Int, weight: Float, notes: String, videoURL: String): Exercise
     updateExercise(exerciseId: ID!, input: updateExerciseInput!): Exercise
     createWorkout(name: String!): Workout
     deleteExercise(exerciseId: ID!): Exercise

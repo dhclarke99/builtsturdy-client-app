@@ -9,6 +9,7 @@ query findAllExercises {
     sets
     reps
     weight
+    videoUrl
   }
 }
 `;
@@ -22,6 +23,7 @@ query findExerciseById($exerciseId: ID!) {
     sets
     reps
     weight
+    videoUrl
   }
 }
 `;

@@ -6,6 +6,7 @@ const exerciseSchema = new Schema({
   reps: Number,
   weight: Number,
   notes: String,
+  videoUrl: String,
 });
 
 module.exports = model('Exercise', exerciseSchema);

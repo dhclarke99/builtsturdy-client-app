@@ -1,6 +1,7 @@
 import React from 'react';
 
 const ExerciseList = ({ exercises }) => {
+  console.log(exercises)
   return (
     <ul>
       {exercises.map((exercise, index) => (
