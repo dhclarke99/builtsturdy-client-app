@@ -79,8 +79,8 @@ useEffect(() => {
   <div>
     <h2>All Schedules</h2>
     <div className="row">
-      {dataSchedules.schedules.map((schedule) => (
-        <div className="col-md-6" key={schedule._id}>
+      {dataSchedules.schedules.map((schedule, index) => (
+        <div className="col-md-6" key={schedule._id + index}>
           <div className="card mb-4">
             <div className="card-header">
               {schedule.name}: {schedule.notes}
@@ -88,12 +88,12 @@ useEffect(() => {
             <button onClick={() => window.location.href = `/admin/edit-schedule/${schedule._id}`}>Edit</button>
             <div className="card-body">
               <ul className="list-group list-group-flush">
-                {schedule.workouts.map((workout) => {
+                {schedule.workouts.map((workout, index) => {
                   const relevantWorkoutDetail = workoutDetails.find(
                     (detail) => detail.workout._id === workout.workoutId
                   );
                   return (
-                    <li className="list-group-item" key={workout.workoutId}>
+                    <li className="list-group-item" key={workout.workoutId + index}>
                       <strong>Day:</strong> {workout.day}, <strong>Workout ID:</strong> {workout.workoutId}
                       {relevantWorkoutDetail && (
                         <ul className="list-group list-group-flush mt-2">

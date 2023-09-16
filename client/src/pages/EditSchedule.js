@@ -4,6 +4,7 @@ import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import { FETCH_SCHEDULE_BY_ID, FETCH_ALL_WORKOUTS, FETCH_WORKOUT_BY_ID } from '../utils/queries';
 import { UPDATE_SCHEDULE } from '../utils/mutations';
+import { swapArrayElements } from '../utils/helpers';
 
 const EditSchedule = () => {
   const { id: scheduleId } = useParams();
@@ -55,8 +56,8 @@ console.log(allWorkouts)
   // Initialize state variables once data is available
   useEffect(() => {
     if (dataSchedule) {
-      setName(dataSchedule.schedule.name);
-      setNotes(dataSchedule.schedule.notes);
+      setName(dataSchedule.schedule.name || '');
+      setNotes(dataSchedule.schedule.notes || '');
       setAllWorkoutIds(dataSchedule.schedule.workouts.map(e => e._id));
     }
   }, [dataSchedule]);
@@ -148,6 +149,7 @@ console.log(allWorkouts)
       console.error(err);
     }
   };
+
   
 
   
@@ -169,12 +171,12 @@ console.log(dataSchedule)
       <label>
         Current Workouts:
         <ul>
-        {dataSchedule.schedule.workouts.map((workout) => {
+        {dataSchedule.schedule.workouts.map((workout, index) => {
                   const relevantWorkoutDetail = workoutDetails.find(
                     (detail) => detail.workout._id === workout.workoutId
                   );
                   return (
-                    <li className="list-group-item" key={workout.workoutId}>
+                    <li className="list-group-item" key={index}>
                       <strong>Day:</strong> {workout.day}, <strong>Workout ID:</strong> {workout.workoutId}
                       {relevantWorkoutDetail && (
                         <ul className="list-group list-group-flush mt-2">
@@ -184,6 +186,7 @@ console.log(dataSchedule)
                       )}
                       <button onClick={() => handleEditWorkout(workout.workoutId)}>Edit</button>
                       <button onClick={() => handleRemoveWorkout(workout.workoutId)}>Remove</button>
+                    
                     </li>
                      
                   );
