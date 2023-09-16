@@ -91,6 +91,7 @@ const UniqueUser = () => {
         currentWeight: parseFloat(cleanedFormData.currentWeight),
         estimatedBodyFat: parseFloat(cleanedFormData.estimatedBodyFat),
         age: parseInt(cleanedFormData.age, 10),
+        weeks: parseFloat(cleanedFormData.weeks),
       };
       console.log(formattedData)
       await updateUser({
@@ -160,6 +161,8 @@ const UniqueUser = () => {
               <li>Body Fat: {user.estimatedBodyFat} %</li>
               <li>Experience: {user.trainingExperience}</li>
               <li>Goal: {user.mainPhysiqueGoal}</li>
+              <li>Program Start Date: {user.startDate}</li>
+              <li>Program Length: {user.weeks} weeks</li>
             </ul>
             <h5 className="card-title">Schedules:</h5>
 
@@ -343,6 +346,24 @@ const UniqueUser = () => {
                   <option key={schedule._id} value={schedule._id}>{schedule.name}</option>
                 ))}
               </select>
+            </label>
+            <label> Start Date:
+              <input
+                type="text"
+                name="startDate"
+                placeholder="Start Date"
+                value={formData.startDate || ''}
+                onChange={handleChange}
+              />
+            </label>
+            <label> Weeks:
+              <input
+                type="text"
+                name="weeks"
+                placeholder="Weeks"
+                value={formData.weeks || ''}
+                onChange={handleChange}
+              />
             </label>
             <button type="submit">Update User</button>
           </form>
