@@ -3,7 +3,13 @@
     color: #c6a10d;
     font-family: Arial, sans-serif;
   }
-  
+
+  .calendar-container h1,
+.calendar-container h2,
+.calendar-container h3 {
+  color: #c6a10d;
+}
+
   #user-name {
     text-align: center;
     font-size: 2em;
@@ -45,7 +51,13 @@
   }
   
   .exercise-item {
-    margin-bottom: 15px;
+    border: 2px solid #c6a10d;
+    padding: 10px;
+    margin: 10px 0;
+  }
+
+  .exercise-item h2 {
+    margin-top: 0;
   }
   
   .exercise-name {
@@ -56,8 +68,20 @@
   .exercise-notes {
     margin: 5px 0;
   }
+
+  .exercise-video-container {
+    margin-top: 20px;
+  }
   
   .exercise-video-placeholder {
-    cursor: pointer;
+    width: 250px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
   }
+
+  .exercise-video-placeholder:hover {
+    transform: scale(1.1);
+  }
+
+
   

@@ -112,13 +112,18 @@ return (
                   <h2 className="exercise-name">{index + 1}. {exercise.name}</h2>
                   <p className="exercise-info">Sets: {exercise.sets}, Reps: {exercise.reps}</p>
                   <p className="exercise-notes">Notes: {exercise.notes}</p>
-                  <img 
+                  <div className="exercise-video-container">
+                    <img 
                     src={placeholderImage} 
                     width="250"
                     alt="Walkthrough Video" 
                     className="exercise-video-placeholder"
                     onClick={() => setCurrentVideoUrl(exercise.videoUrl)}
                   />
+                  </div>
+                  
+                  
+                  
                 </div>
               ))}
             </ol>
