@@ -5,7 +5,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Auth from '../utils/auth';
 import { useQuery, useApolloClient } from '@apollo/client';
 import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID } from '../utils/queries';
-import placeholderImage from '../assets/images/placeholderImage.png'
+import placeholderImage from '../assets/images/placeholderImage.png';
+import '../utils/userCalendar.css'
 const localizer = momentLocalizer(moment);
 
 const UserCalendar = () => {
@@ -76,55 +77,58 @@ const UserCalendar = () => {
   if (userLoading) return <p>Loading...</p>;
   if (userError) return <p>Error: {userError.message}</p>;
 console.log(userData.user)
-  return (
-    <div>
-        <h1>{userData.user.firstname}'s Calendar</h1>
-      <div style={{ height: '500px' }}>
-        <Calendar
-          localizer={localizer}
-          events={events}
-          startAccessor="start"
-          endAccessor="end"
-          onSelectEvent={handleEventClick}
-        />
-      </div>
-      {selectedEvent && (
-  <div>
-    <h2>Workout Details for {selectedEvent.title}</h2>
-    {currentVideoUrl && (
-      <div>
-        <h3>Walkthrough Video:</h3>
-        <video controls width="250">
-          <source src={currentVideoUrl} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        <button onClick={() => setCurrentVideoUrl(null)}>Close Video</button>
-      </div>
-    )}
-    {selectedWorkout && (
-      <div>
-        <h3>Exercises:</h3>
-        <ol>
-          {selectedWorkout.exercises.map((exercise, index) => (
-            <div key={exercise._id}>
-              <h2>{index + 1}. {exercise.name}</h2>
-              <p>Sets: {exercise.sets}, Reps: {exercise.reps}</p>
-              <p>Notes: {exercise.notes}</p>
-              <img 
-                src={placeholderImage} 
-                width="250"
-                alt="Walkthrough Video" 
-                onClick={() => setCurrentVideoUrl(exercise.videoUrl)}
-              />
-            </div>
-          ))}
-        </ol>
+return (
+  <div className="calendar-container">
+    <h1 id="user-name">{userData.user.firstname}'s Calendar</h1>
+    <div id="calendar-box">
+      <Calendar
+        localizer={localizer}
+        events={events}
+        startAccessor="start"
+        endAccessor="end"
+        onSelectEvent={handleEventClick}
+        className="user-calendar"
+      />
+    </div>
+    {selectedEvent && (
+      <div className="workout-details">
+        <h2 className="workout-title">Workout Details for {selectedEvent.title}</h2>
+        {currentVideoUrl && (
+          <div className="video-section">
+            <h3>Walkthrough Video:</h3>
+            <video controls width="250">
+              <source src={currentVideoUrl} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <button className="close-video-btn" onClick={() => setCurrentVideoUrl(null)}>Close Video</button>
+          </div>
+        )}
+        {selectedWorkout && (
+          <div className="exercise-list">
+            <h3>Exercises:</h3>
+            <ol>
+              {selectedWorkout.exercises.map((exercise, index) => (
+                <div key={exercise._id} className="exercise-item">
+                  <h2 className="exercise-name">{index + 1}. {exercise.name}</h2>
+                  <p className="exercise-info">Sets: {exercise.sets}, Reps: {exercise.reps}</p>
+                  <p className="exercise-notes">Notes: {exercise.notes}</p>
+                  <img 
+                    src={placeholderImage} 
+                    width="250"
+                    alt="Walkthrough Video" 
+                    className="exercise-video-placeholder"
+                    onClick={() => setCurrentVideoUrl(exercise.videoUrl)}
+                  />
+                </div>
+              ))}
+            </ol>
+          </div>
+        )}
       </div>
     )}
   </div>
-)}
-    </div>
-  );
+);
+
 };
 
 export default UserCalendar;

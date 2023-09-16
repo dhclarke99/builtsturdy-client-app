@@ -1,0 +1,63 @@
+.calendar-container {
+    background-color: rgb(35, 33, 33);
+    color: #c6a10d;
+    font-family: Arial, sans-serif;
+  }
+  
+  #user-name {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  
+  #calendar-box {
+    height: 500px;
+    margin: 0 auto;
+  }
+  
+  .user-calendar {
+    border: 2px solid #c6a10d;
+  }
+  
+  .workout-details {
+    margin-top: 20px;
+  }
+  
+  .workout-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  .video-section {
+    margin-bottom: 20px;
+  }
+  
+  .close-video-btn {
+    background-color: #c6a10d;
+    color: rgb(35, 33, 33);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .exercise-list {
+    margin-top: 20px;
+  }
+  
+  .exercise-item {
+    margin-bottom: 15px;
+  }
+  
+  .exercise-name {
+    font-size: 1.2em;
+  }
+  
+  .exercise-info,
+  .exercise-notes {
+    margin: 5px 0;
+  }
+  
+  .exercise-video-placeholder {
+    cursor: pointer;
+  }
+  
