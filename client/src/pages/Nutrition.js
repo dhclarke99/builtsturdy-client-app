@@ -31,8 +31,17 @@ const Nutrition = () => {
 
   return (
     <div>
-      <h1>Nutrition Calculator</h1>
-      <p>Your daily calorie target is: {dailyCalories} calories</p>
+        <h1>Nutrition Calculator</h1>
+       <h2>Your Personal Stats</h2>
+       <li>Age: {data.user.age}</li>
+       <li>Gender: {data.user.gender}</li>
+       <li>Height: {data.user.height}</li>
+       <li>Weight: {data.user.currentWeight}</li>
+       <li>Body Fat: {data.user.estimatedBodyFat}</li>
+       <li>Experience: {data.user.trainingExperience}</li>
+       <li>Goal: {data.user.mainPhysiqueGoal}</li>
+      
+      <p>Based on your stats, your daily calorie target is: {dailyCalories} calories</p>
     </div>
   );
 };
