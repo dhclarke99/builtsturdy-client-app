@@ -5,7 +5,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Auth from '../utils/auth';
 import { useQuery, useApolloClient } from '@apollo/client';
 import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID } from '../utils/queries';
-
+import placeholderImage from '../assets/images/placeholderImage.png'
 const localizer = momentLocalizer(moment);
 
 const UserCalendar = () => {
@@ -16,6 +16,7 @@ const UserCalendar = () => {
   const { loading: userLoading, error: userError, data: userData } = useQuery(QUERY_USER_by_id, {
     variables: { userId: Auth.getProfile().data._id },
   });
+  const [currentVideoUrl, setCurrentVideoUrl] = useState(null);
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -88,29 +89,40 @@ console.log(userData.user)
         />
       </div>
       {selectedEvent && (
-        <div>
-          <h2>Workout Details for {selectedEvent.title}</h2>
-          {selectedWorkout && (
-            
-            <div>
-              <h3>Exercises:</h3>
-              <ol>
-                {selectedWorkout.exercises.map((exercise, index) => (
-                  <div key={exercise._id}>
-                  <h2>{index +1}. {exercise.name}</h2>
-                  <p>Sets: {exercise.sets}, Reps: {exercise.reps}</p>
-                  <p>Notes: {exercise.notes}</p>
-                  <video controls width="250">
-                    <source src={exercise.videoUrl} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-                ))}
-              </ol>
+  <div>
+    <h2>Workout Details for {selectedEvent.title}</h2>
+    {currentVideoUrl && (
+      <div>
+        <h3>Walkthrough Video:</h3>
+        <video controls width="250">
+          <source src={currentVideoUrl} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <button onClick={() => setCurrentVideoUrl(null)}>Close Video</button>
+      </div>
+    )}
+    {selectedWorkout && (
+      <div>
+        <h3>Exercises:</h3>
+        <ol>
+          {selectedWorkout.exercises.map((exercise, index) => (
+            <div key={exercise._id}>
+              <h2>{index + 1}. {exercise.name}</h2>
+              <p>Sets: {exercise.sets}, Reps: {exercise.reps}</p>
+              <p>Notes: {exercise.notes}</p>
+              <img 
+                src={placeholderImage} 
+                width="250"
+                alt="Walkthrough Video" 
+                onClick={() => setCurrentVideoUrl(exercise.videoUrl)}
+              />
             </div>
-          )}
-        </div>
-      )}
+          ))}
+        </ol>
+      </div>
+    )}
+  </div>
+)}
     </div>
   );
 };
