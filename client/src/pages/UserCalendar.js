@@ -21,6 +21,7 @@ const UserCalendar = () => {
   });
   const [currentVideoUrl, setCurrentVideoUrl] = useState(null);
   const videoRef = useRef(null);
+  const workoutRef = useRef(null);
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -75,12 +76,15 @@ const UserCalendar = () => {
     });
     setSelectedWorkout(data.workout);
     console.log(data.workout)
+    workoutRef.current.scrollIntoView({behavior: 'smooth'});
   };
 
   const handleImageClick = (videoUrl) => {
     setCurrentVideoUrl(videoUrl);
     videoRef.current.scrollIntoView({ behavior: 'smooth' }); // Scroll to the video section
   };
+  
+  
 
   if (userLoading) return <p>Loading...</p>;
   if (userError) return <p>Error: {userError.message}</p>;
@@ -99,7 +103,7 @@ return (
       />
     </div>
     {selectedEvent && (
-      <div ref={videoRef}className="workout-details">
+      <div ref={videoRef} className="workout-details">
         <h2 className="workout-title">Workout Details for {selectedEvent.title}</h2>
         {currentVideoUrl && (
           <div className="video-section">
@@ -112,7 +116,7 @@ return (
           </div>
         )}
         {selectedWorkout && (
-          <div className="exercise-list">
+          <div ref={workoutRef} className="exercise-list">
             <h3>Exercises:</h3>
             <ol>
               {selectedWorkout.exercises.map((exercise, index) => (
