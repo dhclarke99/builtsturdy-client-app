@@ -3,6 +3,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import { FETCH_WORKOUT_BY_ID, QUERY_EXERCISES } from '../utils/queries';
 import { UPDATE_WORKOUT } from '../utils/mutations';
+import { swapArrayElements } from '../utils/helpers';
 
 const EditWorkout = () => {
   const { id: workoutId } = useParams();
@@ -74,6 +75,24 @@ const EditWorkout = () => {
     }
   };
 
+  const moveExerciseUp = async (index) => {
+    if (index > 0) {
+      const newExerciseIds = swapArrayElements([...allExerciseIds], index, index - 1);
+      setAllExerciseIds(newExerciseIds);
+      await assignExerciseToWorkout({ variables: { workoutId, exerciseIds: newExerciseIds } });
+      window.location.reload();
+    }
+  };
+
+  const moveExerciseDown = async (index) => {
+    if (index < allExerciseIds.length - 1) {
+      const newExerciseIds = swapArrayElements([...allExerciseIds], index, index + 1);
+      setAllExerciseIds(newExerciseIds);
+      await assignExerciseToWorkout({ variables: { workoutId, exerciseIds: newExerciseIds } });
+      window.location.reload();
+    }
+  };
+
   return (
     <div>
       <h1>Edit Workout</h1>
@@ -91,10 +110,12 @@ const EditWorkout = () => {
       <label>
         Current Exercises:
         <ul>
-          {data.workout.exercises.map((exercise) => (
+          {data.workout.exercises.map((exercise, index) => (
             <li key={exercise._id}>
               {exercise.name} 
               <button onClick={() => handleRemoveExercise(exercise._id)}>Remove</button>
+              <button onClick={() => moveExerciseUp(index)}>Move Up</button>
+              <button onClick={() => moveExerciseDown(index)}>Move Down</button>
             </li>
           ))}
         </ul>
