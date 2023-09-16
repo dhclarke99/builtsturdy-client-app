@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -7,6 +7,8 @@ import { useQuery, useApolloClient } from '@apollo/client';
 import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID } from '../utils/queries';
 import placeholderImage from '../assets/images/placeholderImage.png';
 import '../utils/userCalendar.css'
+
+
 const localizer = momentLocalizer(moment);
 
 const UserCalendar = () => {
@@ -18,6 +20,7 @@ const UserCalendar = () => {
     variables: { userId: Auth.getProfile().data._id },
   });
   const [currentVideoUrl, setCurrentVideoUrl] = useState(null);
+  const videoRef = useRef(null);
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -74,6 +77,11 @@ const UserCalendar = () => {
     console.log(data.workout)
   };
 
+  const handleImageClick = (videoUrl) => {
+    setCurrentVideoUrl(videoUrl);
+    videoRef.current.scrollIntoView({ behavior: 'smooth' }); // Scroll to the video section
+  };
+
   if (userLoading) return <p>Loading...</p>;
   if (userError) return <p>Error: {userError.message}</p>;
 console.log(userData.user)
@@ -91,7 +99,7 @@ return (
       />
     </div>
     {selectedEvent && (
-      <div className="workout-details">
+      <div ref={videoRef}className="workout-details">
         <h2 className="workout-title">Workout Details for {selectedEvent.title}</h2>
         {currentVideoUrl && (
           <div className="video-section">
@@ -118,7 +126,7 @@ return (
                     width="250"
                     alt="Walkthrough Video" 
                     className="exercise-video-placeholder"
-                    onClick={() => setCurrentVideoUrl(exercise.videoUrl)}
+                    onClick={() => handleImageClick(exercise.videoUrl)}
                   />
                   </div>
                   
