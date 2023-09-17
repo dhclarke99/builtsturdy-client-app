@@ -176,12 +176,12 @@ const UniqueUser = () => {
                       <h6 className="card-subtitle mb-2 text-muted">Schedule Name: {user.schedule.name}</h6>
                       <ul>
 
-                        {user.schedule.workouts.map((workout) => {
+                        {user.schedule.workouts.map((workout, index) => {
                           const relevantWorkoutDetail = workoutDetails.find(
                             (detail) => detail.workout._id === workout.workoutId
                           );
                           return (
-                            <li key={workout.workoutId}>
+                            <li key={workout.workoutId + index}>
                               Day: {workout.day}, Workout ID: {workout.workoutId}
                               {relevantWorkoutDetail && (
                                 <ul>
@@ -191,7 +191,7 @@ const UniqueUser = () => {
                                     Exercises:
                                     <ul>
                                       {relevantWorkoutDetail.workout.exercises.map((exercise, index) => (
-                                        <li key={index}>Exercise: {exercise.name}</li>
+                                        <li key={index}>{index +1}. {exercise.name}</li>
                                       ))}
                                     </ul>
                                   </li>

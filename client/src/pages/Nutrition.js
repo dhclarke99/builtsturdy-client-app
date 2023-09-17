@@ -13,17 +13,46 @@ const Nutrition = () => {
 
   useEffect(() => {
     if (data && data.user) {
-      const { currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, weight, trainingExperience,  } = data.user;
+      const { currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, weight, trainingExperience } = data.user;
       // Call your helper function to calculate daily calories
-      const calculatedCalories = calculateDailyCalories(gender, height, age, weight, trainingExperience);
+      const calculatedCalories = calculateDailyCalories(currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, weight, trainingExperience);
       setDailyCalories(calculatedCalories);
     }
   }, [data]);
 
+  console.log(data)
+
   const calculateDailyCalories = (currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, weight, trainingExperience) => {
-    console.log(data.user)
-    // Your actual calculation logic here
-    return 2000; // Placeholder
+    const mass = currentWeight * 0.453592
+    const h = height * 2.53
+    if (gender === "Male") {
+        const s = 5;
+    } else if (gender === "Female") {
+        const s = -151;
+    }
+console.log(estimatedBodyFat)
+    const LBM = (mass * (100-estimatedBodyFat))/100
+    const BMRKatchMcardle = 370 + (21.6*LBM)
+
+    const BMR = BMRKatchMcardle * 1.55
+    let calories
+    
+    if (trainingExperience === "Beginner" && mainPhysiqueGoal === "Burn Fat") {
+       calories = BMR - 500
+       
+    } else if (trainingExperience === "Beginner" && mainPhysiqueGoal === "Build Muscle") {
+      calories = BMR + 500
+    
+    } else if (trainingExperience === "Intermediate" && mainPhysiqueGoal === "Burn Fat") {
+       calories = BMR - 300
+     
+    } else if (trainingExperience === "Intermediate" && mainPhysiqueGoal === "Build Muscle") {
+      calories = BMR + 300
+     
+    }
+
+    return Math.round(calories); // Round to the nearest whole number
+
   };
 
   if (loading) return <p>Loading...</p>;
