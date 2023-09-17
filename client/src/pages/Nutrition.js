@@ -1,6 +1,6 @@
 // Nutrition.js
 import React, { useState, useEffect } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, gql } from '@apollo/client';
 import { QUERY_USER_by_id } from '../utils/queries'; 
 import Auth from '../utils/auth';
 
@@ -54,6 +54,31 @@ console.log(estimatedBodyFat)
     return Math.round(calories); // Round to the nearest whole number
 
   };
+
+  useEffect(() => {
+    const url = 'https://production.suggestic.com/graphql'; // Replace with your API endpoint
+    const query = `{
+        myProfile {
+          id
+          program {
+            name
+          }
+        }
+      }`; // Replace with your GraphQL query
+  
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`,
+        'sg-user': '1f1a1f0f-0fc4-4c20-98eb-ee601ebf2863'
+      },
+      body: JSON.stringify({ query })
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
+  }, []);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
