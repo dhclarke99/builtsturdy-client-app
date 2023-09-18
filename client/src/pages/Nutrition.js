@@ -62,16 +62,15 @@ console.log(estimatedBodyFat)
 
   useEffect(() => {
     const url = 'https://production.suggestic.com/graphql'; // Replace with your API endpoint
-    const query = `{
+    const programQuery = `{
         myProfile {
           id
           program {
             id
             name
-            
           }
         }
-      }`; // Replace with your GraphQL query
+      }`; 
   
     fetch(url, {
       method: 'POST',
@@ -80,14 +79,14 @@ console.log(estimatedBodyFat)
         'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`,
         'sg-user': '1f1a1f0f-0fc4-4c20-98eb-ee601ebf2863'
       },
-      body: JSON.stringify({ query })
+      body: JSON.stringify({ query: programQuery })
     })
     .then(response => response.json())
     .then(data => {
         console.log(data)
         const programId = data.data.myProfile.program.id
         console.log(programId)
-        console.log(caloriesRounded)
+        console.log(dailyCalories)
         
     })
     .catch(error => console.error('Error:', error));
