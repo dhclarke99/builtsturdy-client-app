@@ -63,6 +63,32 @@ console.log(estimatedBodyFat)
 
   const createMealPlanTemplate = async () => {
     console.log("template needs to be created")
+    console.log(data)
+    const description = data.user.mainPhysiqueGoal;
+    const calorieTarget = caloriesRounded;
+    const proteinPerc = 25
+    const carbsPerc = 45
+    const fatPerc = 30
+    const name = data.user.firstname
+    // const createTemplateMutation = `
+    // mutation {
+    //   createMealPlanTemplate(
+    //     description: "Custom Meal Plan Template"
+    //     customOptions: {
+    //     calories: 1500
+    //     carbsPerc: 45
+    //     proteinPerc: 25
+    //     fatPerc: 30
+    //     program: "UHJvZ3JhbTozMzNhZjZiYi0xYTg4LTQzYzQtYjExZC1kYjJjZWNkMjk3YjA="
+    //     }
+    //     name: "New Meal Plan Template"
+    //   )
+    //   {
+    //     message
+    //     success
+    //   }
+    // }
+    // `
 
   }
 
@@ -112,7 +138,7 @@ console.log(estimatedBodyFat)
         if (templateData.data.mealPlanTemplates.edges.length === 0) {
           createMealPlanTemplate()
         } else {
-          console.log("Templates already exist")
+          console.log("Templates already exist:", templateData)
         }
      
     })
