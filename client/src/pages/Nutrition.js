@@ -11,6 +11,7 @@ const Nutrition = () => {
   let calories;
   let caloriesRounded;
   const [dailyCalories, setDailyCalories] = useState(0);
+  const url = 'https://production.suggestic.com/graphql'; // Replace with your API endpoint
 
   useEffect(() => {
     if (data && data.user) {
@@ -60,8 +61,60 @@ console.log(estimatedBodyFat)
 
   };
 
+  const createMealPlanTemplate = async () => {
+    console.log(dailyCalories)
+
+  }
+
+  const generateMealPlan = async () => {
+    
+  }
+
+  const checkMealTemplate = async () => {
+    const existingMealTemplateQuery = `
+    query {
+      mealPlanTemplates {
+        edges {
+          node {
+            id
+            description
+            createdAt
+            coachId
+            isPublic
+            days {
+              day
+              meals {
+                recipe {
+                  name
+                }
+                calories
+                numOfServings
+              }
+            }
+          }
+        }
+      }
+    }`
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`
+      },
+      body: JSON.stringify({ query: existingMealTemplateQuery })
+    })
+    .then(response => response.json())
+    .then(templateData => {
+        console.log(templateData)
+     
+    })
+    .catch(error => console.error('Error:', error))
+    console.log(dailyCalories)
+
+  }
   useEffect(() => {
-    const url = 'https://production.suggestic.com/graphql'; // Replace with your API endpoint
+   
     const programQuery = `{
         myProfile {
           id
@@ -82,11 +135,13 @@ console.log(estimatedBodyFat)
       body: JSON.stringify({ query: programQuery })
     })
     .then(response => response.json())
-    .then(data => {
-        console.log(data)
-        const programId = data.data.myProfile.program.id
+    .then(programData => {
+        console.log(programData)
+        const programId = programData.data.myProfile.program.id
         console.log(programId)
-        console.log(dailyCalories)
+        
+
+       
         
     })
     .catch(error => console.error('Error:', error));
@@ -108,6 +163,7 @@ console.log(estimatedBodyFat)
        <li>Goal: {data.user.mainPhysiqueGoal}</li>
       
       <p>Based on your stats, your daily calorie target is: {dailyCalories} calories</p>
+      <button onClick={checkMealTemplate}>Generate Meal Plan</button>
     </div>
   );
 };
