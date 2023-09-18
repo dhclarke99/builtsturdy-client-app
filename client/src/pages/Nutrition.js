@@ -62,12 +62,12 @@ console.log(estimatedBodyFat)
   };
 
   const createMealPlanTemplate = async () => {
-    console.log(dailyCalories)
+    console.log("template needs to be created")
 
   }
 
   const generateMealPlan = async () => {
-    
+
   }
 
   const checkMealTemplate = async () => {
@@ -107,6 +107,13 @@ console.log(estimatedBodyFat)
     .then(response => response.json())
     .then(templateData => {
         console.log(templateData)
+        console.log(templateData.data.mealPlanTemplates.edges)
+
+        if (templateData.data.mealPlanTemplates.edges.length === 0) {
+          createMealPlanTemplate()
+        } else {
+          console.log("Templates already exist")
+        }
      
     })
     .catch(error => console.error('Error:', error))
