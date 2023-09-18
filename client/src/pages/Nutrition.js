@@ -69,7 +69,8 @@ console.log(estimatedBodyFat)
     const proteinPerc = 25
     const carbsPerc = 45
     const fatPerc = 30
-    const name = data.user.firstname
+    const firstname = data.user.firstname
+    const lastname = data.user.lastname
     // const createTemplateMutation = `
     // mutation {
     //   createMealPlanTemplate(
@@ -85,6 +86,7 @@ console.log(estimatedBodyFat)
     //   )
     //   {
     //     message
+    //     id
     //     success
     //   }
     // }
@@ -107,6 +109,7 @@ console.log(estimatedBodyFat)
             createdAt
             coachId
             isPublic
+            name
             days {
               day
               meals {
