@@ -8,7 +8,8 @@ const Nutrition = () => {
   const { loading, error, data } = useQuery(QUERY_USER_by_id, {
     variables: { userId: Auth.getProfile().data._id }, // Replace 'someUserId' with the actual user ID
   });
-
+  let calories;
+  let caloriesRounded;
   const [dailyCalories, setDailyCalories] = useState(0);
 
   useEffect(() => {
@@ -35,23 +36,27 @@ console.log(estimatedBodyFat)
     const BMRKatchMcardle = 370 + (21.6*LBM)
 
     const BMR = BMRKatchMcardle * 1.55
-    let calories
+   
     
     if (trainingExperience === "Beginner" && mainPhysiqueGoal === "Burn Fat") {
        calories = BMR - 500
+       caloriesRounded = Math.round(calories)
        
     } else if (trainingExperience === "Beginner" && mainPhysiqueGoal === "Build Muscle") {
       calories = BMR + 500
+      caloriesRounded = Math.round(calories)
     
     } else if (trainingExperience === "Intermediate" && mainPhysiqueGoal === "Burn Fat") {
        calories = BMR - 300
+       caloriesRounded = Math.round(calories)
      
     } else if (trainingExperience === "Intermediate" && mainPhysiqueGoal === "Build Muscle") {
       calories = BMR + 300
+      caloriesRounded = Math.round(calories)
      
     }
 
-    return Math.round(calories); // Round to the nearest whole number
+    return caloriesRounded; // Round to the nearest whole number
 
   };
 
@@ -61,7 +66,9 @@ console.log(estimatedBodyFat)
         myProfile {
           id
           program {
+            id
             name
+            
           }
         }
       }`; // Replace with your GraphQL query
@@ -76,7 +83,13 @@ console.log(estimatedBodyFat)
       body: JSON.stringify({ query })
     })
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data => {
+        console.log(data)
+        const programId = data.data.myProfile.program.id
+        console.log(programId)
+        console.log(caloriesRounded)
+        
+    })
     .catch(error => console.error('Error:', error));
   }, []);
 
