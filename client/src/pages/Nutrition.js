@@ -13,17 +13,6 @@ const Nutrition = () => {
   const [dailyCalories, setDailyCalories] = useState(0);
   const url = 'https://production.suggestic.com/graphql'; // Replace with your API endpoint
 
-  useEffect(() => {
-    if (data && data.user) {
-      const { currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, weight, trainingExperience } = data.user;
-      // Call your helper function to calculate daily calories
-      const calculatedCalories = calculateDailyCalories(currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, weight, trainingExperience);
-      setDailyCalories(calculatedCalories);
-    }
-  }, [data]);
-
-  console.log(data)
-
   const calculateDailyCalories = (currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, weight, trainingExperience) => {
     const mass = currentWeight * 0.453592
     const h = height * 2.53
@@ -56,21 +45,53 @@ console.log(estimatedBodyFat)
       caloriesRounded = Math.round(calories)
      
     }
-
+console.log(caloriesRounded)
     return caloriesRounded; // Round to the nearest whole number
 
   };
+
+  useEffect(() => {
+    if (data && data.user) {
+      const { currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, weight, trainingExperience } = data.user;
+      // Call your helper function to calculate daily calories
+      const calculatedCalories = calculateDailyCalories(currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, weight, trainingExperience);
+      setDailyCalories(calculatedCalories);
+    }
+  }, [data]);
+
+  console.log(data)
+
+  
+
+  const calculateProteinPerc = async (calorieTarget, data) => {
+console.log(data.user.currentWeight)
+console.log(calorieTarget)
+    if ((calorieTarget*.25)/4 >= data.user.currentWeight) {
+      const proteinPerc = 25
+      console.log(proteinPerc)
+      return proteinPerc
+    } else {
+      const proteinPercFull = (data.user.currentWeight*4)/calorieTarget;
+      const proteinPerc = Math.round(proteinPercFull)
+      console.log(proteinPerc)
+      return proteinPerc
+    }
+    
+  }
 
   const createMealPlanTemplate = async () => {
     console.log("template needs to be created")
     console.log(data)
     const description = data.user.mainPhysiqueGoal;
-    const calorieTarget = caloriesRounded;
-    const proteinPerc = 25
-    const carbsPerc = 45
-    const fatPerc = 30
+    const calorieTarget = dailyCalories;
+    console.log(caloriesRounded)
+   const proteinPerc = await calculateProteinPerc(calorieTarget, data)
+    const carbsPerc = Math.round((100 - proteinPerc)/2 + 5)
+    const fatPerc = 100 - proteinPerc - carbsPerc
     const firstname = data.user.firstname
     const lastname = data.user.lastname
+
+    console.log(description, calorieTarget, proteinPerc, carbsPerc, fatPerc, firstname, lastname, )
     // const createTemplateMutation = `
     // mutation {
     //   createMealPlanTemplate(
@@ -137,6 +158,8 @@ console.log(estimatedBodyFat)
     .then(templateData => {
         console.log(templateData)
         console.log(templateData.data.mealPlanTemplates.edges)
+       
+        
 
         if (templateData.data.mealPlanTemplates.edges.length === 0) {
           createMealPlanTemplate()
