@@ -277,6 +277,27 @@ console.log(calorieTarget)
         </label>
         <button type="submit">Submit</button>
       </form>
+      <h2>Your Tracking History</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Weight</th>
+            <th>Calorie Intake</th>
+            <th>Protein Intake</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.user.dailyTracking.map((entry, index) => (
+            <tr key={index}>
+              <td>{entry.date}</td>
+              <td>{entry.weight}</td>
+              <td>{entry.calorieIntake}</td>
+              <td>{entry.proteinIntake}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
