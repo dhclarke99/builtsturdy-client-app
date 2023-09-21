@@ -9,7 +9,6 @@ type User {
   firstname: String
   lastname: String
   email: String
-  workouts: [Workout]!
   schedule: Schedule
   gender: String
   role: String
@@ -38,8 +37,8 @@ input CreateUserInput {
   age: Int
   trainingExperience: String
   mainPhysiqueGoal: String
-  startDate: String
-  weeks: Int
+  startDate: String!
+  weeks: Int!
 }
 
 input UpdateUserInput {
