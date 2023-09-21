@@ -31,7 +31,6 @@ const userSchema = new Schema({
         required: true,
         minlength: 5,
     },
-    workouts: [{ type: Schema.Types.ObjectId, ref: 'Workout' }],
     schedule: {
         type: Schema.Types.ObjectId,
         ref: 'Schedule',

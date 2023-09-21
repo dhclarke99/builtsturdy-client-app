@@ -57,18 +57,11 @@ mutation createUser($input: CreateUserInput!) {
       }
       trainingExperience
       username
-      workouts {
-        _id
-        exercises {
-          _id
-          notes
-          name
-          reps
-          sets
-          weight
-        }
-        name
-        notes
+      dailyTracking {
+        calorieIntake
+        date
+        proteinIntake
+        weight
       }
     }
   }
@@ -101,18 +94,11 @@ mutation updateUser($userId: ID!, $input: UpdateUserInput!) {
         workoutId
       }
     }
-    workouts {
-      _id
-      name
-      notes
-      exercises {
-        _id
-        name
-        notes
-        sets
-        reps
-        weight
-      }
+    dailyTracking {
+      calorieIntake
+      date
+      proteinIntake
+      weight
     }
   }
 }

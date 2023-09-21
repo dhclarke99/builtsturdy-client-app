@@ -83,8 +83,10 @@ const UniqueUser = () => {
     event.preventDefault();
     try {
 
-      const { __typename, _id, workouts, ...cleanedFormData } = formData; // Remove __typename
-      // cleanedFormData.scheduleId = schedule?._id; // Use the correct field name 'scheduleId'
+      const cleanedDailyTracking = formData.dailyTracking.map(({ __typename, ...rest }) => rest);
+      const { __typename, _id, ...cleanedFormData } = {...formData, dailyTracking: cleanedDailyTracking}; // Remove __typename
+  
+      console.log(cleanedFormData)
       const formattedData = {
         ...cleanedFormData,
         height: parseFloat(cleanedFormData.height),

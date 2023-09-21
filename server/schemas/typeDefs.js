@@ -58,6 +58,7 @@ input UpdateUserInput {
   schedule: ID
   startDate: String
   weeks: Int
+  dailyTracking: [DailyTrackingInput!]
 
 }
 
