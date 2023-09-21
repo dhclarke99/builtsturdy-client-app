@@ -1,7 +1,8 @@
 // Nutrition.js
 import React, { useState, useEffect } from 'react';
-import { useQuery, gql } from '@apollo/client';
+import { useQuery, gql, useMutation } from '@apollo/client';
 import { QUERY_USER_by_id } from '../utils/queries'; 
+import { ADD_DAILY_TRACKING } from '../utils/mutations'; 
 import Auth from '../utils/auth';
 
 const Nutrition = () => {
@@ -13,6 +14,15 @@ const Nutrition = () => {
   const [dailyCalories, setDailyCalories] = useState(0);
   const url = 'https://production.suggestic.com/graphql'; // Replace with your API endpoint
 
+  const [trackingData, setTrackingData] = useState({
+    weight: '',
+    calorieIntake: '',
+    proteinIntake: ''
+  });
+
+  const [addDailyTracking] = useMutation(ADD_DAILY_TRACKING);
+  
+
   const calculateDailyCalories = (currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, weight, trainingExperience) => {
     const mass = currentWeight * 0.453592
     const h = height * 2.53
@@ -21,6 +31,7 @@ const Nutrition = () => {
     } else if (gender === "Female") {
         const s = -151;
     }
+
 console.log(estimatedBodyFat)
     const LBM = (mass * (100-estimatedBodyFat))/100
     const BMRKatchMcardle = 370 + (21.6*LBM)
@@ -61,7 +72,19 @@ console.log(caloriesRounded)
 
   console.log(data)
 
-  
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setTrackingData({
+      ...trackingData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = async () => {
+    await addDailyTracking({
+      variables: { userId: Auth.getProfile().data._id, trackingData }
+    });
+  };
 
   const calculateProteinPerc = async (calorieTarget, data) => {
 console.log(data.user.currentWeight)
@@ -223,6 +246,37 @@ console.log(calorieTarget)
       
       <p>Based on your stats, your daily calorie target is: {dailyCalories} calories</p>
       <button onClick={checkMealTemplate}>Generate Meal Plan</button>
+      <h2>Daily Tracking</h2>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Weight:
+          <input 
+            type="number" 
+            name="weight" 
+            value={trackingData.weight} 
+            onChange={handleInputChange} 
+          />
+        </label>
+        <label>
+          Calorie Intake:
+          <input 
+            type="number" 
+            name="calorieIntake" 
+            value={trackingData.calorieIntake} 
+            onChange={handleInputChange} 
+          />
+        </label>
+        <label>
+          Protein Intake:
+          <input 
+            type="number" 
+            name="proteinIntake" 
+            value={trackingData.proteinIntake} 
+            onChange={handleInputChange} 
+          />
+        </label>
+        <button type="submit">Submit</button>
+      </form>
     </div>
   );
 };

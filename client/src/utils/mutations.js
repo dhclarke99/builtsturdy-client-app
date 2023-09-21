@@ -247,3 +247,40 @@ mutation deleteExercise($exerciseId: ID!) {
   }
 }
 `;
+
+export const ADD_DAILY_TRACKING = gql `
+mutation addDailyTracking($userId: ID!, $trackingData: DailyTrackingInput!) {
+  addDailyTracking(userId: $userId, trackingData: $trackingData) {
+    _id
+    age
+    currentWeight
+    dailyTracking {
+      calorieIntake
+      date
+      proteinIntake
+      weight
+    }
+    email
+    estimatedBodyFat
+    firstname
+    gender
+    height
+    lastname
+    mainPhysiqueGoal
+    role
+    schedule {
+      _id
+      name
+      notes
+      workouts {
+        day
+        workoutId
+      }
+    }
+    startDate
+    trainingExperience
+    username
+    weeks
+  }
+}
+`

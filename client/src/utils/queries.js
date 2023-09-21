@@ -70,6 +70,12 @@ query findUserById($userId: String!) {
         weight
       }
     }
+    dailyTracking {
+      calorieIntake
+      date
+      proteinIntake
+      weight
+    }
   }
 }
 `;
@@ -150,6 +156,12 @@ query findAllUsers {
         weight
         videoUrl
       }
+    }
+    dailyTracking {
+      calorieIntake
+      date
+      proteinIntake
+      weight
     }
   }
 }
