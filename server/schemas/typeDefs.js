@@ -21,6 +21,7 @@ type User {
   mainPhysiqueGoal: String
   startDate: String
   weeks: Int
+  dailyTracking: [DailyTracking]
 }
 
 input CreateUserInput {
@@ -58,6 +59,7 @@ input UpdateUserInput {
   schedule: ID
   startDate: String
   weeks: Int
+
 }
 
   type Option {
@@ -131,6 +133,20 @@ input UpdateUserInput {
     workouts: [UpdateWorkoutInput]
   }
 
+  input DailyTrackingInput {
+    date: String
+    weight: Float
+    calorieIntake: Float
+    proteinIntake: Float
+  }
+
+  type DailyTracking {
+    date: String
+    weight: Float
+    calorieIntake: Float
+    proteinIntake: Float
+  }
+
   type Query {
     users: [User]
     user(id: String!): User
@@ -160,6 +176,7 @@ input UpdateUserInput {
     removeWorkoutFromSchedule(scheduleId: ID!, workoutId: ID!): Schedule
     updateWorkout(workoutId: ID!, name: String, notes: String, exerciseIds: [ID]): Workout
     updateSchedule(scheduleId: ID!, input: UpdateScheduleInput!): Schedule
+    addDailyTracking(userId: ID!, trackingData: DailyTrackingInput!): User
     }
     
   

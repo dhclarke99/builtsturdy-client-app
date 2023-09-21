@@ -70,6 +70,14 @@ const userSchema = new Schema({
     weeks: {
         type: Number
     },
+    dailyTracking: [
+        {
+            date: Date,
+            weight: Number,
+            calorieIntake: Number,
+            proteinIntake: Number
+        }
+    ]
 });
 
 

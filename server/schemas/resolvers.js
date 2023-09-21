@@ -319,6 +319,14 @@ const resolvers = {
         throw new Error("Failed to remove workout from schedule");
       }
     },
+ 
+      addDailyTracking: async (_, { userId, trackingData }, { User }) => {
+        return await User.findByIdAndUpdate(
+          userId,
+          { $push: { dailyTracking: trackingData } },
+          { new: true }
+        );
+      }
    
   },
 };
