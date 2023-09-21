@@ -290,10 +290,28 @@ console.log(calorieTarget)
         <tbody>
           {data.user.dailyTracking.map((entry, index) => (
             <tr key={index}>
-              <td>{entry.date}</td>
-              <td>{entry.weight}</td>
-              <td>{entry.calorieIntake}</td>
-              <td>{entry.proteinIntake}</td>
+              <td>{new Date(entry.date).toLocaleDateString()}</td>
+              <td>
+                <input 
+                  type="number" 
+                  value={entry.weight || ''} 
+                  onChange={(e) => handleInputChange(index, 'weight', e.target.value)} 
+                />
+              </td>
+              <td>
+                <input 
+                  type="number" 
+                  value={entry.calorieIntake || ''} 
+                  onChange={(e) => handleInputChange(index, 'calorieIntake', e.target.value)} 
+                />
+              </td>
+              <td>
+                <input 
+                  type="number" 
+                  value={entry.proteinIntake || ''} 
+                  onChange={(e) => handleInputChange(index, 'proteinIntake', e.target.value)} 
+                />
+              </td>
             </tr>
           ))}
         </tbody>
