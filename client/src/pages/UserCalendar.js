@@ -79,7 +79,8 @@ const UserCalendar = () => {
     workoutRef.current.scrollIntoView({behavior: 'smooth'});
   };
 
-  const handleImageClick = (videoUrl) => {
+  const handleImageClick = async (videoUrl) => {
+    await setCurrentVideoUrl(null);
     setCurrentVideoUrl(videoUrl);
     videoRef.current.scrollIntoView({ behavior: 'smooth' }); // Scroll to the video section
   };
@@ -133,9 +134,7 @@ return (
                     onClick={() => handleImageClick(exercise.videoUrl)}
                   />
                   </div>
-                  
-                  
-                  
+              
                 </div>
               ))}
             </ol>
