@@ -80,7 +80,30 @@ const userSchema = new Schema({
     ]
 });
 
-
+userSchema.pre('save', function(next) {
+    // Only run this function if startDate or programLength is modified (or new)
+    if (this.isModified('startDate') || this.isModified('weeks')) {
+      const startDate = new Date(this.startDate);
+      const programLength = this.weeks;
+      const dailyTracking = [];
+      console.log("Middleware message: dailyTracking Updated")
+  
+      for (let i = 0; i < programLength * 7; i++) {
+        const date = new Date(startDate);
+        date.setDate(startDate.getDate() + i);
+        dailyTracking.push({
+          date,
+          weight: null,
+          calorieIntake: null,
+          proteinIntake: null
+        });
+      }
+  
+      this.dailyTracking = dailyTracking;
+    }
+  
+    next();
+  });
 
 userSchema.pre('save', async function (next) {
     if (this.isNew || this.isModified('password')) {

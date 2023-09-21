@@ -57,39 +57,11 @@ query findUserById($userId: String!) {
         workoutId
       }
     }
-    workouts {
-      _id
-      name
-      notes
-      exercises {
-        _id
-        name
-        notes
-        reps
-        sets
-        weight
-      }
-    }
     dailyTracking {
       calorieIntake
       date
       proteinIntake
       weight
-    }
-  }
-}
-`;
-
-export const QUERY_ME = gql`
-query Query {
-  me {
-    eggplants
-    polls { 
-      title
-      description
-      value
-      option1
-      option2
     }
   }
 }
@@ -142,21 +114,6 @@ query findAllUsers {
     }
     trainingExperience
     username
-    workouts {
-      _id
-      name
-      notes
-      exercises {
-        _id
-        name
-        notes
-        adminNotes
-        sets
-        reps
-        weight
-        videoUrl
-      }
-    }
     dailyTracking {
       calorieIntake
       date
