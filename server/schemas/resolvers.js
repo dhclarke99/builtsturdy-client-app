@@ -320,12 +320,21 @@ const resolvers = {
       }
     },
  
-      addDailyTracking: async (_, { userId, trackingData }, { User }) => {
-        return await User.findByIdAndUpdate(
-          userId,
-          { $push: { dailyTracking: trackingData } },
-          { new: true }
-        );
+      addDailyTracking: async (_, { userId, trackingData }) => {
+        try {
+          console.log(userId)
+          console.log(trackingData)
+          return await User.findByIdAndUpdate(
+            userId,
+            { $push: { dailyTracking: trackingData } },
+            { new: true }
+          );
+
+        } catch (error) {
+          console.error("Error in addDailyTracking: ", error);
+          throw new Error("Failed to addDailyTracking");
+        }
+        
       }
    
   },
