@@ -64,7 +64,7 @@ const userSchema = new Schema({
         enum: ['Burn Fat', 'Build Muscle', 'Recomp'],
     },
     startDate: {
-        type: String
+        type: Date
     },
     weeks: {
         type: Number
@@ -82,7 +82,7 @@ const userSchema = new Schema({
 userSchema.pre('save', function(next) {
     // Only run this function if startDate or programLength is modified (or new)
     if (this.isModified('startDate') || this.isModified('weeks')) {
-      const startDate = new Date(this.startDate);
+      const startDate = this.startDate;
       const programLength = this.weeks;
       const dailyTracking = [];
       console.log("Middleware message: dailyTracking Updated")

@@ -18,7 +18,7 @@ type User {
   age: Int
   trainingExperience: String
   mainPhysiqueGoal: String
-  startDate: String
+  startDate: Date
   weeks: Int
   dailyTracking: [DailyTracking]
 }
@@ -37,7 +37,7 @@ input CreateUserInput {
   age: Int
   trainingExperience: String
   mainPhysiqueGoal: String
-  startDate: String!
+  startDate: Date!
   weeks: Int!
 }
 
@@ -56,7 +56,7 @@ input UpdateUserInput {
   trainingExperience: String
   mainPhysiqueGoal: String
   schedule: ID
-  startDate: String
+  startDate: Date
   weeks: Int
   dailyTracking: [DailyTrackingInput!]
 
