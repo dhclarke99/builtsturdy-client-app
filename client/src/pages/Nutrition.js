@@ -6,22 +6,44 @@ import { ADD_DAILY_TRACKING } from '../utils/mutations';
 import Auth from '../utils/auth';
 
 const Nutrition = () => {
-  const { loading, error, data } = useQuery(QUERY_USER_by_id, {
-    variables: { userId: Auth.getProfile().data._id }, // Replace 'someUserId' with the actual user ID
-  });
+  
   let calories;
   let caloriesRounded;
   const [dailyCalories, setDailyCalories] = useState(0);
-  const url = 'https://production.suggestic.com/graphql'; // Replace with your API endpoint
+  const url = 'https://production.suggestic.com/graphql';
 
   const [trackingData, setTrackingData] = useState({
     weight: '',
     calorieIntake: '',
     proteinIntake: ''
+  }); 
+  console.log(Auth.getProfile())
+  console.log(Auth.getProfile().data._id)
+  const { loading, error, data } = useQuery(QUERY_USER_by_id, {
+    variables: { userId: Auth.getProfile().data._id }, 
+ 
   });
 
+  console.log("Loading:", loading);
+console.log("Error:", error);
+console.log("Data:", data);
+
+  useEffect(() => {
+    if (data && data.user) {
+      const { currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, weight, trainingExperience } = data.user;
+      // Call your helper function to calculate daily calories
+      const calculatedCalories = calculateDailyCalories(currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, weight, trainingExperience);
+      setDailyCalories(calculatedCalories);
+    }
+  }, [data]);
+
+  console.log(data)
+ 
+
   const [addDailyTracking] = useMutation(ADD_DAILY_TRACKING);
-  
+  const [updatedTracking, setUpdatedTracking] = useState({});
+
+ 
 
   const calculateDailyCalories = (currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, weight, trainingExperience) => {
     const mass = currentWeight * 0.453592
@@ -32,7 +54,7 @@ const Nutrition = () => {
         const s = -151;
     }
 
-console.log(estimatedBodyFat)
+
     const LBM = (mass * (100-estimatedBodyFat))/100
     const BMRKatchMcardle = 370 + (21.6*LBM)
 
@@ -61,23 +83,16 @@ console.log(caloriesRounded)
 
   };
 
-  useEffect(() => {
-    if (data && data.user) {
-      const { currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, weight, trainingExperience } = data.user;
-      // Call your helper function to calculate daily calories
-      const calculatedCalories = calculateDailyCalories(currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, weight, trainingExperience);
-      setDailyCalories(calculatedCalories);
-    }
-  }, [data]);
+
 
   console.log(data)
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setTrackingData({
-      ...trackingData,
-      [name]: value
-    });
+  const handleInputChange = (week, day, type, value) => {
+    const newTracking = { ...updatedTracking };
+    if (!newTracking[week]) newTracking[week] = {};
+    if (!newTracking[week][day]) newTracking[week][day] = {};
+    newTracking[week][day][type] = value;
+    setUpdatedTracking(newTracking);
   };
 
   const handleSubmit = async () => {
@@ -100,6 +115,22 @@ console.log(calorieTarget)
       return proteinPerc
     }
     
+  }
+
+  const handleSave = async () => {
+    // Here, you would call your mutation to update the user's dailyTracking data
+    // For now, I'm just logging the updated data
+    console.log(updatedTracking);
+  };
+
+  const weeks = {};
+  if (data && data.user && data.user.dailyTracking) {
+    data.user.dailyTracking.forEach((day, index) => {
+      const weekNumber = Math.floor(index / 7) + 1;
+      const dayOfWeek = index % 7;
+      if (!weeks[weekNumber]) weeks[weekNumber] = {};
+      weeks[weekNumber][dayOfWeek] = day;
+    });
   }
 
   const createMealPlanTemplate = async () => {
@@ -247,75 +278,43 @@ console.log(calorieTarget)
       <p>Based on your stats, your daily calorie target is: {dailyCalories} calories</p>
       <button onClick={checkMealTemplate}>Generate Meal Plan</button>
       <h2>Daily Tracking</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Weight:
-          <input 
-            type="number" 
-            name="weight" 
-            value={trackingData.weight} 
-            onChange={handleInputChange} 
-          />
-        </label>
-        <label>
-          Calorie Intake:
-          <input 
-            type="number" 
-            name="calorieIntake" 
-            value={trackingData.calorieIntake} 
-            onChange={handleInputChange} 
-          />
-        </label>
-        <label>
-          Protein Intake:
-          <input 
-            type="number" 
-            name="proteinIntake" 
-            value={trackingData.proteinIntake} 
-            onChange={handleInputChange} 
-          />
-        </label>
-        <button type="submit">Submit</button>
-      </form>
-      <h2>Your Tracking History</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Weight</th>
-            <th>Calorie Intake</th>
-            <th>Protein Intake</th>
+      <button onClick={handleSave}>Save</button>
+<table>
+  <thead>
+    <tr>
+      <th>Week</th>
+      <th>Monday</th>
+      <th>Tuesday</th>
+      <th>Wednesday</th>
+      <th>Thursday</th>
+      <th>Friday</th>
+      <th>Saturday</th>
+      <th>Sunday</th>
+    </tr>
+  </thead>
+  <tbody>
+    {Object.keys(weeks).map((weekNumber) => (
+      <React.Fragment key={weekNumber}>
+        {['Weight', 'Calories', 'Protein'].map((type, index) => (
+          <tr key={type}>
+            {index === 0 && <td rowSpan="3">Week {weekNumber}</td>}
+            <td>{type}</td>
+            {[0, 1, 2, 3, 4, 5, 6].map((dayOfWeek) => (
+              <td key={dayOfWeek}>
+                <input
+                  type="number"
+                  value={weeks[weekNumber][dayOfWeek]?.[type.toLowerCase()] || ''}
+                  onChange={(e) => handleInputChange(weekNumber, dayOfWeek, type.toLowerCase(), e.target.value)}
+                />
+              </td>
+            ))}
           </tr>
-        </thead>
-        <tbody>
-          {data.user.dailyTracking.map((entry, index) => (
-            <tr key={index}>
-              <td>{new Date(parseInt(entry.date)).toLocaleDateString()}</td>
-              <td>
-                <input 
-                  type="number" 
-                  value={entry.weight || ''} 
-                  onChange={(e) => handleInputChange(index, 'weight', e.target.value)} 
-                />
-              </td>
-              <td>
-                <input 
-                  type="number" 
-                  value={entry.calorieIntake || ''} 
-                  onChange={(e) => handleInputChange(index, 'calorieIntake', e.target.value)} 
-                />
-              </td>
-              <td>
-                <input 
-                  type="number" 
-                  value={entry.proteinIntake || ''} 
-                  onChange={(e) => handleInputChange(index, 'proteinIntake', e.target.value)} 
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        ))}
+      </React.Fragment>
+    ))}
+  </tbody>
+</table>
+
     </div>
   );
 };

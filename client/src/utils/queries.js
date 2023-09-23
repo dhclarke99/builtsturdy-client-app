@@ -37,7 +37,6 @@ query findUserById($userId: String!) {
     age
     currentWeight
     email
-    role
     estimatedBodyFat
     firstname
     gender
@@ -46,8 +45,6 @@ query findUserById($userId: String!) {
     mainPhysiqueGoal
     trainingExperience
     username
-    startDate
-    weeks
     schedule {
       _id
       name
@@ -58,8 +55,8 @@ query findUserById($userId: String!) {
       }
     }
     dailyTracking {
-      calorieIntake
       date
+      calorieIntake
       proteinIntake
       weight
     }

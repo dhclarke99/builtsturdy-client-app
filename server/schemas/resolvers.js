@@ -12,6 +12,7 @@ const resolvers = {
       return await User.find().populate('schedule');
     },
     user: async (_parent, { id }) => {
+      console.log(id)
       return await User.findOne({ _id:  id }).populate('schedule');
     },
     workouts: async (_parent, _args, context) => {
