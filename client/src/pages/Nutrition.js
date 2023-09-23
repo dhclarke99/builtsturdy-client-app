@@ -25,9 +25,7 @@ const Nutrition = () => {
  
   });
 
-  console.log("Loading:", loading);
-console.log("Error:", error);
-console.log("Data:", data);
+
 
   useEffect(() => {
     if (data && data.user) {
@@ -260,6 +258,12 @@ console.log(calorieTarget)
     })
     .catch(error => console.error('Error:', error));
   }, []);
+   
+   const calculateWeekStartDate = (startDate, weekNumber) => {
+     const date = new Date(startDate);
+     date.setDate(date.getDate() + (weekNumber - 1) * 7);
+     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+   };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -280,6 +284,8 @@ console.log(calorieTarget)
       <button onClick={checkMealTemplate}>Generate Meal Plan</button>
       <h2>Daily Tracking</h2>
       <button onClick={handleSave}>Save</button>
+      <button onClick={() => setCurrentStartWeek(Math.max(1, currentStartWeek - 4))}>Previous 4 Weeks</button>
+      <button onClick={() => setCurrentStartWeek(currentStartWeek + 4)}>Next 4 Weeks</button>
 <table>
   <thead>
     <tr>
@@ -295,11 +301,11 @@ console.log(calorieTarget)
     </tr>
   </thead>
   <tbody>
-    {Object.keys(weeks).map((weekNumber) => (
-      <React.Fragment key={weekNumber}>
+  {Object.keys(weeks).slice(currentStartWeek - 1, currentStartWeek + 3).map((weekNumber) => (
+            <React.Fragment key={weekNumber}>
         {['Weight', 'Calories', 'Protein'].map((type, index) => (
           <tr key={type}>
-            {index === 0 && <td rowSpan="3">Week {weekNumber}</td>}
+            {index === 0 && <td rowSpan="3">Week {weekNumber} ({calculateWeekStartDate(parseInt(data.user.startDate), weekNumber)})</td>}
             <td>{type}</td>
             {[0, 1, 2, 3, 4, 5, 6].map((dayOfWeek) => (
               <td key={dayOfWeek}>
