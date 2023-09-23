@@ -87,10 +87,13 @@ console.log(caloriesRounded)
   console.log(data)
 
   const handleInputChange = (week, day, type, value) => {
-    const newTracking = { ...updatedTracking };
+    // Deep clone the weeks object
+    const newTracking = JSON.parse(JSON.stringify(weeks));
+    
     if (!newTracking[week]) newTracking[week] = {};
     if (!newTracking[week][day]) newTracking[week][day] = {};
     newTracking[week][day][type] = value;
+    
     setUpdatedTracking(newTracking);
   };
 
@@ -311,9 +314,9 @@ console.log(calorieTarget)
               <td key={dayOfWeek}>
                 <input
                   type="number"
-                  value={weeks[weekNumber][dayOfWeek]?.[type.toLowerCase()] || ''}
+                  value={weeks[weekNumber][dayOfWeek]?.[type.toLowerCase()] || updatedTracking[weekNumber]?.[dayOfWeek]?.[type.toLowerCase()] || ''}
                   onChange={(e) => handleInputChange(weekNumber, dayOfWeek, type.toLowerCase(), e.target.value)}
-                />
+              />
               </td>
             ))}
           </tr>
