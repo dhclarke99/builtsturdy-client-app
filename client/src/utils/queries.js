@@ -45,6 +45,8 @@ query findUserById($userId: String!) {
     mainPhysiqueGoal
     trainingExperience
     username
+    weeks
+    startDate
     schedule {
       _id
       name

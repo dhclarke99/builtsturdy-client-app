@@ -26,7 +26,9 @@ const UserCalendar = () => {
   useEffect(() => {
     const fetchWorkouts = async () => {
       if (userData && userData.user && userData.user.schedule) {
+        console.log(userData.user.startDate)
         const roughDate = new Date(parseInt(userData.user.startDate))
+       
         const startDate = moment(roughDate); // Make sure this is in the correct format
         const weeks = userData.user.weeks; // Number of weeks
         console.log("Start Date:", startDate);

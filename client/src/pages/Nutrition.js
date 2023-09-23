@@ -17,6 +17,7 @@ const Nutrition = () => {
     calorieIntake: '',
     proteinIntake: ''
   }); 
+  const [currentStartWeek, setCurrentStartWeek] = useState(1);
   console.log(Auth.getProfile())
   console.log(Auth.getProfile().data._id)
   const { loading, error, data } = useQuery(QUERY_USER_by_id, {
