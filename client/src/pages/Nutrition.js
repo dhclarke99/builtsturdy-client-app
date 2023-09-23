@@ -17,6 +17,7 @@ const Nutrition = () => {
     calorieIntake: '',
     proteinIntake: ''
   }); 
+  const [updatedTracking, setUpdatedTracking] = useState({});
   const [currentStartWeek, setCurrentStartWeek] = useState(1);
   console.log(Auth.getProfile())
   console.log(Auth.getProfile().data._id)
@@ -40,7 +41,7 @@ const Nutrition = () => {
  
 
   const [addDailyTracking] = useMutation(ADD_DAILY_TRACKING);
-  const [updatedTracking, setUpdatedTracking] = useState({});
+ 
 
  
 
@@ -87,13 +88,10 @@ console.log(caloriesRounded)
   console.log(data)
 
   const handleInputChange = (week, day, type, value) => {
-    // Deep clone the weeks object
-    const newTracking = JSON.parse(JSON.stringify(weeks));
-    
+    const newTracking = { ...updatedTracking };
     if (!newTracking[week]) newTracking[week] = {};
     if (!newTracking[week][day]) newTracking[week][day] = {};
     newTracking[week][day][type] = value;
-    
     setUpdatedTracking(newTracking);
   };
 
@@ -120,6 +118,7 @@ console.log(calorieTarget)
   }
 
   const handleSave = async () => {
+
     // Here, you would call your mutation to update the user's dailyTracking data
     // For now, I'm just logging the updated data
     console.log(updatedTracking);
@@ -314,7 +313,7 @@ console.log(calorieTarget)
               <td key={dayOfWeek}>
                 <input
                   type="number"
-                  value={weeks[weekNumber][dayOfWeek]?.[type.toLowerCase()] || updatedTracking[weekNumber]?.[dayOfWeek]?.[type.toLowerCase()] || ''}
+                  value={updatedTracking[weekNumber]?.[dayOfWeek]?.[type.toLowerCase()] || weeks[weekNumber][dayOfWeek]?.[type.toLowerCase()] || ''}
                   onChange={(e) => handleInputChange(weekNumber, dayOfWeek, type.toLowerCase(), e.target.value)}
               />
               </td>
