@@ -290,7 +290,7 @@ console.log(calorieTarget)
         <tbody>
           {data.user.dailyTracking.map((entry, index) => (
             <tr key={index}>
-              <td>{new Date(entry.date).toLocaleDateString()}</td>
+              <td>{new Date(parseInt(entry.date)).toLocaleDateString()}</td>
               <td>
                 <input 
                   type="number" 
