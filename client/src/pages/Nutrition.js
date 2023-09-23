@@ -283,6 +283,7 @@ console.log(calorieTarget)
   <thead>
     <tr>
       <th>Week</th>
+      <th>Metric</th>
       <th>Monday</th>
       <th>Tuesday</th>
       <th>Wednesday</th>
