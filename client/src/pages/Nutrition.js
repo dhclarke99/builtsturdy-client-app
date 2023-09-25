@@ -87,7 +87,9 @@ console.log(caloriesRounded)
 
   console.log(data)
 
-  const handleInputChange = (week, day, type, value) => {
+  const handleInputChange = (date, week, day, type, value) => {
+    console.log("week:", week, "day: ", day, "type: ",type ,"value: ", value)
+    console.log("Date: ", date)
     const newTracking = { ...updatedTracking };
     if (!newTracking[week]) newTracking[week] = {};
     if (!newTracking[week][day]) newTracking[week][day] = {};
@@ -132,6 +134,7 @@ console.log(calorieTarget)
       const dayOfWeek = index % 7;
       if (!weeks[weekNumber]) weeks[weekNumber] = {};
       weeks[weekNumber][dayOfWeek] = day;
+      console.log(weeks[weekNumber][dayOfWeek].date)
     });
   }
 
@@ -310,15 +313,18 @@ console.log(calorieTarget)
           <tr key={type}>
             {index === 0 && <td rowSpan="3">Week {weekNumber} ({calculateWeekStartDate(parseInt(data.user.startDate), weekNumber)})</td>}
             <td>{type}</td>
-            {[0, 1, 2, 3, 4, 5, 6].map((dayOfWeek) => (
-              <td key={dayOfWeek}>
+            {[0, 1, 2, 3, 4, 5, 6].map((dayOfWeek) => {
+              const date = weeks[weekNumber] && weeks[weekNumber][dayOfWeek] ? weeks[weekNumber][dayOfWeek].date : null; // Conditional check for date to exist
+              return (
+              <td key={dayOfWeek} value={dayOfWeek}>
                 <input
+                date={dayOfWeek.date}
                   type="number"
                   value={updatedTracking[weekNumber]?.[dayOfWeek]?.[type.toLowerCase()] || weeks[weekNumber][dayOfWeek]?.[type.toLowerCase()] || ''}
-                  onChange={(e) => handleInputChange(weekNumber, dayOfWeek, type.toLowerCase(), e.target.value)}
+                  onChange={(e) => handleInputChange(date, weekNumber, dayOfWeek, type.toLowerCase(), e.target.value)}
               />
               </td>
-            ))}
+            )})}
           </tr>
         ))}
       </React.Fragment>
