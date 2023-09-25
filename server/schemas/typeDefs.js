@@ -134,7 +134,7 @@ input UpdateUserInput {
   }
 
   input DailyTrackingInput {
-    date: String
+    date: String!
     weight: Float
     calorieIntake: Float
     proteinIntake: Float

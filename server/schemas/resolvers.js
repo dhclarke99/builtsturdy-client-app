@@ -299,21 +299,28 @@ const resolvers = {
       }
     },
  
-      addDailyTracking: async (_, { userId, trackingData }) => {
-        try {
-          console.log(userId)
-          console.log(trackingData)
-          return await User.findByIdAndUpdate(
-            userId,
-            { $push: { dailyTracking: trackingData } },
-            { new: true }
+      addDailyTracking: async (parent, { userId, trackingData }, context) => {
+        const user = await User.findById(userId);
+      
+        trackingData.forEach((newTrack) => {
+          const existingTrackingIndex = user.dailyTracking.findIndex(
+            (track) => new Date(track.date).getTime() === new Date(newTrack.date).getTime()
           );
-
-        } catch (error) {
-          console.error("Error in addDailyTracking: ", error);
-          throw new Error("Failed to addDailyTracking");
-        }
-        
+      
+          if (existingTrackingIndex !== -1) {
+            // Update existing tracking data
+            user.dailyTracking[existingTrackingIndex] = {
+              ...user.dailyTracking[existingTrackingIndex],
+              ...newTrack,
+            };
+          } else {
+            // Add new tracking data
+            user.dailyTracking.push(newTrack);
+          }
+        });
+      
+        await user.save();
+        return user;
       }
    
   },
