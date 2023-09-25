@@ -127,6 +127,7 @@ console.log(calorieTarget)
   const weeks = {};
   if (data && data.user && data.user.dailyTracking) {
     data.user.dailyTracking.forEach((day, index) => {
+      console.log(day.date)
       const weekNumber = Math.floor(index / 7) + 1;
       const dayOfWeek = index % 7;
       if (!weeks[weekNumber]) weeks[weekNumber] = {};
