@@ -88,15 +88,13 @@ console.log(caloriesRounded)
 
   console.log(data)
 
-  const handleInputChange = (date, week, day, type, value) => {
-    console.log("week:", week, "day: ", day, "type: ",type ,"value: ", value)
-    console.log("Date: ", date)
+  const handleInputChange = (dateUnix, week, type, value) => {
     const newTracking = { ...updatedTracking };
     if (!newTracking[week]) newTracking[week] = {};
-    if (!newTracking[week][day]) newTracking[week][day] = {};
-    newTracking[week][day][type] = value;
-    console.log(newTracking)
+    if (!newTracking[week][dateUnix]) newTracking[week][dateUnix] = {};
+    newTracking[week][dateUnix][type] = value;
     setUpdatedTracking(newTracking);
+    console.log(newTracking)
   };
 
   const handleSubmit = async () => {
@@ -131,16 +129,20 @@ console.log(calorieTarget)
 
   const weeks = {};
   if (data && data.user && data.user.dailyTracking) {
-    data.user.dailyTracking.forEach((day, index) => {
-      console.log(day.date)
-      const date = day.date
+  
+      const sortedDailyTracking = [...data.user.dailyTracking].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      console.log(sortedDailyTracking)
+   
+    sortedDailyTracking.forEach((day, index) => {
+      const dateUnix = day.date
       const weekNumber = Math.floor(index / 7) + 1;
-      const dayOfWeek = index % 7;
       if (!weeks[weekNumber]) weeks[weekNumber] = {};
-      weeks[weekNumber][dayOfWeek] = day;
-      console.log(weeks[weekNumber][dayOfWeek].date)
+      weeks[weekNumber][dateUnix] = day; // Use Unix timestamp as a key
     });
   }
+  console.log(weeks)
+ 
 
   const createMealPlanTemplate = async () => {
     console.log("template needs to be created")
@@ -317,17 +319,15 @@ console.log(calorieTarget)
           <tr key={type}>
             {index === 0 && <td rowSpan="3">Week {weekNumber} ({calculateWeekStartDate(parseInt(data.user.startDate), weekNumber)})</td>}
             <td>{type}</td>
-            {[0, 1, 2, 3, 4, 5, 6].map((dayOfWeek) => {
-              const date = weeks[weekNumber] && weeks[weekNumber][dayOfWeek] ? weeks[weekNumber][dayOfWeek].date : null; // Conditional check for date to exist
-              return (
-              <td key={dayOfWeek}>
-                <input
-                  type="number"
-                  value={updatedTracking[weekNumber]?.[dayOfWeek]?.[type.toLowerCase()] || weeks[weekNumber][dayOfWeek]?.[type.toLowerCase()] || ''}
-                  onChange={(e) => handleInputChange(date, weekNumber, dayOfWeek, type.toLowerCase(), e.target.value)}
-              />
-              </td>
-            )})}
+            {Object.keys(weeks[weekNumber]).map((dateUnix) => (
+          <td key={dateUnix}>
+            <input
+              type="number"
+              value={updatedTracking[weekNumber]?.[dateUnix]?.[type.toLowerCase()] || weeks[weekNumber][dateUnix]?.[type.toLowerCase()] || ''}
+              onChange={(e) => handleInputChange(dateUnix, weekNumber, type.toLowerCase(), e.target.value)}
+            />
+          </td>
+            ))}
           </tr>
         ))}
       </React.Fragment>
