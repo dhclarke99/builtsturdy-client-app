@@ -176,7 +176,7 @@ input UpdateUserInput {
     removeWorkoutFromSchedule(scheduleId: ID!, workoutId: ID!): Schedule
     updateWorkout(workoutId: ID!, name: String, notes: String, exerciseIds: [ID]): Workout
     updateSchedule(scheduleId: ID!, input: UpdateScheduleInput!): Schedule
-    addDailyTracking(userId: ID!, trackingData: DailyTrackingInput!): User
+    addDailyTracking(userId: ID!, trackingData: [DailyTrackingInput!]!): User
     }
     
   

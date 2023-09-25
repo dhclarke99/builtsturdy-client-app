@@ -97,13 +97,6 @@ console.log(caloriesRounded)
     console.log(newTracking)
   };
 
-  const handleSubmit = async () => {
-
-    await addDailyTracking({
-      variables: { userId: Auth.getProfile().data._id, trackingData }
-    });
-  };
-
   const calculateProteinPerc = async (calorieTarget, data) => {
 console.log(data.user.currentWeight)
 console.log(calorieTarget)
@@ -122,9 +115,14 @@ console.log(calorieTarget)
 
   const handleSave = async () => {
 
+    console.log(updatedTracking);
+    // await addDailyTracking({
+    //   variables: { userId: Auth.getProfile().data._id, updatedTracking }
+    // });
+
     // Here, you would call your mutation to update the user's dailyTracking data
     // For now, I'm just logging the updated data
-    console.log(updatedTracking);
+    
   };
 
   const weeks = {};

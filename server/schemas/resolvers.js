@@ -299,29 +299,45 @@ const resolvers = {
       }
     },
  
-      addDailyTracking: async (parent, { userId, trackingData }, context) => {
+    addDailyTracking: async (_, { userId, trackingData }, context) => {
+      try {
+        // Find the user by userId
         const user = await User.findById(userId);
-      
-        trackingData.forEach((newTrack) => {
-          const existingTrackingIndex = user.dailyTracking.findIndex(
-            (track) => new Date(track.date).getTime() === new Date(newTrack.date).getTime()
+
+        if (!user) {
+          throw new Error('User not found');
+        }
+
+        // Loop through the trackingData array and update or create new entries
+        for (const data of trackingData) {
+          const { date, weight, calorieIntake, proteinIntake } = data;
+
+          // Find existing tracking data for the given date
+          const existingData = user.dailyTracking.find(
+            (track) => track.date === date
           );
-      
-          if (existingTrackingIndex !== -1) {
-            // Update existing tracking data
-            user.dailyTracking[existingTrackingIndex] = {
-              ...user.dailyTracking[existingTrackingIndex],
-              ...newTrack,
-            };
+
+          if (existingData) {
+            // Update existing data
+            existingData.weight = weight || existingData.weight;
+            existingData.calorieIntake = calorieIntake || existingData.calorieIntake;
+            existingData.proteinIntake = proteinIntake || existingData.proteinIntake;
           } else {
             // Add new tracking data
-            user.dailyTracking.push(newTrack);
+            user.dailyTracking.push(data);
           }
-        });
-      
+        }
+
+        // Save the updated user data
         await user.save();
+
         return user;
+      } catch (error) {
+        console.error(error);
+        throw new Error('Failed to update daily tracking');
       }
+    },
+  
    
   },
 };
