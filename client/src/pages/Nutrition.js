@@ -114,16 +114,35 @@ console.log(calorieTarget)
   }
 
   const handleSave = async () => {
-
-    console.log(updatedTracking);
-    // await addDailyTracking({
-    //   variables: { userId: Auth.getProfile().data._id, updatedTracking }
-    // });
-
-    // Here, you would call your mutation to update the user's dailyTracking data
-    // For now, I'm just logging the updated data
-    
+    // Create a new array to hold the updated tracking data
+    const newTrackingData = [];
+  
+    // Loop through each week
+    Object.keys(weeks).forEach((weekNumber) => {
+      // Loop through each day in the week
+      Object.keys(weeks[weekNumber]).forEach((dateUnix) => {
+        // Create a new object to hold the data for this day
+        const dayData = {
+          date: dateUnix,
+          weight: parseInt(updatedTracking[weekNumber]?.[dateUnix]?.weight) || parseInt(weeks[weekNumber][dateUnix]?.weight) || null,
+          calorieIntake: parseInt(updatedTracking[weekNumber]?.[dateUnix]?.calorieIntake) || parseInt(weeks[weekNumber][dateUnix]?.calorieIntake) || null,
+          proteinIntake: parseInt(updatedTracking[weekNumber]?.[dateUnix]?.proteinIntake) || parseInt(weeks[weekNumber][dateUnix]?.proteinIntake) || null
+        };
+  
+        // Add this day's data to the new tracking data array
+        newTrackingData.push(dayData);
+      });
+    });
+  
+    // Now, newTrackingData is a complete array that includes all fields, whether they were edited or not
+    console.log(newTrackingData);
+  
+    // Call your mutation to update the user's dailyTracking data
+    await addDailyTracking({
+      variables: { userId: Auth.getProfile().data._id, trackingData: newTrackingData }
+    });
   };
+  
 
   const weeks = {};
   if (data && data.user && data.user.dailyTracking) {
