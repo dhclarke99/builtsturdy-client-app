@@ -134,6 +134,14 @@ const UniqueUser = () => {
   if (errorUser || errorSchedules) return <p>Error: {errorUser.message}</p>;
 
   const user = dataUser.user;
+  const convertedStartDate = (startDate) => {
+  
+    const convertedStartDate = new Date(startDate)
+    return `${convertedStartDate.getMonth() + 1}/${convertedStartDate.getDate()}/${convertedStartDate.getFullYear()}`;
+
+  }
+ 
+
   console.log(formData)
   return (
 
@@ -163,7 +171,7 @@ const UniqueUser = () => {
               <li>Body Fat: {user.estimatedBodyFat} %</li>
               <li>Experience: {user.trainingExperience}</li>
               <li>Goal: {user.mainPhysiqueGoal}</li>
-              <li>Program Start Date: {user.startDate}</li>
+              <li>Program Start Date: {convertedStartDate(parseInt(user.startDate))}</li>
               <li>Program Length: {user.weeks} weeks</li>
             </ul>
             <h5 className="card-title">Schedules:</h5>
