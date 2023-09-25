@@ -13,6 +13,7 @@ const Nutrition = () => {
   const url = 'https://production.suggestic.com/graphql';
 
   const [trackingData, setTrackingData] = useState({
+    date: '',
     weight: '',
     calorieIntake: '',
     proteinIntake: ''
@@ -94,10 +95,12 @@ console.log(caloriesRounded)
     if (!newTracking[week]) newTracking[week] = {};
     if (!newTracking[week][day]) newTracking[week][day] = {};
     newTracking[week][day][type] = value;
+    console.log(newTracking)
     setUpdatedTracking(newTracking);
   };
 
   const handleSubmit = async () => {
+
     await addDailyTracking({
       variables: { userId: Auth.getProfile().data._id, trackingData }
     });
@@ -130,6 +133,7 @@ console.log(calorieTarget)
   if (data && data.user && data.user.dailyTracking) {
     data.user.dailyTracking.forEach((day, index) => {
       console.log(day.date)
+      const date = day.date
       const weekNumber = Math.floor(index / 7) + 1;
       const dayOfWeek = index % 7;
       if (!weeks[weekNumber]) weeks[weekNumber] = {};
@@ -309,16 +313,15 @@ console.log(calorieTarget)
   <tbody>
   {Object.keys(weeks).slice(currentStartWeek - 1, currentStartWeek + 3).map((weekNumber) => (
             <React.Fragment key={weekNumber}>
-        {['Weight', 'Calories', 'Protein'].map((type, index) => (
+        {['Weight', 'calorieIntake', 'Protein'].map((type, index) => (
           <tr key={type}>
             {index === 0 && <td rowSpan="3">Week {weekNumber} ({calculateWeekStartDate(parseInt(data.user.startDate), weekNumber)})</td>}
             <td>{type}</td>
             {[0, 1, 2, 3, 4, 5, 6].map((dayOfWeek) => {
               const date = weeks[weekNumber] && weeks[weekNumber][dayOfWeek] ? weeks[weekNumber][dayOfWeek].date : null; // Conditional check for date to exist
               return (
-              <td key={dayOfWeek} value={dayOfWeek}>
+              <td key={dayOfWeek}>
                 <input
-                date={dayOfWeek.date}
                   type="number"
                   value={updatedTracking[weekNumber]?.[dayOfWeek]?.[type.toLowerCase()] || weeks[weekNumber][dayOfWeek]?.[type.toLowerCase()] || ''}
                   onChange={(e) => handleInputChange(date, weekNumber, dayOfWeek, type.toLowerCase(), e.target.value)}
