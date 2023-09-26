@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { QUERY_USER_by_id } from '../utils/queries';
 import Auth from '../utils/auth';
+import TrendsChart from '../components/charts/TrendsChart';
 
 const Trends = () => {
 const { loading, error, data } = useQuery(QUERY_USER_by_id, {
@@ -24,19 +25,36 @@ const { loading, error, data } = useQuery(QUERY_USER_by_id, {
   
     // Calculate Weekly Averages
     Object.keys(groupedByWeek).forEach((weekNumber) => {
-      const weekData = groupedByWeek[weekNumber];
-      const totalDays = weekData.length;
-  
-      const totalWeight = weekData.reduce((acc, day) => acc + day.weight, 0);
-      const totalCalories = weekData.reduce((acc, day) => acc + day.calorieIntake, 0);
-      const totalProtein = weekData.reduce((acc, day) => acc + day.proteinIntake, 0);
-  
-      weeklyAverages[weekNumber] = {
-        averageWeight: totalWeight / totalDays,
-        averageCalories: totalCalories / totalDays,
-        averageProtein: totalProtein / totalDays,
-      };
-    });
+        const weekData = groupedByWeek[weekNumber];
+      
+        let totalWeight = 0;
+        let totalCalories = 0;
+        let totalProtein = 0;
+        let countWeight = 0;
+        let countCalories = 0;
+        let countProtein = 0;
+      
+        weekData.forEach((day) => {
+          if (day.weight !== null && day.weight !== 0) {
+            totalWeight += day.weight;
+            countWeight++;
+          }
+          if (day.calorieIntake !== null && day.calorieIntake !== 0) {
+            totalCalories += day.calorieIntake;
+            countCalories++;
+          }
+          if (day.proteinIntake !== null && day.proteinIntake !== 0) {
+            totalProtein += day.proteinIntake;
+            countProtein++;
+          }
+        });
+      
+        weeklyAverages[weekNumber] = {
+          averageWeight: countWeight ? totalWeight / countWeight : null,
+          averageCalories: countCalories ? totalCalories / countCalories : null,
+          averageProtein: countProtein ? totalProtein / countProtein : null,
+        };
+      });
   }
   console.log(groupedByWeek)
   console.log(weeklyAverages)
@@ -54,7 +72,8 @@ const { loading, error, data } = useQuery(QUERY_USER_by_id, {
 
   return (
     <div>
-        <h1>{data.user.firstname}'s Trends</h1>
+      <h1>{data.user.firstname}'s Trends</h1>
+      <TrendsChart weeklyAverages={weeklyAverages} />
     </div>
   );
 
