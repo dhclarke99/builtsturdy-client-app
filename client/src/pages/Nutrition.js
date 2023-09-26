@@ -92,7 +92,7 @@ console.log(caloriesRounded)
     const newTracking = { ...updatedTracking };
     if (!newTracking[week]) newTracking[week] = {};
     if (!newTracking[week][dateUnix]) newTracking[week][dateUnix] = {};
-    newTracking[week][dateUnix][type] = value;
+    newTracking[week][dateUnix][type] = parseInt(value);
     setUpdatedTracking(newTracking);
     console.log(newTracking)
   };
@@ -124,9 +124,9 @@ console.log(calorieTarget)
         // Create a new object to hold the data for this day
         const dayData = {
           date: dateUnix,
-          weight: parseInt(updatedTracking[weekNumber]?.[dateUnix]?.weight) || parseInt(weeks[weekNumber][dateUnix]?.weight) || null,
-          calorieIntake: parseInt(updatedTracking[weekNumber]?.[dateUnix]?.calorieIntake) || parseInt(weeks[weekNumber][dateUnix]?.calorieIntake) || null,
-          proteinIntake: parseInt(updatedTracking[weekNumber]?.[dateUnix]?.proteinIntake) || parseInt(weeks[weekNumber][dateUnix]?.proteinIntake) || null
+          weight: updatedTracking[weekNumber]?.[dateUnix]?.weight || weeks[weekNumber][dateUnix]?.weight || null,
+          calorieIntake: updatedTracking[weekNumber]?.[dateUnix]?.calorieIntake || weeks[weekNumber][dateUnix]?.calorieIntake || null,
+          proteinIntake: updatedTracking[weekNumber]?.[dateUnix]?.proteinIntake || weeks[weekNumber][dateUnix]?.proteinIntake || null
         };
   
         // Add this day's data to the new tracking data array

@@ -308,25 +308,8 @@ const resolvers = {
           throw new Error('User not found');
         }
 
-        // Loop through the trackingData array and update or create new entries
-        for (const data of trackingData) {
-          const { date, weight, calorieIntake, proteinIntake } = data;
-
-          // Find existing tracking data for the given date
-          const existingData = user.dailyTracking.find(
-            (track) => track.date === date
-          );
-
-          if (existingData) {
-            // Update existing data
-            existingData.weight = weight || existingData.weight;
-            existingData.calorieIntake = calorieIntake || existingData.calorieIntake;
-            existingData.proteinIntake = proteinIntake || existingData.proteinIntake;
-          } else {
-            // Add new tracking data
-            user.dailyTracking.push(data);
-          }
-        }
+        // Replace the existing dailyTracking array with the new trackingData array
+        user.dailyTracking = trackingData;
 
         // Save the updated user data
         await user.save();
@@ -337,8 +320,6 @@ const resolvers = {
         throw new Error('Failed to update daily tracking');
       }
     },
-  
-   
   },
 };
 
