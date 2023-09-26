@@ -129,6 +129,22 @@ const UniqueUser = () => {
     }
   }, [dataUser]);
 
+  const weeks = {};
+  if (dataUser && dataUser.user && dataUser.user.dailyTracking) {
+
+    const sortedDailyTracking = [...dataUser.user.dailyTracking].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    console.log(sortedDailyTracking)
+
+    sortedDailyTracking.forEach((day, index) => {
+      const dateUnix = day.date
+      const weekNumber = Math.floor(index / 7) + 1;
+      if (!weeks[weekNumber]) weeks[weekNumber] = {};
+      weeks[weekNumber][dateUnix] = day; // Use Unix timestamp as a key
+    });
+  }
+  console.log(weeks)
+
 
   if (loadingUser || loadingSchedules) return <p>Loading...</p>;
   if (errorUser || errorSchedules) return <p>Error: {errorUser.message}</p>;
@@ -148,12 +164,13 @@ const UniqueUser = () => {
     <div className="container mt-5">
       <nav>
         <ul>
-          <button onClick={() => setActiveTab('view')}>View</button>
+          <button onClick={() => setActiveTab('view info')}>View Info</button>
+          <button onClick={() => setActiveTab('view nutrition')}>View Nutrition</button>
           <button onClick={() => setActiveTab('edit')}>Edit</button>
           <button onClick={() => setActiveTab('delete')}>Delete</button>
         </ul>
       </nav>
-      {activeTab === 'view' && (
+      {activeTab === 'view info' && (
         <div className="card">
           <div className="card-header">
             <h3>{user.firstname} {user.lastname}</h3>
@@ -218,6 +235,11 @@ const UniqueUser = () => {
               )}
             </ul>
           </div>
+        </div>
+      )}
+      {activeTab === 'view nutrition' && (
+        <div>
+
         </div>
       )}
       {activeTab === 'edit' && (
