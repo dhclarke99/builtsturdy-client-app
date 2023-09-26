@@ -350,11 +350,11 @@ const Nutrition = () => {
                       <input
                         type="number"
                         value={
-                          typeof updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)] !== 'undefined'
+                          (typeof updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)] !== 'undefined'
                             ? updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)]
                             : typeof weeks[weekNumber][dateUnix]?.[getTypeKey(type)] !== 'undefined'
                             ? weeks[weekNumber][dateUnix]?.[getTypeKey(type)]
-                            : ""
+                            : null) !== null ? (updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)] || weeks[weekNumber][dateUnix]?.[getTypeKey(type)] || "").toString() : ""
                         }
                         onChange={(e) => handleInputChange(dateUnix, weekNumber, getTypeKey(type), e.target.value)}
                       />
