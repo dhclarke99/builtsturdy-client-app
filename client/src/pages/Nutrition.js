@@ -5,6 +5,7 @@ import { QUERY_USER_by_id } from '../utils/queries';
 import { ADD_DAILY_TRACKING } from '../utils/mutations';
 import Auth from '../utils/auth';
 
+
 const Nutrition = () => {
 
   let calories;
@@ -142,6 +143,8 @@ const Nutrition = () => {
     await addDailyTracking({
       variables: { userId: Auth.getProfile().data._id, trackingData: newTrackingData }
     });
+
+    window.location.reload();
   };
 
 
@@ -305,7 +308,7 @@ const Nutrition = () => {
 
   return (
     <div>
-      <h1>Nutrition Calculator</h1>
+      <h1>{data.user.firstname}'s Nutrition Calculator</h1>
       <h2>Your Personal Stats</h2>
       <li>Age: {data.user.age}</li>
       <li>Gender: {data.user.gender}</li>
@@ -347,9 +350,11 @@ const Nutrition = () => {
                       <input
                         type="number"
                         value={
-                          updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)] ??
-                          weeks[weekNumber][dateUnix]?.[getTypeKey(type)] ??
-                          ""
+                          typeof updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)] !== 'undefined'
+                            ? updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)]
+                            : typeof weeks[weekNumber][dateUnix]?.[getTypeKey(type)] !== 'undefined'
+                            ? weeks[weekNumber][dateUnix]?.[getTypeKey(type)]
+                            : ""
                         }
                         onChange={(e) => handleInputChange(dateUnix, weekNumber, getTypeKey(type), e.target.value)}
                       />
