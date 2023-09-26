@@ -4,6 +4,7 @@ import { useQuery, gql, useMutation } from '@apollo/client';
 import { QUERY_USER_by_id } from '../utils/queries';
 import { ADD_DAILY_TRACKING } from '../utils/mutations';
 import Auth from '../utils/auth';
+import {Link} from 'react-router-dom'
 
 
 const Nutrition = () => {
@@ -321,9 +322,13 @@ const Nutrition = () => {
       <p>Based on your stats, your daily calorie target is: {dailyCalories} calories</p>
       <button onClick={checkMealTemplate}>Generate Meal Plan</button>
       <h2>Daily Tracking</h2>
-      <button onClick={handleSave}>Save</button>
+      
       <button onClick={() => setCurrentStartWeek(Math.max(1, currentStartWeek - 4))}>Previous 4 Weeks</button>
       <button onClick={() => setCurrentStartWeek(currentStartWeek + 4)}>Next 4 Weeks</button>
+      <button onClick={handleSave}>Save</button>
+      <Link to={`/trends`}>
+        <button>View Trends</button>
+        </Link>
       <table>
         <thead>
           <tr>

@@ -7,6 +7,7 @@ const scheduleSchema = new Schema({
       require: true,
   },
     notes: String,
+    adminNotes: String,
     workouts: [
       {
         workoutId: {
