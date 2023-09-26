@@ -22,6 +22,7 @@ const UserCalendar = () => {
   const [currentVideoUrl, setCurrentVideoUrl] = useState(null);
   const videoRef = useRef(null);
   const workoutRef = useRef(null);
+  
 
   useEffect(() => {
     const fetchWorkouts = async () => {

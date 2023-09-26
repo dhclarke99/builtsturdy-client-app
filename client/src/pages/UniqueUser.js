@@ -7,7 +7,7 @@ import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID, FETCH_SCHEDULES } from '../utils
 import { UPDATE_USER, DELETE_USER } from '../utils/mutations';
 
 const UniqueUser = () => {
-  const [activeTab, setActiveTab] = useState('view')
+  const [activeTab, setActiveTab] = useState('view info')
   const [workoutDetails, setWorkoutDetails] = useState([]);
   const { loading: loadingSchedules, error: errorSchedules, data: dataSchedules } = useQuery(FETCH_SCHEDULES);
 
@@ -27,6 +27,7 @@ const UniqueUser = () => {
   const [formData, setFormData] = useState({});
   const [updateUser] = useMutation(UPDATE_USER);
   const [deleteUser] = useMutation(DELETE_USER);
+  const [currentStartWeek, setCurrentStartWeek] = useState(1);
 
   useEffect(() => {
     console.log(dataSchedules)
@@ -145,6 +146,19 @@ const UniqueUser = () => {
   }
   console.log(weeks)
 
+  const calculateWeekStartDate = (startDate, weekNumber) => {
+    const date = new Date(startDate);
+    date.setDate(date.getDate() + (weekNumber - 1) * 7);
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+  };
+
+  const getTypeKey = (type) => {
+    if (type === 'Weight') return 'weight';
+    if (type === 'Calories') return 'calorieIntake';
+    if (type === 'Protein') return 'proteinIntake';
+  };
+
+
 
   if (loadingUser || loadingSchedules) return <p>Loading...</p>;
   if (errorUser || errorSchedules) return <p>Error: {errorUser.message}</p>;
@@ -239,7 +253,49 @@ const UniqueUser = () => {
       )}
       {activeTab === 'view nutrition' && (
         <div>
-
+          <h2>Daily Tracking</h2>
+      <button onClick={() => setCurrentStartWeek(Math.max(1, currentStartWeek - 4))}>Previous 4 Weeks</button>
+      <button onClick={() => setCurrentStartWeek(currentStartWeek + 4)}>Next 4 Weeks</button>
+      <table>
+        <thead>
+          <tr>
+            <th>Week</th>
+            <th>Metric</th>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Saturday</th>
+            <th>Sunday</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Object.keys(weeks).slice(currentStartWeek - 1, currentStartWeek + 3).map((weekNumber) => (
+            <React.Fragment key={weekNumber}>
+              {['Weight', 'Calories', 'Protein'].map((type, index) => (
+                <tr key={type}>
+                  {index === 0 && <td rowSpan="3">Week {weekNumber} ({calculateWeekStartDate(parseInt(dataUser.user.startDate), weekNumber)})</td>}
+                  <td>{type}</td>
+                  {Object.keys(weeks[weekNumber]).map((dateUnix) => (
+                    <td key={dateUnix}>
+                      <input
+                        type="number"
+                        value={
+                          (typeof weeks[weekNumber][dateUnix]?.[getTypeKey(type)] !== 'undefined'
+                            ? weeks[weekNumber][dateUnix]?.[getTypeKey(type)]
+                            : null) !== null ? (weeks[weekNumber][dateUnix]?.[getTypeKey(type)] || "").toString() : ""
+                        }
+                       
+                      />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </React.Fragment>
+          ))}
+        </tbody>
+      </table>
         </div>
       )}
       {activeTab === 'edit' && (
