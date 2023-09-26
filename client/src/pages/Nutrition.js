@@ -116,7 +116,7 @@ console.log(calorieTarget)
   const handleSave = async () => {
     // Create a new array to hold the updated tracking data
     const newTrackingData = [];
-  
+  console.log(updatedTracking)
     // Loop through each week
     Object.keys(weeks).forEach((weekNumber) => {
       // Loop through each day in the week
@@ -125,8 +125,8 @@ console.log(calorieTarget)
         const dayData = {
           date: dateUnix,
           weight: updatedTracking[weekNumber]?.[dateUnix]?.weight || weeks[weekNumber][dateUnix]?.weight || null,
-          calorieIntake: updatedTracking[weekNumber]?.[dateUnix]?.calorieIntake || weeks[weekNumber][dateUnix]?.calorieIntake || null,
-          proteinIntake: updatedTracking[weekNumber]?.[dateUnix]?.proteinIntake || weeks[weekNumber][dateUnix]?.proteinIntake || null
+          calorieIntake: updatedTracking[weekNumber]?.[dateUnix]?.calories || weeks[weekNumber][dateUnix]?.calories || null,
+          proteinIntake: updatedTracking[weekNumber]?.[dateUnix]?.protein || weeks[weekNumber][dateUnix]?.protein || null
         };
   
         // Add this day's data to the new tracking data array
@@ -160,6 +160,11 @@ console.log(calorieTarget)
   }
   console.log(weeks)
  
+  const getTypeKey = (type) => {
+    if (type === 'Weight') return 'weight';
+    if (type === 'Calories') return 'calorieIntake';
+    if (type === 'Protein') return 'proteinIntake';
+  };
 
   const createMealPlanTemplate = async () => {
     console.log("template needs to be created")
@@ -332,7 +337,7 @@ console.log(calorieTarget)
   <tbody>
   {Object.keys(weeks).slice(currentStartWeek - 1, currentStartWeek + 3).map((weekNumber) => (
             <React.Fragment key={weekNumber}>
-        {['Weight', 'calorieIntake', 'Protein'].map((type, index) => (
+        {['Weight', 'Calories', 'Protein'].map((type, index) => (
           <tr key={type}>
             {index === 0 && <td rowSpan="3">Week {weekNumber} ({calculateWeekStartDate(parseInt(data.user.startDate), weekNumber)})</td>}
             <td>{type}</td>
@@ -340,7 +345,7 @@ console.log(calorieTarget)
           <td key={dateUnix}>
             <input
               type="number"
-              value={updatedTracking[weekNumber]?.[dateUnix]?.[type.toLowerCase()] || weeks[weekNumber][dateUnix]?.[type.toLowerCase()] || ''}
+              value={updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)] || weeks[weekNumber][dateUnix]?.[getTypeKey(type)] || ''}
               onChange={(e) => handleInputChange(dateUnix, weekNumber, type.toLowerCase(), e.target.value)}
             />
           </td>
