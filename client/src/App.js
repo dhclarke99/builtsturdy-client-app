@@ -19,6 +19,7 @@ import CreateUser from './pages/CreateUser';
 import UserCalendar from './pages/UserCalendar';
 import Nutrition from './pages/Nutrition';
 import Trends from './pages/Trends';
+import AdminTrends from './pages/AdminTrends.js';
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -66,6 +67,7 @@ const App = () => {
           <Route path="/calendar" element={<UserCalendar />} />
           <Route path="/nutrition" element={<Nutrition />} />
           <Route path="/trends" element={<Trends />}/>
+          <Route path="/admin/user/:id/trends" element={<AdminTrends />}/>
 
         </Routes>
       </Router>

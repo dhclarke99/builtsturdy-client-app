@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 
 import { useQuery, useMutation } from '@apollo/client';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID, FETCH_SCHEDULES } from '../utils/queries';
 import { UPDATE_USER, DELETE_USER } from '../utils/mutations';
 
@@ -256,6 +256,9 @@ const UniqueUser = () => {
           <h2>Daily Tracking</h2>
       <button onClick={() => setCurrentStartWeek(Math.max(1, currentStartWeek - 4))}>Previous 4 Weeks</button>
       <button onClick={() => setCurrentStartWeek(currentStartWeek + 4)}>Next 4 Weeks</button>
+      <Link to={`/admin/user/${user._id}/trends`}>
+        <button>View Trends</button>
+        </Link>
       <table>
         <thead>
           <tr>
