@@ -73,7 +73,7 @@ const { loading, error, data } = useQuery(QUERY_USER_by_id, {
   return (
     <div>
       <h1>{data.user.firstname}'s Trends</h1>
-      <TrendsChart weeklyAverages={weeklyAverages} />
+      <TrendsChart weeklyAverages={weeklyAverages} currentWeight={data.user.currentWeight}/>
     </div>
   );
 

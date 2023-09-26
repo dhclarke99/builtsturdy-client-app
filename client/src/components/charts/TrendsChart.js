@@ -1,7 +1,7 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 
-const TrendsChart = ({ weeklyAverages }) => {
+const TrendsChart = ({ weeklyAverages, currentWeight }) => {
   // Prepare data for the charts
   const labels = Object.keys(weeklyAverages);
   const avgWeightData = labels.map((week) => weeklyAverages[week].averageWeight);
@@ -34,8 +34,8 @@ const TrendsChart = ({ weeklyAverages }) => {
   const weightOptions = {
     scales: {
       y: {
-        min: 100, // minimum value
-        max: 300, // maximum value
+        min: currentWeight - 50, // minimum value
+        max: currentWeight + 50, // maximum value
         ticks: {
           stepSize: 10, // difference between each tick
         },
