@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { FETCH_ALL_WORKOUTS, FETCH_ALL_USERS, QUERY_EXERCISES, FETCH_SCHEDULES, FETCH_WORKOUT_BY_ID } from '../utils/queries';
-import { DELETE_WORKOUT, DELETE_EXERCISE } from '../utils/mutations';
+import { DELETE_WORKOUT, DELETE_EXERCISE, DELETE_SCHEDULE } from '../utils/mutations';
 import { Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
@@ -13,6 +13,9 @@ const AdminDashboard = () => {
   const { loading: loadingSchedules, error: errorSchedules, data: dataSchedules } = useQuery(FETCH_SCHEDULES);
   const [deleteWorkout] = useMutation(DELETE_WORKOUT, {
     refetchQueries: [{ query: FETCH_ALL_WORKOUTS }],
+  });
+  const [deleteSchedule] = useMutation(DELETE_SCHEDULE, {
+    refetchQueries: [{ query: FETCH_SCHEDULES }],
   });
   const [deleteExercise] = useMutation(DELETE_EXERCISE, {
     refetchQueries: [{ query: QUERY_EXERCISES }],
@@ -50,6 +53,14 @@ useEffect(() => {
     }
   };
 
+  const handleDeleteSchedule = async (scheduleId) => {
+    try {
+      await deleteSchedule({ variables: { scheduleId } });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleDeleteExercise = async (exerciseId) => {
     try {
       await deleteExercise({ variables: { exerciseId } });
@@ -59,8 +70,8 @@ useEffect(() => {
     }
   };
 
-  if (loadingWorkouts || loadingUsers || loadingExercises) return <p>Loading...</p>;
-  if (errorWorkouts || errorUsers || errorExercises) return <p>Error: {errorWorkouts?.message || errorUsers?.message || errorExercises?.message}</p>;
+  if (loadingWorkouts || loadingUsers || loadingExercises || loadingSchedules) return <p>Loading...</p>;
+  if (errorWorkouts || errorUsers || errorExercises || errorSchedules) return <p>Error: {errorWorkouts?.message || errorUsers?.message || errorExercises?.message || errorSchedules?.message}</p>;
 
   return (
     <div>
@@ -86,6 +97,7 @@ useEffect(() => {
               {schedule.name}: {schedule.notes}
             </div>
             <button onClick={() => window.location.href = `/admin/edit-schedule/${schedule._id}`}>Edit</button>
+            <button onClick={() => handleDeleteSchedule(schedule._id)}>Delete</button>
             <div className="card-body">
               <ul className="list-group list-group-flush">
                 {schedule.workouts.map((workout, index) => {

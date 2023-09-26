@@ -93,7 +93,7 @@ console.log(allWorkouts)
       await updateSchedule({ variables: { scheduleId, input } });
   
       // Optionally, refresh the component to show the newly assigned exercise
-      window.location.href = '/admin/admindashboard';
+      window.location.reload();
     } else {
         const updatedWorkouts =  [...allWorkouts]
         const cleanedWorkouts = updatedWorkouts.map(({ workoutId, day }) => ({ workoutId, day }));
@@ -111,7 +111,7 @@ console.log(allWorkouts)
       await updateSchedule({ variables: { scheduleId, input } });
   
       // Optionally, refresh the component to show the newly assigned exercise
-      window.location.href = '/admin/admindashboard';
+      window.location.reload();
     }
       
       

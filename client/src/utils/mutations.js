@@ -221,6 +221,13 @@ mutation deleteUser($userId: ID!) {
 }
 `;
 
+export const DELETE_SCHEDULE = gql `
+mutation deleteSchedule($scheduleId: ID!) {
+  deleteSchedule(scheduleId: $scheduleId) {
+    _id
+  }
+}`
+
 export const DELETE_EXERCISE = gql `
 mutation deleteExercise($exerciseId: ID!) {
   deleteExercise(exerciseId: $exerciseId) {

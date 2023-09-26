@@ -37,7 +37,7 @@ const EditWorkout = () => {
       setAllExerciseIds(updatedExerciseIds); // Update the local state
       await assignExerciseToWorkout({ variables: { workoutId, exerciseIds: updatedExerciseIds } });
       // Optionally, refresh the component to show the newly assigned exercise
-      window.location.href = '/admin/admindashboard';
+      window.location.reload();
     } catch (err) {
       console.error(err);
     }
