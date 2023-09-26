@@ -92,9 +92,9 @@ const Nutrition = () => {
     const newTracking = { ...updatedTracking };
     if (!newTracking[week]) newTracking[week] = {};
     if (!newTracking[week][dateUnix]) newTracking[week][dateUnix] = {};
-    newTracking[week][dateUnix][type] = value ? parseFloat(value) : null;
+    newTracking[week][dateUnix][type] = value !== "" ? parseFloat(value) : null;
     setUpdatedTracking(newTracking);
-    console.log(setUpdatedTracking)
+    console.log(updatedTracking)
   };
   
 
@@ -125,9 +125,9 @@ const Nutrition = () => {
         // Create a new object to hold the data for this day
         const dayData = {
           date: dateUnix,
-          weight: updatedTracking[weekNumber]?.[dateUnix]?.weight || weeks[weekNumber][dateUnix]?.weight || null,
-          calorieIntake: updatedTracking[weekNumber]?.[dateUnix]?.calorieIntake || weeks[weekNumber][dateUnix]?.calorieIntake || null,
-          proteinIntake: updatedTracking[weekNumber]?.[dateUnix]?.proteinIntake || weeks[weekNumber][dateUnix]?.proteinIntake || null
+          weight: updatedTracking[weekNumber]?.[dateUnix]?.hasOwnProperty('weight') ? updatedTracking[weekNumber][dateUnix].weight : (weeks[weekNumber][dateUnix]?.weight || null),
+          calorieIntake: updatedTracking[weekNumber]?.[dateUnix]?.hasOwnProperty('calorieIntake') ? updatedTracking[weekNumber][dateUnix].calorieIntake : (weeks[weekNumber][dateUnix]?.calorieIntake || null),
+          proteinIntake: updatedTracking[weekNumber]?.[dateUnix]?.hasOwnProperty('proteinIntake') ? updatedTracking[weekNumber][dateUnix].proteinIntake : (weeks[weekNumber][dateUnix]?.proteinIntake || null),
         };
 
         // Add this day's data to the new tracking data array
