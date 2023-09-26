@@ -288,8 +288,6 @@ const UniqueUser = () => {
                             ? weeks[weekNumber][dateUnix]?.[getTypeKey(type)]
                             : null) !== null ? (weeks[weekNumber][dateUnix]?.[getTypeKey(type)] || "").toString() : ""
                         }
-                       
-                       
                       />
                     </td>
                   ))}

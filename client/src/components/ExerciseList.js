@@ -6,7 +6,7 @@ const ExerciseList = ({ exercises }) => {
     <ul>
       {exercises.map((exercise, index) => (
         <li key={index}>
-          {exercise.name} - {exercise.sets} sets of {exercise.reps}
+          {exercise.name} - {exercise.sets} sets of {exercise.reps} reps
         </li>
       ))}
     </ul>

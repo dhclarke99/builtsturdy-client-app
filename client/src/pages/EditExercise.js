@@ -63,6 +63,7 @@ console.log(formData)
           ...cleanedFormData,
           weight: parseFloat(cleanedFormData.weight),
           reps: parseFloat(cleanedFormData.reps),
+          sets: parseFloat(cleanedFormData.sets)
   
         };
         
