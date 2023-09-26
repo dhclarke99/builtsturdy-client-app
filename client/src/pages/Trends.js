@@ -9,21 +9,44 @@ const { loading, error, data } = useQuery(QUERY_USER_by_id, {
     variables: { userId: Auth.getProfile().data._id },
   });
 
-  const weeks = {};
+  const groupedByWeek = {};
+  const weeklyAverages = {};
   if (data && data.user && data.user.dailyTracking) {
-
     const sortedDailyTracking = [...data.user.dailyTracking].sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    console.log(sortedDailyTracking)
-
+  
     sortedDailyTracking.forEach((day, index) => {
-      const dateUnix = day.date
       const weekNumber = Math.floor(index / 7) + 1;
-      if (!weeks[weekNumber]) weeks[weekNumber] = {};
-      weeks[weekNumber][dateUnix] = day; // Use Unix timestamp as a key
+      if (!groupedByWeek[weekNumber]) {
+        groupedByWeek[weekNumber] = [];
+      }
+      groupedByWeek[weekNumber].push(day);
+    });
+  
+    // Calculate Weekly Averages
+    Object.keys(groupedByWeek).forEach((weekNumber) => {
+      const weekData = groupedByWeek[weekNumber];
+      const totalDays = weekData.length;
+  
+      const totalWeight = weekData.reduce((acc, day) => acc + day.weight, 0);
+      const totalCalories = weekData.reduce((acc, day) => acc + day.calorieIntake, 0);
+      const totalProtein = weekData.reduce((acc, day) => acc + day.proteinIntake, 0);
+  
+      weeklyAverages[weekNumber] = {
+        averageWeight: totalWeight / totalDays,
+        averageCalories: totalCalories / totalDays,
+        averageProtein: totalProtein / totalDays,
+      };
     });
   }
-  console.log(weeks)
+  console.log(groupedByWeek)
+  console.log(weeklyAverages)
+
+// Step 4: Prepare Data for Charting
+// You can now use `weeklyAverages` to create your charts
+
+
+
+
   
 
   if (loading) return <p>Loading...</p>;
