@@ -4,7 +4,7 @@ import { useQuery, gql, useMutation } from '@apollo/client';
 import { QUERY_USER_by_id } from '../utils/queries';
 import { ADD_DAILY_TRACKING } from '../utils/mutations';
 import Auth from '../utils/auth';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 
 const Nutrition = () => {
