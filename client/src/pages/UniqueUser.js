@@ -158,8 +158,6 @@ const UniqueUser = () => {
     if (type === 'Protein') return 'proteinIntake';
   };
 
-
-
   if (loadingUser || loadingSchedules) return <p>Loading...</p>;
   if (errorUser || errorSchedules) return <p>Error: {errorUser.message}</p>;
 
@@ -284,11 +282,13 @@ const UniqueUser = () => {
                     <td key={dateUnix}>
                       <input
                         type="number"
+                        readOnly
                         value={
                           (typeof weeks[weekNumber][dateUnix]?.[getTypeKey(type)] !== 'undefined'
                             ? weeks[weekNumber][dateUnix]?.[getTypeKey(type)]
                             : null) !== null ? (weeks[weekNumber][dateUnix]?.[getTypeKey(type)] || "").toString() : ""
                         }
+                       
                        
                       />
                     </td>

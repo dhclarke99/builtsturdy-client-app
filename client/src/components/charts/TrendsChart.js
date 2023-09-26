@@ -82,7 +82,7 @@ const TrendsChart = ({ weeklyAverages, currentWeight }) => {
 
   return (
     <div>
-      <h1>Trends</h1>
+    
       <div>
         <h2>Average Weight</h2>
         <Line data={weightConfig} options={weightOptions} />
