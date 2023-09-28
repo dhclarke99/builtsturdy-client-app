@@ -78,14 +78,22 @@ const userSchema = new Schema({
             calorieIntake: Number,
             proteinIntake: Number
         }
-    ]
+    ],
+    completedDays: [
+        {
+          date: Date,
+          completed: Boolean,
+        },
+      ]
 });
 
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function (next) {
     if (this.isModified('startDate') || this.isModified('weeks')) {
-      const startDate = new Date(this.startDate); // Initialize once
+      // Logic for dailyTracking
+      const startDate = new Date(this.startDate);
       const programLength = this.weeks;
       const dailyTracking = [];
+      const completedDays = []; // Initialize completedDays array
       for (let i = 0; i < programLength * 7; i++) {
         const date = new Date(startDate);
         date.setDate(startDate.getDate() + i);
@@ -93,10 +101,15 @@ userSchema.pre('save', function(next) {
           date,
           weight: null,
           calorieIntake: null,
-          proteinIntake: null
+          proteinIntake: null,
+        });
+        completedDays.push({
+          date,
+          completed: false, // Initialize as not completed
         });
       }
       this.dailyTracking = dailyTracking;
+      this.completedDays = completedDays; // Update completedDays field
     }
     next();
   });

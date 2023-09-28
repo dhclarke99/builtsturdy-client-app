@@ -1,37 +1,22 @@
 const db = require('../config/connection');
-const { User, Workout, Exercise } = require('../models');
-
-const exerciseData = require('./exerciseData.json');
+const { User } = require('../models');
 const userData = require('./userData.json');
-const workoutData = require('./workoutData.json');
 
-db.once('open', async () => {
-  // Delete existing data
+const seedDatabase = async () => {
+  // Check if admin user already exists
+  const adminUser = await User.findOne({ role: 'Admin' });
   await User.deleteMany({});
-  await Workout.deleteMany({});
-  await Exercise.deleteMany({});
+  if (!adminUser) {
+    // If no admin user exists, seed the admin user
+    await User.create(userData[0]); // Assuming the admin data is the first object in userData.json
+    console.log('Admin user seeded!');
+  } else {
+    console.log('Admin user already exists.');
+  }
 
-  // Insert new exercise data
-  const exercises = await Exercise.insertMany(exerciseData);
-
-  // Insert new workout data and replace placeholder exercise IDs with real ones
-  const workoutDataWithRealIDs = workoutData.map((workout, index) => {
-    return {
-      ...workout,
-      exercises: [exercises[index]._id]
-    };
-  });
-  const workouts = await Workout.insertMany(workoutDataWithRealIDs);
-
-  // Insert new user data and replace placeholder workout IDs with real ones
-  const userDataWithRealWorkoutIDs = userData.map((user, index) => {
-    return {
-      ...user,
-      workouts: [workouts[index]._id]
-    };
-  });
-  await User.insertMany(userDataWithRealWorkoutIDs);
+  // You can add more seeding logic here if needed
 
   console.log('all done!');
-  process.exit(0);
-});
+};
+
+module.exports = seedDatabase;

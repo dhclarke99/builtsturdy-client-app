@@ -3,26 +3,18 @@
       "firstname": "David",
       "lastname": "Clarke",
       "username": "dhclarke99",
-      "email": "dave@gmail.com",
+      "email": "dhclarke99@gmail.com",
       "password": "password123",
-      "workouts": [1]
-    },
-    {
-        "firstname": "John",
-      "lastname": "Jones",
-        "username": "jones99",
-        "email": "jones@gmail.com",
-        "password": "password123",
-        "workouts": [2]
-      },
-      {
-        "firstname": "Emma",
-      "lastname": "Watson",
-        "username": "emma99",
-        "email": "emma@gmail.com",
-        "password": "password123",
-        "workouts": [3]
-      }
+      "gender": "Male",
+      "role": "Admin",
+      "height": 74,
+      "currentWeight": 180,
+      "estimatedBodyFat": 11.5,
+      "age": 24,
+      "startDate": "10/02/2023",
+      "weeks": 12
+     
+    }
 
   ]
   
