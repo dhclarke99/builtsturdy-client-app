@@ -24,6 +24,7 @@ const UniqueUser = () => {
   });
 
   const { id } = useParams();
+  const [sortedWorkouts, setSortedWorkouts] = useState([]);
 
 
   const { loading: loadingUser, error: errorUser, data: dataUser } = useQuery(QUERY_USER_by_id, {
@@ -37,26 +38,7 @@ const UniqueUser = () => {
   const [currentStartWeek, setCurrentStartWeek] = useState(1);
   const localizer = momentLocalizer(moment);
 
-  useEffect(() => {
-    console.log(dataSchedules)
-    if (dataSchedules && dataSchedules.schedules) {
-      const workoutIds = dataSchedules.schedules.flatMap(schedule =>
-        schedule.workouts ? schedule.workouts.map(w => w.workoutId) : []
-      );
-      const fetchWorkoutDetails = async () => {
-        const details = await Promise.all(workoutIds.map(async workoutId => {
-          const { data } = await client.query({
-            query: FETCH_WORKOUT_BY_ID,
-            variables: { workoutId: workoutId.toString() },
-          });
-          return data;
-        }));
-        setWorkoutDetails(details);
-      };
-
-      fetchWorkoutDetails();
-    }
-  }, [dataSchedules]);
+ 
 
   useEffect(() => {
     if (dataUser && dataUser.user) {
@@ -122,8 +104,20 @@ const UniqueUser = () => {
     fetchWorkouts();
   }, [dataUser]);
 
-      
+  useEffect(() => {
+    if (dataUser && dataUser.user && dataUser.user.schedule) {
+      console.log("dataUser", dataUser.user.schedule);
 
+      const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+      const newSortedWorkouts = [...dataUser.user.schedule.workouts].sort((a, b) => {
+        return daysOfWeek.indexOf(a.day) - daysOfWeek.indexOf(b.day);
+      });
+
+      setSortedWorkouts(newSortedWorkouts);
+    }
+  }, [dataUser]);
+ 
   const handleChange = (event) => {
     const { name, value } = event.target;
     if (name === 'startDate') {
@@ -305,7 +299,7 @@ const UniqueUser = () => {
                       <h6 className="card-subtitle mb-2 text-muted">Schedule: {user.schedule.name}</h6>
                       <ul>
 
-                        {user.schedule.workouts.map((workout, index) => {
+                        {sortedWorkouts.map((workout, index) => {
                           const relevantWorkoutDetail = workoutDetails.find(
                             (detail) => detail.workout._id === workout.workoutId
                           );
