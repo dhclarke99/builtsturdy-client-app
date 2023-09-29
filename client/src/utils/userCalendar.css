@@ -87,5 +87,10 @@
     transform: scale(1.1);
   }
 
+  .completed-event {
+    background-color: grey !important;
+  }
+  
+
 
   

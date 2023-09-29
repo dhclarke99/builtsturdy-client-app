@@ -25,6 +25,7 @@ const UserCalendar = () => {
   const [currentVideoUrl, setCurrentVideoUrl] = useState(null);
   const videoRef = useRef(null);
   const workoutRef = useRef(null);
+  const calendarRef = useRef(null);
   const [completedDays, setCompletedDays] = useState([]);
   const [updateUserCompletion] = useMutation(UPDATE_USER_COMPLETION);
   
@@ -107,15 +108,16 @@ const UserCalendar = () => {
     } else {
       console.log("Day not found in completedDays array");
     }
+    if (calendarRef.current) {
+      calendarRef.current.scrollIntoView({ behavior: 'smooth'})
+    }
   };
   
 
   const eventStyleGetter = (event) => {
-    const isCompleted = completedDays.some(day => day.date === event.start.toISOString());
+    const isCompleted = completedDays.some(day => day.date === event.start.getTime().toString() && day.completed);
     return {
-      style: {
-        backgroundColor: isCompleted ? 'grey' : 'blue',
-      },
+      className: isCompleted ? 'completed-event' : '',
     };
   };
 let completedPercentage;
@@ -151,7 +153,7 @@ return (
   <div className="calendar-container">
     <h1 id="user-name">{userData.user.firstname}'s Calendar</h1>
       <ProgressBar now={completedPercentage} label={`${completedPercentage}% Completed`} />
-      <div id="calendar-box">
+      <div id="calendar-box" ref={calendarRef}>
         <Calendar
           localizer={localizer}
           events={events}
