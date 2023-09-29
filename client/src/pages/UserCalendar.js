@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Auth from '../utils/auth';
-import { useQuery, useApolloClient } from '@apollo/client';
+import { useQuery, useApolloClient, useMutation } from '@apollo/client';
 import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID } from '../utils/queries';
 import {UPDATE_USER_COMPLETION} from '../utils/mutations'
 import placeholderImage from '../assets/images/placeholderImage.png';
@@ -26,6 +26,7 @@ const UserCalendar = () => {
   const videoRef = useRef(null);
   const workoutRef = useRef(null);
   const [completedDays, setCompletedDays] = useState([]);
+  const [updateUserCompletion] = useMutation(UPDATE_USER_COMPLETION);
   
   
 
@@ -82,17 +83,32 @@ const UserCalendar = () => {
 
   const markDayAsCompleted = async () => {
     // Logic to mark a day as completed
- 
-    const selectedDate = new Date(selectedEvent.start)
+    const selectedDate = new Date(selectedEvent.start);
     const selectedDateUnix = selectedDate.getTime();
   
-    const dayToComplete = completedDays.find(day => day.date === selectedDateUnix.toString())
-    console.log(dayToComplete)
-// make a GraphQL mutation call
-
-
-    // Update the `completedDays` state 
+    const dayToCompleteIndex = completedDays.findIndex(day => day.date === selectedDateUnix.toString());
+  
+    if (dayToCompleteIndex !== -1) {
+      const dayToComplete = { ...completedDays[dayToCompleteIndex] };
+      dayToComplete.completed = true;
+  
+      // Call your GraphQL mutation here to update completedDays in the database
+      const { __typename, ...cleanedDayToComplete } = dayToComplete;
+  
+      // Make a GraphQL mutation call
+      await updateUserCompletion({
+        variables: { userId: Auth.getProfile().data._id, input: cleanedDayToComplete },
+      });
+  
+      // Update the local state
+      const updatedCompletedDays = [...completedDays];
+      updatedCompletedDays[dayToCompleteIndex] = cleanedDayToComplete;
+      setCompletedDays(updatedCompletedDays);
+    } else {
+      console.log("Day not found in completedDays array");
+    }
   };
+  
 
   const eventStyleGetter = (event) => {
     const isCompleted = completedDays.some(day => day.date === event.start.toISOString());
