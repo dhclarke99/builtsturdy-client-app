@@ -78,7 +78,7 @@ const UniqueUser = () => {
         console.log("Start Date:", startDate);
         console.log("Weeks:", weeks);
         setCompletedDays(dataUser.user.completedDays)
-  
+
         const workoutIds = dataUser.user.schedule.workouts.map(w => w.workoutId);
   
         const workouts = await Promise.all(workoutIds.map(async id => {
@@ -364,7 +364,7 @@ const UniqueUser = () => {
         </div>
       )}
       {activeTab === 'view progress' && (
-        <div>
+        <div className="calendar-container">
           <h2>User Progress</h2>
           <div id="calendar-box">
             <Calendar
@@ -519,7 +519,7 @@ const UniqueUser = () => {
                 type="text"
                 name="startDate"
                 placeholder="Start Date"
-                value={formData.startDate || ''}
+                value={formData.startDate|| ''}
                 onChange={handleChange}
               />
             </label>
