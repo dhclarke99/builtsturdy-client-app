@@ -80,9 +80,18 @@ const UserCalendar = () => {
   
 
 
-  const markDayAsCompleted = (slotInfo) => {
+  const markDayAsCompleted = async () => {
     // Logic to mark a day as completed
-    // Update the `completedDays` state and make a GraphQL mutation call
+ 
+    const selectedDate = new Date(selectedEvent.start)
+    const selectedDateUnix = selectedDate.getTime();
+  
+    const dayToComplete = completedDays.find(day => day.date === selectedDateUnix.toString())
+    console.log(dayToComplete)
+// make a GraphQL mutation call
+
+
+    // Update the `completedDays` state 
   };
 
   const eventStyleGetter = (event) => {
@@ -101,6 +110,7 @@ let completedPercentage;
 
   const handleEventClick = async (event) => {
     setSelectedEvent(event);
+    console.log(selectedEvent)
     const { data } = await client.query({
       query: FETCH_WORKOUT_BY_ID,
       variables: { workoutId: event.workoutId._id },
