@@ -60,12 +60,18 @@ const UniqueUser = () => {
 
   useEffect(() => {
     if (dataUser && dataUser.user) {
-      const { schedule, ...restOfUserData } = dataUser.user;
+      const startDateString = new Date(parseInt(dataUser.user.startDate))
+      const formattedStartDateString = `${startDateString.getMonth() + 1}/${startDateString.getDate()}/${startDateString.getFullYear()}`;
+      const { schedule, startDate, ...restOfUserData } = dataUser.user;
+      console.log(restOfUserData)
       const formattedUser = {
         ...restOfUserData,
-        schedule: schedule ? schedule._id : null,  // set only the ID
+        schedule: schedule ? schedule._id : null, // set only the ID
+        startDate: formattedStartDateString 
       };
+      console.log(formattedUser)
       setFormData(prevState => ({ ...prevState, ...formattedUser }));
+      console.log("FormData has been set: ", formData)
     }
   }, [dataUser]);
 
@@ -119,11 +125,19 @@ const UniqueUser = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    if (name === 'startDate') {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
+  
 
   const handleDelete = async (event) => {
     event.preventDefault();
@@ -152,14 +166,15 @@ const UniqueUser = () => {
         estimatedBodyFat: parseFloat(cleanedFormData.estimatedBodyFat),
         age: parseInt(cleanedFormData.age, 10),
         weeks: parseFloat(cleanedFormData.weeks),
+        startDate: stringToUnix(formData.startDate)
       };
       console.log(formattedData)
-      await updateUser({
-        variables: { userId: id, input: formattedData },
-      });
+      // await updateUser({
+      //   variables: { userId: id, input: formattedData },
+      // });
 
       console.log("data User: ", dataUser)
-      window.location.reload()
+      // window.location.reload()
 
     } catch (err) {
       console.error('Failed to update user:', err);
@@ -227,12 +242,17 @@ const UniqueUser = () => {
   if (errorUser || errorSchedules) return <p>Error: {errorUser.message}</p>;
 
   const user = dataUser.user;
-  const convertedStartDate = (startDate) => {
+  const unixToString = (startDate) => {
   
-    const convertedStartDate = new Date(startDate)
+    const convertedStartDate = new Date(parseInt(startDate))
     return `${convertedStartDate.getMonth() + 1}/${convertedStartDate.getDate()}/${convertedStartDate.getFullYear()}`;
 
-  }
+  };
+
+  const stringToUnix = (str) => {
+    const [month, day, year] = str.split('/');
+    return new Date(`${month}/${day}/${year}`).getTime();
+  };
  
 
   console.log(formData)
@@ -266,7 +286,7 @@ const UniqueUser = () => {
               <li>Body Fat: {user.estimatedBodyFat} %</li>
               <li>Experience: {user.trainingExperience}</li>
               <li>Goal: {user.mainPhysiqueGoal}</li>
-              <li>Program Start Date: {convertedStartDate(parseInt(user.startDate))}</li>
+              <li>Program Start Date: {unixToString(parseInt(user.startDate))}</li>
               <li>Program Length: {user.weeks} weeks</li>
             </ul>
             <h5 className="card-title">Schedules:</h5>
