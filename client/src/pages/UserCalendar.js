@@ -5,8 +5,11 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Auth from '../utils/auth';
 import { useQuery, useApolloClient } from '@apollo/client';
 import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID } from '../utils/queries';
+import {UPDATE_USER_COMPLETION} from '../utils/mutations'
 import placeholderImage from '../assets/images/placeholderImage.png';
-import '../utils/userCalendar.css'
+import '../utils/userCalendar.css';
+import ProgressBar from 'react-bootstrap/ProgressBar'; 
+
 
 
 const localizer = momentLocalizer(moment);
@@ -22,6 +25,8 @@ const UserCalendar = () => {
   const [currentVideoUrl, setCurrentVideoUrl] = useState(null);
   const videoRef = useRef(null);
   const workoutRef = useRef(null);
+  const [completedDays, setCompletedDays] = useState([]);
+  
   
 
   useEffect(() => {
@@ -32,6 +37,7 @@ const UserCalendar = () => {
         const weeks = userData.user.weeks; // Number of weeks
         console.log("Start Date:", startDate);
         console.log("Weeks:", weeks);
+        setCompletedDays(userData.user.completedDays)
   
         const workoutIds = userData.user.schedule.workouts.map(w => w.workoutId);
   
@@ -70,6 +76,29 @@ const UserCalendar = () => {
 
   console.log(events)
 
+ 
+  
+
+
+  const markDayAsCompleted = (slotInfo) => {
+    // Logic to mark a day as completed
+    // Update the `completedDays` state and make a GraphQL mutation call
+  };
+
+  const eventStyleGetter = (event) => {
+    const isCompleted = completedDays.some(day => day.date === event.start.toISOString());
+    return {
+      style: {
+        backgroundColor: isCompleted ? 'grey' : 'blue',
+      },
+    };
+  };
+let completedPercentage;
+  if (userData && userData.user) {
+    completedPercentage = (completedDays.length / userData.user.weeks * 7) * 100;
+  }
+  
+
   const handleEventClick = async (event) => {
     setSelectedEvent(event);
     const { data } = await client.query({
@@ -95,16 +124,20 @@ console.log(userData.user)
 return (
   <div className="calendar-container">
     <h1 id="user-name">{userData.user.firstname}'s Calendar</h1>
-    <div id="calendar-box">
-      <Calendar
-        localizer={localizer}
-        events={events}
-        startAccessor="start"
-        endAccessor="end"
-        onSelectEvent={handleEventClick}
-        className="user-calendar"
-      />
-    </div>
+      <ProgressBar now={completedPercentage} label={`${completedPercentage}% Completed`} />
+      <div id="calendar-box">
+        <Calendar
+          localizer={localizer}
+          events={events}
+          startAccessor="start"
+          endAccessor="end"
+          onSelectEvent={handleEventClick}
+          onSelectSlot={markDayAsCompleted}
+          eventPropGetter={eventStyleGetter}
+          className="user-calendar"
+        />
+      </div>
+      
     {selectedEvent && (
       <div ref={videoRef} className="workout-details">
         <h2 className="workout-title">Workout Details for {selectedEvent.title}</h2>
@@ -142,6 +175,9 @@ return (
             </ol>
           </div>
         )}
+        {selectedEvent && (
+  <button onClick={markDayAsCompleted}>Mark Workout Complete</button>
+)}
       </div>
     )}
   </div>
