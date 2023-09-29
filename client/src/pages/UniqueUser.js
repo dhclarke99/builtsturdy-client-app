@@ -71,7 +71,7 @@ const UniqueUser = () => {
 
   useEffect(() => {
     const fetchWorkouts = async () => {
-      if (dataUser && dataUser.user && dataUser.user.schedule) {
+      if (dataUser && dataUser.user && dataUser.user.schedule.workouts) {
         const roughDate = new Date(parseInt(dataUser.user.startDate))
         const startDate = moment(roughDate); // Make sure this is in the correct format
         const weeks = dataUser.user.weeks; // Number of weeks
@@ -79,6 +79,7 @@ const UniqueUser = () => {
         console.log("Weeks:", weeks);
         setCompletedDays(dataUser.user.completedDays)
 
+        
         const workoutIds = dataUser.user.schedule.workouts.map(w => w.workoutId);
   
         const workouts = await Promise.all(workoutIds.map(async id => {
@@ -157,6 +158,7 @@ const UniqueUser = () => {
         variables: { userId: id, input: formattedData },
       });
 
+      console.log("data User: ", dataUser)
       window.location.reload()
 
     } catch (err) {
