@@ -85,17 +85,15 @@ const UserCalendar = () => {
 
 
   const markDayAsCompleted = async () => {
-    // Logic to mark a day as completed
     const selectedDate = new Date(selectedEvent.start);
-    const selectedDateUnix = selectedDate.getTime();
+    const selectedDateUnix = selectedDate.getTime().toString();
   
-    const dayToCompleteIndex = completedDays.findIndex(day => day.date === selectedDateUnix.toString());
+    const dayToCompleteIndex = completedDays.findIndex(day => day.date === selectedDateUnix);
   
     if (dayToCompleteIndex !== -1) {
       const dayToComplete = { ...completedDays[dayToCompleteIndex] };
-      dayToComplete.completed = true;
+      dayToComplete.completed = !dayToComplete.completed; // Toggle the completion status
   
-      // Call your GraphQL mutation here to update completedDays in the database
       const { __typename, ...cleanedDayToComplete } = dayToComplete;
   
       // Make a GraphQL mutation call
@@ -108,13 +106,17 @@ const UserCalendar = () => {
       updatedCompletedDays[dayToCompleteIndex] = cleanedDayToComplete;
       setCompletedDays(updatedCompletedDays);
       setIsWorkoutCompleted(dayToComplete.completed);
+  
+      
+      // Scroll back to the calendar
+      if (calendarRef.current) {
+        calendarRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
     } else {
       console.log("Day not found in completedDays array");
     }
-    if (calendarRef.current) {
-      calendarRef.current.scrollIntoView({ behavior: 'smooth'})
-    }
   };
+  
   
 
   const eventStyleGetter = (event) => {
@@ -123,10 +125,12 @@ const UserCalendar = () => {
       className: isCompleted ? 'completed-event' : '',
     };
   };
-let completedPercentage;
-  if (userData && userData.user) {
-    completedPercentage = (completedDays.length / userData.user.weeks * 7) * 100;
-  }
+
+  let completedPercentage;
+if (completedDays.length > 0) {
+  completedPercentage = Math.floor((completedDays.filter(day => day.completed).length / completedDays.length) * 100);
+}
+
   
 
   const handleEventClick = async (event) => {
@@ -158,7 +162,7 @@ console.log(userData.user)
 return (
   <div className="calendar-container">
     <h1 id="user-name">{userData.user.firstname}'s Calendar</h1>
-      <ProgressBar now={completedPercentage} label={`${completedPercentage}% Completed`} />
+    <ProgressBar now={completedPercentage} label={`${completedPercentage}% Completed`} />
       <div id="calendar-box" ref={calendarRef}>
         <Calendar
           localizer={localizer}
