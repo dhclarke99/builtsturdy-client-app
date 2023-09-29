@@ -4,15 +4,15 @@
     font-family: Arial, sans-serif;
   }
 
+  .user-calendar .rbc-off-range-bg {
+    background-color: rgb(35, 33, 33);
+  }
+
   .calendar-container h1,
 .calendar-container h2,
 .calendar-container h3 {
   color: #c6a10d;
 }
-
-.rbc-off-range-bg {
-    background-color: rgb(35, 33, 33);
-  }
 
   #user-name {
     text-align: center;

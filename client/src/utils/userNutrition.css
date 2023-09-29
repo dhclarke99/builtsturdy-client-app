@@ -1,0 +1,12 @@
+tr[class^="week-"]:first-child {
+    border-top: 2px solid #c6a10d;
+  }
+  
+  tr[class^="week-"]:last-child {
+    border-bottom: 2px solid #c6a10d;;
+  }
+  
+  tbody tr:nth-child(3n) {
+    border-bottom: 2px solid #c6a10d;;
+  }
+  

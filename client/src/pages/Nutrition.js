@@ -5,6 +5,7 @@ import { QUERY_USER_by_id } from '../utils/queries';
 import { ADD_DAILY_TRACKING } from '../utils/mutations';
 import Auth from '../utils/auth';
 import { Link } from 'react-router-dom';
+import '../utils/userNutrition.css';
 
 
 const Nutrition = () => {
@@ -344,32 +345,33 @@ const Nutrition = () => {
           </tr>
         </thead>
         <tbody>
-          {Object.keys(weeks).slice(currentStartWeek - 1, currentStartWeek + 3).map((weekNumber) => (
-            <React.Fragment key={weekNumber}>
-              {['Weight', 'Calories', 'Protein'].map((type, index) => (
-                <tr key={type}>
-                  {index === 0 && <td rowSpan="3">Week {weekNumber} ({calculateWeekStartDate(parseInt(data.user.startDate), weekNumber)})</td>}
-                  <td>{type}</td>
-                  {Object.keys(weeks[weekNumber]).map((dateUnix) => (
-                    <td key={dateUnix}>
-                      <input
-                        type="number"
-                        value={
-                          (typeof updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)] !== 'undefined'
-                            ? updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)]
-                            : typeof weeks[weekNumber][dateUnix]?.[getTypeKey(type)] !== 'undefined'
-                            ? weeks[weekNumber][dateUnix]?.[getTypeKey(type)]
-                            : null) !== null ? (updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)] || weeks[weekNumber][dateUnix]?.[getTypeKey(type)] || "").toString() : ""
-                        }
-                        onChange={(e) => handleInputChange(dateUnix, weekNumber, getTypeKey(type), e.target.value)}
-                      />
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </React.Fragment>
+  {Object.keys(weeks).slice(currentStartWeek - 1, currentStartWeek + 3).map((weekNumber) => (
+    <React.Fragment key={weekNumber}>
+      {['Weight', 'Calories', 'Protein'].map((type, index) => (
+        <tr key={type} className={`week-${weekNumber}`}>
+          {index === 0 && <td rowSpan="3">Week {weekNumber} ({calculateWeekStartDate(parseInt(data.user.startDate), weekNumber)})</td>}
+          <td>{type}</td>
+          {Object.keys(weeks[weekNumber]).map((dateUnix) => (
+            <td key={dateUnix}>
+              <input
+                type="number"
+                value={
+                  (typeof updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)] !== 'undefined'
+                    ? updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)]
+                    : typeof weeks[weekNumber][dateUnix]?.[getTypeKey(type)] !== 'undefined'
+                    ? weeks[weekNumber][dateUnix]?.[getTypeKey(type)]
+                    : null) !== null ? (updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)] || weeks[weekNumber][dateUnix]?.[getTypeKey(type)] || "").toString() : ""
+                }
+                onChange={(e) => handleInputChange(dateUnix, weekNumber, getTypeKey(type), e.target.value)}
+              />
+            </td>
           ))}
-        </tbody>
+        </tr>
+      ))}
+    </React.Fragment>
+  ))}
+</tbody>
+
       </table>
 
     </div>
