@@ -149,10 +149,12 @@ input UpdateUserInput {
   }
 
   input CompletedDaysInput{
+    date: String!
     completed: Boolean
   }
 
   type CompletedDays {
+    date: String
     completed: Boolean
   }
 

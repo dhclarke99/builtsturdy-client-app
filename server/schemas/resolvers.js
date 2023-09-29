@@ -320,6 +320,35 @@ const resolvers = {
         throw new Error('Failed to update daily tracking');
       }
     },
+    updateUserCompletion: async (_, { userId, input }) => {
+      try {
+        // Find the user by ID
+        const user = await User.findById(userId);
+        
+        if (!user) {
+          throw new Error('User not found');
+        }
+
+        // Find the specific day to update in the completedDays array
+        const dayIndex = user.completedDays.findIndex(day => day.date === input.date);
+
+        if (dayIndex !== -1) {
+          // Update the completed status for the specific day
+          user.completedDays[dayIndex].completed = input.completed;
+        } else {
+          // If the day doesn't exist, add it to the array
+          user.completedDays.push(input);
+        }
+        
+        // Save the updated user
+        const updatedUser = await user.save();
+
+        return updatedUser;
+      } catch (error) {
+        console.error(error);
+        throw new Error('Failed to update completion status');
+      }
+    },
   },
 };
 
