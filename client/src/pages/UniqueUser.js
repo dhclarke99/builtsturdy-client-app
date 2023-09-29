@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
-
 import { useQuery, useMutation } from '@apollo/client';
 import { useParams, Link } from 'react-router-dom';
 import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID, FETCH_SCHEDULES } from '../utils/queries';
 import { UPDATE_USER, DELETE_USER } from '../utils/mutations';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+import '../utils/userCalendar.css';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+
+
 
 const UniqueUser = () => {
   const [activeTab, setActiveTab] = useState('view info')
   const [workoutDetails, setWorkoutDetails] = useState([]);
   const { loading: loadingSchedules, error: errorSchedules, data: dataSchedules } = useQuery(FETCH_SCHEDULES);
+  const [events, setEvents] = useState([]);
+  const [completedDays, setCompletedDays] = useState([]);
 
   const client = new ApolloClient({
     link: createHttpLink({ uri: '/graphql' }),
@@ -28,6 +35,7 @@ const UniqueUser = () => {
   const [updateUser] = useMutation(UPDATE_USER);
   const [deleteUser] = useMutation(DELETE_USER);
   const [currentStartWeek, setCurrentStartWeek] = useState(1);
+  const localizer = momentLocalizer(moment);
 
   useEffect(() => {
     console.log(dataSchedules)
@@ -60,6 +68,53 @@ const UniqueUser = () => {
       setFormData(prevState => ({ ...prevState, ...formattedUser }));
     }
   }, [dataUser]);
+
+  useEffect(() => {
+    const fetchWorkouts = async () => {
+      if (dataUser && dataUser.user && dataUser.user.schedule) {
+        const roughDate = new Date(parseInt(dataUser.user.startDate))
+        const startDate = moment(roughDate); // Make sure this is in the correct format
+        const weeks = dataUser.user.weeks; // Number of weeks
+        console.log("Start Date:", startDate);
+        console.log("Weeks:", weeks);
+        setCompletedDays(dataUser.user.completedDays)
+  
+        const workoutIds = dataUser.user.schedule.workouts.map(w => w.workoutId);
+  
+        const workouts = await Promise.all(workoutIds.map(async id => {
+          const { data } = await client.query({
+            query: FETCH_WORKOUT_BY_ID,
+            variables: { workoutId: id },
+          });
+          return data.workout;
+        }));
+  
+        const calendarEvents = [];
+  
+        for (let i = 0; i < weeks; i++) {
+          workouts.forEach((workout, index) => {
+            const workoutDate = moment(startDate).add(i, 'weeks').day(dataUser.user.schedule.workouts[index].day);
+            calendarEvents.push({
+              workoutId: workout,
+              id: index,
+              title: workout.name,
+              notes: workout.notes,
+              start: workoutDate.toDate(),
+              end: workoutDate.toDate(),
+              allDay: true,
+            });
+          });
+        }
+  
+        console.log("Calendar Events:", calendarEvents);
+        setEvents(calendarEvents);
+      }
+    };
+
+    fetchWorkouts();
+  }, [dataUser]);
+
+      
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -159,6 +214,13 @@ const UniqueUser = () => {
     if (type === 'Protein') return 'proteinIntake';
   };
 
+  const eventStyleGetter = (event) => {
+    const isCompleted = completedDays.some(day => day.date === event.start.getTime().toString() && day.completed);
+    return {
+      className: isCompleted ? 'completed-event' : '',
+    };
+  };
+
   if (loadingUser || loadingSchedules) return <p>Loading...</p>;
   if (errorUser || errorSchedules) return <p>Error: {errorUser.message}</p>;
 
@@ -179,6 +241,7 @@ const UniqueUser = () => {
         <ul>
           <button onClick={() => setActiveTab('view info')}>View Info</button>
           <button onClick={() => setActiveTab('view nutrition')}>View Nutrition</button>
+          <button onClick={() => setActiveTab('view progress')}>View Progress</button>
           <button onClick={() => setActiveTab('edit')}>Edit</button>
           <button onClick={() => setActiveTab('delete')}>Delete</button>
         </ul>
@@ -298,6 +361,21 @@ const UniqueUser = () => {
           ))}
         </tbody>
       </table>
+        </div>
+      )}
+      {activeTab === 'view progress' && (
+        <div>
+          <h2>User Progress</h2>
+          <div id="calendar-box">
+            <Calendar
+              localizer={localizer}
+              events={events}
+              startAccessor="start"
+              endAccessor="end"
+              eventPropGetter={eventStyleGetter}
+              className="user-calendar"
+            />
+          </div>
         </div>
       )}
       {activeTab === 'edit' && (

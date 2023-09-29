@@ -162,7 +162,8 @@ console.log(userData.user)
 return (
   <div className="calendar-container">
     <h1 id="user-name">{userData.user.firstname}'s Calendar</h1>
-    <ProgressBar now={completedPercentage} label={`${completedPercentage}% Completed`} />
+    <h2>Program Progress</h2>
+    <ProgressBar now={completedPercentage} label={`${completedPercentage}%`} />
       <div id="calendar-box" ref={calendarRef}>
         <Calendar
           localizer={localizer}

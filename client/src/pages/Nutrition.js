@@ -324,7 +324,7 @@ const Nutrition = () => {
       <h2>Daily Tracking</h2>
       
       <button onClick={() => setCurrentStartWeek(Math.max(1, currentStartWeek - 4))}>Previous 4 Weeks</button>
-      <button onClick={() => setCurrentStartWeek(currentStartWeek + 4)}>Next 4 Weeks</button>
+      <button onClick={() => setCurrentStartWeek( currentStartWeek + 4)}>Next 4 Weeks</button>
       <button onClick={handleSave}>Save</button>
       <Link to={`/trends`}>
         <button>View Trends</button>
