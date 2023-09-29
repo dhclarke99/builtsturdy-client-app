@@ -63,6 +63,7 @@ query findUserById($userId: String!) {
       weight
     }
     completedDays{
+      date
       completed
     }
   }
@@ -121,6 +122,10 @@ query findAllUsers {
       date
       proteinIntake
       weight
+    }
+    completedDays{
+      date
+      completed
     }
   }
 }
