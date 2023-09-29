@@ -268,3 +268,17 @@ mutation addDailyTracking($userId: ID!, $trackingData: [DailyTrackingInput!]!) {
   }
 }
 `
+
+export const UPDATE_USER_COMPLETION = gql `
+mutation updateUserCompletion($userId: ID!, $input: CompletedDaysInput!) {
+  updateUserCompletion(userId: $userId, input: $input) {
+    _id
+    firstname
+    email
+    completedDays {
+      date
+      completed
+    }
+  }
+}
+`;

@@ -42,6 +42,7 @@ query findUserById($userId: String!) {
     gender
     height
     lastname
+    role
     mainPhysiqueGoal
     trainingExperience
     username

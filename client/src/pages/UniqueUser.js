@@ -81,11 +81,12 @@ const UniqueUser = () => {
     }
   }
   const handleSubmit = async (event) => {
+    console.log(formData)
     event.preventDefault();
     try {
 
       const cleanedDailyTracking = formData.dailyTracking.map(({ __typename, ...rest }) => rest);
-      const { __typename, _id, ...cleanedFormData } = {...formData, dailyTracking: cleanedDailyTracking}; // Remove __typename
+      const { __typename, _id, completedDays, ...cleanedFormData } = {...formData, dailyTracking: cleanedDailyTracking}; // Remove __typename
   
       console.log(cleanedFormData)
       const formattedData = {
