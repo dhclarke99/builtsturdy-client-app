@@ -28,6 +28,8 @@ const UserCalendar = () => {
   const calendarRef = useRef(null);
   const [completedDays, setCompletedDays] = useState([]);
   const [updateUserCompletion] = useMutation(UPDATE_USER_COMPLETION);
+  const [isWorkoutCompleted, setIsWorkoutCompleted] = useState(false);
+
   
   
 
@@ -105,6 +107,7 @@ const UserCalendar = () => {
       const updatedCompletedDays = [...completedDays];
       updatedCompletedDays[dayToCompleteIndex] = cleanedDayToComplete;
       setCompletedDays(updatedCompletedDays);
+      setIsWorkoutCompleted(dayToComplete.completed);
     } else {
       console.log("Day not found in completedDays array");
     }
@@ -128,6 +131,9 @@ let completedPercentage;
 
   const handleEventClick = async (event) => {
     setSelectedEvent(event);
+    const selectedDateUnix = event.start.getTime().toString();
+  const dayToComplete = completedDays.find(day => day.date === selectedDateUnix);
+  setIsWorkoutCompleted(dayToComplete ? dayToComplete.completed : false);
     console.log(selectedEvent)
     const { data } = await client.query({
       query: FETCH_WORKOUT_BY_ID,
@@ -204,7 +210,10 @@ return (
           </div>
         )}
         {selectedEvent && (
-  <button onClick={markDayAsCompleted}>Mark Workout Complete</button>
+  <button onClick={markDayAsCompleted}>
+  {isWorkoutCompleted ? "Mark Workout Incomplete" : "Mark Workout Complete"}
+</button>
+
 )}
       </div>
     )}
