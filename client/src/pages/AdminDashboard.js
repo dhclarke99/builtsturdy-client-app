@@ -25,9 +25,19 @@ const AdminDashboard = () => {
     cache: new InMemoryCache(),
 });
   const [workoutDetails, setWorkoutDetails] = useState([]);
+  const [sortedSchedules, setSortedSchedules] = useState([]);
+
+  const sortWorkoutsByDay = (workouts) => {
+    const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    // Create a copy of the array before sorting
+    const workoutsCopy = [...workouts];
+    return workoutsCopy.sort((a, b) => daysOfWeek.indexOf(a.day) - daysOfWeek.indexOf(b.day));
+  };
+  
 console.log(dataSchedules)
 useEffect(() => {
   if (dataSchedules) {
+    
       const workoutIds = dataSchedules.schedules.flatMap(schedule => schedule.workouts.map(w => w.workoutId));
 
       const fetchWorkoutDetails = async () => {
@@ -42,6 +52,18 @@ useEffect(() => {
       };
 
       fetchWorkoutDetails();
+  }
+}, [dataSchedules]);
+
+useEffect(() => {
+  if (dataSchedules) {
+    const sorted = dataSchedules.schedules.map(schedule => {
+      return {
+        ...schedule,
+        workouts: sortWorkoutsByDay(schedule.workouts)
+      };
+    });
+    setSortedSchedules(sorted);
   }
 }, [dataSchedules]);
 
@@ -90,7 +112,7 @@ useEffect(() => {
   <div>
     <h2>All Schedules</h2>
     <div className="row">
-      {dataSchedules.schedules.map((schedule, index) => (
+      {sortedSchedules.map((schedule, index) => (
         <div className="col-md-6" key={schedule._id + index}>
           <div className="card mb-4">
             <div className="card-header">

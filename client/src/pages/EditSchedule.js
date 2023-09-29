@@ -26,6 +26,7 @@ const EditSchedule = () => {
 });
 
 const [workoutDetails, setWorkoutDetails] = useState([]);
+const [sortedWorkouts, setSortedWorkouts] = useState([]);
 console.log("data:", dataSchedule)
 
 useEffect(() => {
@@ -48,19 +49,32 @@ useEffect(() => {
   }, [dataSchedule]);
   
   useEffect(() => {
-    if (dataSchedule) {
-      setAllWorkouts(dataSchedule.schedule.workouts);
-    }
+    
+      if (dataSchedule && dataSchedule.schedule &&dataSchedule.schedule.workouts) {
+    console.log(dataSchedule)
+
+        const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  
+        const newSortedWorkouts = [...dataSchedule.schedule.workouts].sort((a, b) => {
+          return daysOfWeek.indexOf(a.day) - daysOfWeek.indexOf(b.day);
+        });
+  
+        setSortedWorkouts(newSortedWorkouts);
+      }
+    
   }, [dataSchedule]);
-console.log(allWorkouts)
+console.log(sortedWorkouts)
   // Initialize state variables once data is available
   useEffect(() => {
     if (dataSchedule) {
       setName(dataSchedule.schedule.name || '');
       setNotes(dataSchedule.schedule.notes || '');
       setAllWorkoutIds(dataSchedule.schedule.workouts.map(e => e._id));
+      setAllWorkouts(dataSchedule.schedule.workouts); // <-- Add this line
     }
   }, [dataSchedule]);
+
+  
 
   if (loading || loadingWorkouts) return <p>Loading...</p>;
   if (error || errorWorkouts) return <p>Error: {error?.message || errorWorkouts?.message}</p>;
@@ -68,87 +82,63 @@ console.log(allWorkouts)
 
   const handleUpdateWorkout = async () => {
     try {
-      // Create a new workout object with the selected workout and day
       const newWorkout = {
         workoutId: selectedWorkout,
-        day: selectedWorkoutDay // Assume you have a state variable or some way to select the day
+        day: selectedWorkoutDay
       };
-      console.log(newWorkout)
   
       // Add the new workout to the existing list of workouts
+      let updatedWorkouts = [...allWorkouts];
       if (newWorkout.workoutId !== "") {
-        const updatedWorkouts = [...allWorkouts, newWorkout];
-        const cleanedWorkouts = updatedWorkouts.map(({ workoutId, day }) => ({ workoutId, day }));
+        updatedWorkouts.push(newWorkout);
+      }
+  
+      const cleanedWorkouts = updatedWorkouts.map(({ workoutId, day }) => ({ workoutId, day }));
+  
       // Update the local state
       setAllWorkouts(updatedWorkouts);
   
-      // Prepare the input for the GraphQL mutation
       const input = {
         name,
         notes,
         workouts: cleanedWorkouts
       };
   
-      // Execute the GraphQL mutation
       await updateSchedule({ variables: { scheduleId, input } });
-  
-      // Optionally, refresh the component to show the newly assigned exercise
       window.location.reload();
-    } else {
-        const updatedWorkouts =  [...allWorkouts]
-        const cleanedWorkouts = updatedWorkouts.map(({ workoutId, day }) => ({ workoutId, day }));
-      // Update the local state
-      setAllWorkouts(updatedWorkouts);
-  
-      // Prepare the input for the GraphQL mutation
-      const input = {
-        name,
-        notes,
-        workouts: cleanedWorkouts
-      };
-  
-      // Execute the GraphQL mutation
-      await updateSchedule({ variables: { scheduleId, input } });
-  
-      // Optionally, refresh the component to show the newly assigned exercise
-      window.location.reload();
-    }
-      
-      
     } catch (err) {
       console.error(err);
     }
   };
+  
+  const handleRemoveWorkout = async (workoutIdToRemove) => {
+    try {
+      const updatedWorkouts = allWorkouts.filter(workout => workout.workoutId !== workoutIdToRemove);
+      const cleanedWorkouts = updatedWorkouts.map(({ workoutId, day }) => ({ workoutId, day }));
+  
+      // Update the local state
+      setAllWorkouts(updatedWorkouts);
+  
+      const input = {
+        name,
+        notes,
+        workouts: cleanedWorkouts
+      };
+  
+      await updateSchedule({ variables: { scheduleId, input } });
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  
+  
   
 
   const handleEditWorkout = async (workoutIdToEdit) => {
     console.log(workoutIdToEdit)
   }
 
-  const handleRemoveWorkout = async (workoutIdToRemove) => {
-    try {
-      // Filter out the workout with the ID to remove
-      const updatedWorkouts = allWorkouts.filter(workout => workout.workoutId !== workoutIdToRemove);
-  
-      // Create a cleaned-up array without the __typename field
-      const cleanedWorkouts = updatedWorkouts.map(({ workoutId, day }) => ({ workoutId, day }));
-  
-      setAllWorkouts(updatedWorkouts); // Update the local state
-  
-      const input = {
-        name,
-        notes,
-        workouts: cleanedWorkouts
-      };
-  
-      await updateSchedule({ variables: { scheduleId, input } });
-  
-      // Optionally, refresh the component to show the updated list of exercises
-      window.location.reload();
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   
 
@@ -171,7 +161,7 @@ console.log(dataSchedule)
       <label>
         Current Workouts:
         <ul>
-        {dataSchedule.schedule.workouts.map((workout, index) => {
+        {sortedWorkouts.map((workout, index) => {
                   const relevantWorkoutDetail = workoutDetails.find(
                     (detail) => detail.workout._id === workout.workoutId
                   );
