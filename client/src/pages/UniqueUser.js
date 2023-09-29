@@ -166,15 +166,17 @@ const UniqueUser = () => {
         estimatedBodyFat: parseFloat(cleanedFormData.estimatedBodyFat),
         age: parseInt(cleanedFormData.age, 10),
         weeks: parseFloat(cleanedFormData.weeks),
-        startDate: stringToUnix(formData.startDate)
+        startDate: stringToUnix(formData.startDate).toString(),
       };
+      console.log(formData.startDate)
+      console.log(stringToUnix(formData.startDate).toString())
       console.log(formattedData)
-      // await updateUser({
-      //   variables: { userId: id, input: formattedData },
-      // });
+      await updateUser({
+        variables: { userId: id, input: formattedData },
+      });
 
       console.log("data User: ", dataUser)
-      // window.location.reload()
+      window.location.reload()
 
     } catch (err) {
       console.error('Failed to update user:', err);
@@ -250,7 +252,9 @@ const UniqueUser = () => {
   };
 
   const stringToUnix = (str) => {
+    
     const [month, day, year] = str.split('/');
+    console.log(new Date(`${month}/${day}/${year}`).getTime())
     return new Date(`${month}/${day}/${year}`).getTime();
   };
  
