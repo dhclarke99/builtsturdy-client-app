@@ -62,6 +62,9 @@ query findUserById($userId: String!) {
       proteinIntake
       weight
     }
+    completedDays{
+      completed
+    }
   }
 }
 `;

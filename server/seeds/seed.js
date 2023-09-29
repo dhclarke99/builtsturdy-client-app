@@ -5,7 +5,7 @@ const userData = require('./userData.json');
 const seedDatabase = async () => {
   // Check if admin user already exists
   const adminUser = await User.findOne({ role: 'Admin' });
-  await User.deleteMany({});
+  
   if (!adminUser) {
     // If no admin user exists, seed the admin user
     await User.create(userData[0]); // Assuming the admin data is the first object in userData.json

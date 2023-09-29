@@ -21,6 +21,7 @@ type User {
   startDate: String
   weeks: Int
   dailyTracking: [DailyTracking]
+  completedDays: [CompletedDays]
 }
 
 input CreateUserInput {
@@ -147,6 +148,14 @@ input UpdateUserInput {
     proteinIntake: Float
   }
 
+  input CompletedDaysInput{
+    completed: Boolean
+  }
+
+  type CompletedDays {
+    completed: Boolean
+  }
+
   type Query {
     users: [User]
     user(id: String!): User
@@ -162,6 +171,7 @@ input UpdateUserInput {
   type Mutation {
     createUser(input: CreateUserInput!): Auth
     updateUser(userId: ID!, input: UpdateUserInput!): User
+    updateUserCompletion(userId: ID!, input: CompletedDaysInput): User
     deleteUser(userId: ID!): User
     login(email: String!, password: String!): Auth
     logout: Boolean

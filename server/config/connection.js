@@ -12,9 +12,6 @@ mongoose.connect(
     useNewUrlParser: true,
     useUnifiedTopology: true,
   },
-  console.log("env file: ", process.env),
-  console.log("password is ", encodedPassword),
-  
 );
 
 module.exports = mongoose.connection;
