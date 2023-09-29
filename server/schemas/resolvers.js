@@ -320,35 +320,39 @@ const resolvers = {
         throw new Error('Failed to update daily tracking');
       }
     },
-    updateUserCompletion: async (_, { userId, input }) => {
+    updateUserCompletion: async (parent, { userId, input }, context) => {
       try {
-        // Find the user by ID
         const user = await User.findById(userId);
-        
+    
         if (!user) {
           throw new Error('User not found');
         }
+    
+        // Convert Unix timestamp to ISO string
+    const inputDateIsoString = new Date(parseInt(input.date)).toISOString();
 
-        // Find the specific day to update in the completedDays array
-        const dayIndex = user.completedDays.findIndex(day => day.date === input.date);
-
-        if (dayIndex !== -1) {
-          // Update the completed status for the specific day
-          user.completedDays[dayIndex].completed = input.completed;
+    // Find the index of the object that has the specified date
+    const index = user.completedDays.findIndex(day => day.date.toISOString() === inputDateIsoString);
+        console.log("input date: ", input.date)
+        console.log("User Completed Days: ", user.completedDays)
+        console.log("index: ", index)
+        if (index === -1) {
+          // If the object doesn't exist, throw an error
+          throw new Error('Specified date not found in completedDays');
         } else {
-          // If the day doesn't exist, add it to the array
-          user.completedDays.push(input);
+          // If the object exists, update its 'completed' field
+          user.completedDays[index].completed = input.completed;
         }
-        
-        // Save the updated user
-        const updatedUser = await user.save();
-
-        return updatedUser;
+    
+        await user.save();
+    
+        return user;
       } catch (error) {
         console.error(error);
-        throw new Error('Failed to update completion status');
+        throw new Error('Something went wrong');
       }
     },
+    
   },
 };
 
