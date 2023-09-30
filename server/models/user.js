@@ -86,10 +86,10 @@ const userSchema = new Schema({
           workout: [
             {
               exerciseName: String,
-              sets: Number,
-              targetReps: String, // Rep range set by admin
+              sets: [{
               actualReps: Number,  // Actual reps set by user
               weight: Number
+            }]
             }
           ]
         },

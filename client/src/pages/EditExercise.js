@@ -12,11 +12,8 @@ const EditExercise = () => {
  
 
   const [name, setName] = useState('');
-  const [sets, setSets] = useState('');
-  const [reps, setReps] = useState('');
   const [notes, setNotes] = useState('');
   const [adminNotes, setAdminNotes] = useState('');
-  const [weight, setWeight] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
 
   const [updateExercise] = useMutation(UPDATE_EXERCISE);
@@ -25,11 +22,8 @@ const EditExercise = () => {
   useEffect(() => {
     if (data) {
       setName(data.exercise.name || '');
-      setSets(data.exercise.sets || '');
-      setReps(data.exercise.reps || '');
       setNotes(data.exercise.notes || '');
       setAdminNotes(data.exercise.adminNotes || '');
-      setWeight(data.exercise.weight || '');  // Use empty string if weight is null
       setVideoUrl(data.exercise.videoUrl || '');
     }
   }, [data]);
@@ -61,9 +55,7 @@ console.log(formData)
 
       const formattedData = {
           ...cleanedFormData,
-          weight: parseFloat(cleanedFormData.weight),
-          reps: parseFloat(cleanedFormData.reps),
-          sets: parseFloat(cleanedFormData.sets)
+         
         };
         
     await updateExercise({
@@ -87,21 +79,6 @@ console.log(formData)
         Name:
         <input type="text" name="name" value={formData.name || ''} onChange={handleChange} />
         
-      </label>
-      <label>
-        Sets:
-        <input type="text" name="sets" value={formData.sets || ''} onChange={handleChange} />
-       
-      </label>
-      <label>
-        Reps:
-        <input type="text" name="reps" value={formData.reps || ''} onChange={handleChange} />
-       
-      </label>
-      <label>
-        Weight:
-        <input type="text" name="weight" value={formData.weight || ''} onChange={handleChange} />
-       
       </label>
       <label>
         Notes:

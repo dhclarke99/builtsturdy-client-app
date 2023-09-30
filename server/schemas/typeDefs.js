@@ -78,9 +78,6 @@ input UpdateUserInput {
   type Exercise {
     _id: ID
     name: String
-    sets: Int
-    reps: Int
-    weight: Float
     notes: String
     adminNotes: String
     videoUrl: String
@@ -105,9 +102,6 @@ input UpdateUserInput {
 
   input ExerciseInput {
     name: String!
-    sets: Int!
-    reps: Int!
-    weight: Float
     notes: String
     adminNotes: String
     videoUrl: String
@@ -115,9 +109,6 @@ input UpdateUserInput {
 
   input updateExerciseInput {
     name: String
-    sets: Int
-    reps: Int
-    weight: Float
     notes: String
     adminNotes: String
     videoUrl: String
@@ -177,7 +168,7 @@ input UpdateUserInput {
     deleteUser(userId: ID!): User
     login(email: String!, password: String!): Auth
     logout: Boolean
-    createExercise(name: String!, sets: Int, reps: Int, weight: Float, notes: String, videoURL: String): Exercise
+    createExercise(name: String!, notes: String, adminNotes: String, videoURL: String): Exercise
     updateExercise(exerciseId: ID!, input: updateExerciseInput!): Exercise
     createWorkout(name: String!): Workout
     deleteExercise(exerciseId: ID!): Exercise
@@ -189,6 +180,7 @@ input UpdateUserInput {
     updateWorkout(workoutId: ID!, name: String, notes: String, exerciseIds: [ID]): Workout
     updateSchedule(scheduleId: ID!, input: UpdateScheduleInput!): Schedule
     addDailyTracking(userId: ID!, trackingData: [DailyTrackingInput!]!): User
+    updateWorkoutTracking(userId: ID!, date: String!, exerciseName: String!, sets: Int, targetReps: String, actualReps: Int, weight: Int): User
     }
     
   

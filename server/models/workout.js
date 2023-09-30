@@ -1,9 +1,17 @@
 const { Schema, model } = require('mongoose');
-const Exercise = require('./exercise');
+
+const exerciseSchema = new Schema({
+  exercise: {
+    type: Schema.Types.ObjectId,
+    ref: 'Exercise'
+  },
+  sets: Number,
+  targetReps: String
+});
 
 const workoutSchema = new Schema({
   name: String,
-  exercises: [{ type: Schema.Types.ObjectId, ref: 'Exercise' }],
+  exercises: [exerciseSchema],
   notes: String,
   adminNotes: String
 });
