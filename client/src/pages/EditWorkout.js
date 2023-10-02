@@ -59,11 +59,23 @@ const EditWorkout = () => {
 
   const handleRemoveExercise = async (exerciseIdToRemove) => {
     const updatedExercises = allExercises.filter(ex => ex.exercise._id !== exerciseIdToRemove);
-    console.log(updatedExercises)
-    // setAllExercises(updatedExercises);
-    // await updateWorkout({ variables: { workoutId, input: { exercises: updatedExercises } } });
-    // window.location.reload();
+  
+    // Prepare the exercises array for the mutation
+    const preparedExercises = updatedExercises.map(ex => ({
+      exercise: ex.exercise._id, // Only include the ID
+      sets: ex.sets,
+      targetReps: ex.targetReps,
+    }));
+  
+    try {
+      await updateWorkout({ variables: { workoutId, input: { exercises: preparedExercises } } });
+      setAllExercises(updatedExercises); // Update the state after successful mutation
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+    }
   };
+  
 
   const moveExerciseUp = async (index) => {
     if (index > 0) {
