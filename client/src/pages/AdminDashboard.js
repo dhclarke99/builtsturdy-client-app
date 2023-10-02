@@ -91,11 +91,8 @@ useEffect(() => {
       console.error(err);
     }
   };
-  if (dataWorkouts && dataWorkouts.workouts) {
-console.log(dataWorkouts)
-console.log(dataWorkouts.workouts[0].exercises[0].exercise.name)
-  }
-
+  
+console.log(dataSchedules)
   if (loadingWorkouts || loadingUsers || loadingExercises || loadingSchedules) return <p>Loading...</p>;
   if (errorWorkouts || errorUsers || errorExercises || errorSchedules) return <p>Error: {errorWorkouts?.message || errorUsers?.message || errorExercises?.message || errorSchedules?.message}</p>;
 
@@ -128,7 +125,7 @@ console.log(dataWorkouts.workouts[0].exercises[0].exercise.name)
               <ul className="list-group list-group-flush">
                 {schedule.workouts.map((workout, index) => {
                   const relevantWorkoutDetail = workoutDetails.find(
-                    (detail) => detail.workout._id === workout.workoutId
+                    (detail) => detail && detail.workout && detail.workout._id === workout.workoutId
                   );
                   return (
                     <li className="list-group-item" key={workout.workoutId + index}>
@@ -141,7 +138,7 @@ console.log(dataWorkouts.workouts[0].exercises[0].exercise.name)
                             Exercises:
                             <ul className="list-group list-group-flush mt-2">
                               {relevantWorkoutDetail.workout.exercises.map((exercise, index) => (
-                                <li className="list-group-item" key={index}>Exercise: {exercise.name}</li>
+                                <li className="list-group-item" key={index}>Exercise: {exercise.exercise.name}</li>
                               ))}
                             </ul>
                           </li>

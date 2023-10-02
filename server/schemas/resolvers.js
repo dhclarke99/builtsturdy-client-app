@@ -24,8 +24,13 @@ const resolvers = {
       return await Workout.find().populate("exercises.exercise");
   
     },
-    workout: async (_parent, { workoutId }) => {
-      return await Workout.findOne({ _id: workoutId }).populate('exercises');
+    workout: async (_parent, { workoutId }, context) => {
+      // console.log("workouts resolver starting")
+      // console.log("context user role: ", context.user.role)
+      // if (context.user.role !== 'Admin') {
+      //   throw new AuthenticationError('You are not authorized to access this resource.');
+      // }
+      return await Workout.findOne({ _id: workoutId }).populate('exercises.exercise');
     },
     exercises: async () => {
       return await Exercise.find();

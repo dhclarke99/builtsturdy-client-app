@@ -66,7 +66,7 @@ query findUserById($userId: String!) {
 `;
 
 export const FETCH_ALL_WORKOUTS = gql`
-query Query {
+query fetchAllWorkouts {
   workouts {
     _id
     name
