@@ -105,7 +105,7 @@ const UniqueUser = () => {
   }, [dataUser]);
 
   useEffect(() => {
-    if (dataUser && dataUser.user && dataUser.user.schedule.workouts) {
+    if (dataUser && dataUser.user && dataUser.user.schedule && dataUser.user.schedule.workouts) {
       console.log("dataUser", dataUser.user.schedule.workouts);
 
       const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
