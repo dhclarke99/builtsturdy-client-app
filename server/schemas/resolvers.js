@@ -16,6 +16,8 @@ const resolvers = {
       return await User.findOne({ _id:  id }).populate('schedule');
     },
     workouts: async (_parent, _args, context) => {
+      console.log("workouts resolver starting")
+      console.log("context user role: ", context.user.role)
       if (context.user.role !== 'Admin') {
         throw new AuthenticationError('You are not authorized to access this resource.');
       }

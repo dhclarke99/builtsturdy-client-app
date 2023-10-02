@@ -7,9 +7,6 @@ query findAllExercises {
     name
     notes
     adminNotes
-    sets
-    reps
-    weight
     videoUrl
   }
 }
@@ -22,9 +19,6 @@ query findExerciseById($exerciseId: ID!) {
     name
     notes
     adminNotes
-    sets
-    reps
-    weight
     videoUrl
   }
 }
@@ -82,9 +76,6 @@ query Query {
     name
     notes
     adminNotes
-    sets
-    reps
-    weight
     videoUrl
     }
   }
@@ -143,9 +134,6 @@ query findWorkoutById($workoutId: ID!) {
       name
       notes
       adminNotes
-      sets
-      reps
-      weight
       videoUrl
     }
     

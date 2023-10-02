@@ -106,11 +106,9 @@ mutation updateUser($userId: ID!, $input: UpdateUserInput!) {
 
 
 export const CREATE_EXERCISE = gql`
-mutation Mutation($name: String!, $sets: Int!, $reps: Int!) {
-  createExercise(name: $name, sets: $sets, reps: $reps) {
+mutation Mutation($name: String!) {
+  createExercise(name: $name) {
     name
-    sets
-    reps
   }
 }
 `;
@@ -121,9 +119,6 @@ mutation updateExercise($exerciseId: ID!, $input: updateExerciseInput!) {
     _id
     name
     notes
-    reps
-    sets
-    weight
     videoUrl
   }
 }
@@ -145,9 +140,6 @@ mutation updateWorkout($workoutId: ID!, $name: String, $notes: String, $exercise
       _id
       name
       notes
-      reps
-      sets
-      weight
     }
     name
     notes
@@ -171,9 +163,6 @@ mutation updateWorkout($workoutId: ID!, $name: String, $notes: String, $exercise
       _id
       name
       notes
-      reps
-      sets
-      weight
     }
     name
     notes
@@ -234,9 +223,6 @@ mutation deleteExercise($exerciseId: ID!) {
     _id
     name
     notes
-    reps
-    sets
-    weight
   }
 }
 `;

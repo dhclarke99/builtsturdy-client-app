@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { setContext } from '@apollo/client/link/context';
-import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from '@apollo/client';
+import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink, ApolloLink } from '@apollo/client';
 import Header from './components/header';  // This will automatically import from Header/index.js
 import Exercise from './pages/Exercise';
 import Login from './pages/Login';
@@ -27,16 +27,29 @@ const httpLink = createHttpLink({
 });
 
 // Construct request middleware that will attach the JWT token to every request as an `authorization` header
-const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('id_token');
-  // return the headers to the context so httpLink can read them
-  return {
+const authLink = new ApolloLink((operation, forward) => {
+  // Get the authentication token from local storage if it exists
+  const token = localStorage.getItem('token');
+  const refreshtoken = localStorage.getItem('refreshToken');
+  const authorizationToken = localStorage.getItem('id_token'); // Assuming 'id_token' is the key where you store the authorization token
+
+  console.log("Token from Local Storage:", token);
+  console.log("Refresh Token from Local Storage:", refreshtoken);
+  console.log("Authorization Token from Local Storage:", authorizationToken);
+
+  // Use the setContext method to set the HTTP headers.
+  operation.setContext({
     headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : '',
-    },
-  };
+      'x-token': token ? token : "",
+      'x-refresh-token': refreshtoken ? refreshtoken : "",
+      'authorization': authorizationToken ? `Bearer ${authorizationToken}` : ""
+    }
+  });
+
+  // Log the entire operation context to see what headers are being sent
+  console.log("Operation Context after setContext:", operation.getContext());
+
+  return forward(operation);
 });
 
 const client = new ApolloClient({

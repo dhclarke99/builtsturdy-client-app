@@ -173,7 +173,7 @@ useEffect(() => {
                 <ul>
                   {workout.exercises ? workout.exercises.map((exercise) => (
                     <li key={exercise._id}>
-                      {exercise.name}: Sets - {exercise.sets}, reps - {exercise.reps}
+                      {exercise.name}
                     </li>
                   )) : <li>No Exercises assigned</li>}
                 </ul>

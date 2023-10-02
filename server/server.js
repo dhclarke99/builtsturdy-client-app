@@ -5,7 +5,7 @@ const { authMiddleware } = require('./utils/auth');
 const cors = require('cors');
 require('dotenv').config();
 
-const seedDatabase = require('./seeds/seed'); 
+// const seedDatabase = require('./seeds/seed'); 
 
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
@@ -42,7 +42,7 @@ const startApolloServer = async (typeDefs, resolvers) => {
   db.once('open', () => {
     app.listen(PORT, () => {
       console.log('Successfully connected to the database');
-      seedDatabase();
+      // seedDatabase();
       console.log(`API server running on port ${PORT}!`);
       console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
      
