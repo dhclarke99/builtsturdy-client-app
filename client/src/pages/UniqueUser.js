@@ -106,7 +106,7 @@ const UniqueUser = () => {
 
   useEffect(() => {
     if (dataUser && dataUser.user && dataUser.user.schedule.workouts) {
-      console.log("dataUser", dataUser.user.schedule);
+      console.log("dataUser", dataUser.user.schedule.workouts);
 
       const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
@@ -314,7 +314,7 @@ const UniqueUser = () => {
                                     Exercises:
                                     <ul>
                                       {relevantWorkoutDetail.workout.exercises.map((exercise, index) => (
-                                        <li key={index}>{index +1}. {exercise.name}</li>
+                                        <li key={index}>{index +1}. {exercise.exercise.name}</li>
                                       ))}
                                     </ul>
                                   </li>
