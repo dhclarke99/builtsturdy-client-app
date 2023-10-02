@@ -17,71 +17,76 @@ const EditWorkout = () => {
   const [notes, setNotes] = useState('');
   const [selectedExercise, setSelectedExercise] = useState('');
   const [updateWorkout] = useMutation(UPDATE_WORKOUT);
-  const [allExerciseIds, setAllExerciseIds] = useState([]);
+  const [allExercises, setAllExercises] = useState([]);
 
   // Initialize state variables once data is available
   useEffect(() => {
     if (data) {
       setName(data.workout.name);
       setNotes(data.workout.notes);
-      setAllExerciseIds(data.workout.exercises.map(e => e._id));
+      setAllExercises(data.workout.exercises); // Updated to hold more details
     }
   }, [data]);
+  console.log(allExercises)
+
+  console.log(data)
 
   if (loading || loadingExercises) return <p>Loading...</p>;
   if (error || errorExercises) return <p>Error: {error?.message || errorExercises?.message}</p>;
 
   const handleUpdateWorkout = async () => {
     try {
+      // Prepare the exercises array for the mutation
+      const preparedExercises = allExercises.map(ex => ({
+        exercise: ex.exercise._id, // Only include the ID
+        sets: ex.sets,
+        targetReps: ex.targetReps,
+      }));
+  
       if (selectedExercise !== "") {
-        const updatedExerciseIds = [...allExerciseIds, selectedExercise];
-        setAllExerciseIds(updatedExerciseIds); // Update the local state
-        await updateWorkout({ variables: { workoutId, exerciseIds: updatedExerciseIds, name: name, notes: notes } });
-        // Optionally, refresh the component to show the newly assigned exercise
+        const updatedExercises = [...preparedExercises, { exercise: selectedExercise, sets: 3, targetReps: '8-10' }];
+        await updateWorkout({ variables: { workoutId, input: { name, notes, exercises: updatedExercises } } });
         window.location.reload();
       } else {
-        const updatedExerciseIds = [...allExerciseIds];
-        setAllExerciseIds(updatedExerciseIds); // Update the local state
-        await updateWorkout({ variables: { workoutId, exerciseIds: updatedExerciseIds, name: name, notes: notes } });
-        // Optionally, refresh the component to show the newly assigned exercise
+        await updateWorkout({ variables: { workoutId, input: { name, notes, exercises: preparedExercises } } });
         window.location.reload();
       }
     } catch (err) {
       console.error(err);
     }
-
   };
+  
 
   const handleRemoveExercise = async (exerciseIdToRemove) => {
-    try {
-      const updatedExerciseIds = allExerciseIds.filter(id => id !== exerciseIdToRemove);
-      setAllExerciseIds(updatedExerciseIds); // Update the local state
-      await updateWorkout({ variables: { workoutId, exerciseIds: updatedExerciseIds } });
-      // Optionally, refresh the component to show the updated list of exercises
-      window.location.reload()
-    } catch (err) {
-      console.error(err);
-    }
+    const updatedExercises = allExercises.filter(ex => ex.exercise._id !== exerciseIdToRemove);
+    console.log(updatedExercises)
+    // setAllExercises(updatedExercises);
+    // await updateWorkout({ variables: { workoutId, input: { exercises: updatedExercises } } });
+    // window.location.reload();
   };
-
 
   const moveExerciseUp = async (index) => {
     if (index > 0) {
-      const newExerciseIds = swapArrayElements([...allExerciseIds], index, index - 1);
-      setAllExerciseIds(newExerciseIds);
-      await updateWorkout({ variables: { workoutId, exerciseIds: newExerciseIds } });
+      const newExercises = swapArrayElements([...allExercises], index, index - 1);
+      setAllExercises(newExercises);
+      await updateWorkout({ variables: { workoutId, input: { exercises: newExercises } } });
       window.location.reload();
     }
   };
 
+
   const moveExerciseDown = async (index) => {
-    if (index < allExerciseIds.length - 1) {
-      const newExerciseIds = swapArrayElements([...allExerciseIds], index, index + 1);
-      setAllExerciseIds(newExerciseIds);
-      await updateWorkout({ variables: { workoutId, exerciseIds: newExerciseIds } });
+    if (index < allExercises.length - 1) {
+      const newExercises = swapArrayElements([...allExercises], index, index + 1);
+      setAllExercises(newExercises);
+      await updateWorkout({ variables: { workoutId, input: { exercises: newExercises } } });
       window.location.reload();
     }
   };
+
+
+
+
 
   return (
     <div>
@@ -101,9 +106,9 @@ const EditWorkout = () => {
         Current Exercises:
         <ul>
           {data.workout.exercises.map((exercise, index) => (
-            <li key={exercise._id}>
-              {exercise.name}
-              <button onClick={() => handleRemoveExercise(exercise._id)}>Remove</button>
+            <li key={exercise.exercise._id}>
+              {exercise.exercise.name}
+              <button onClick={() => handleRemoveExercise(exercise.exercise._id)}>Remove</button>
               <button onClick={() => moveExerciseUp(index)}>Move Up</button>
               <button onClick={() => moveExerciseDown(index)}>Move Down</button>
             </li>

@@ -133,16 +133,22 @@ mutation createWorkout($name: String!) {
 `;
 
 export const UPDATE_WORKOUT = gql `
-mutation updateWorkout($workoutId: ID!, $name: String, $notes: String, $exerciseIds: [ID]) {
-  updateWorkout(workoutId: $workoutId, name: $name, notes: $notes, exerciseIds: $exerciseIds) {
+mutation updateWorkoutDetails($workoutId: ID!, $input: UpdateWorkoutDetailsInput!) {
+  updateWorkout(workoutId: $workoutId, input: $input) {
     _id
-    exercises {
-      _id
-      name
-      notes
-    }
     name
     notes
+    exercises {
+      exercise {
+        _id
+        adminNotes
+        name
+        notes
+        videoUrl
+      }
+      sets
+      targetReps
+    }
   }
 }
 `;

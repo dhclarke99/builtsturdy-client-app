@@ -83,8 +83,8 @@ input UpdateUserInput {
 
   input ExerciseInWorkoutInput {
     exercise: ID!
-    sets: Int!
-    targetReps: String!
+    sets: Int
+    targetReps: String
   }
 
   type Exercise {
