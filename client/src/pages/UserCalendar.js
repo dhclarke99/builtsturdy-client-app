@@ -196,16 +196,16 @@ return (
             <ol>
               {selectedWorkout.exercises.map((exercise, index) => (
                 <div key={exercise._id} className="exercise-item">
-                  <h2 className="exercise-name">{index + 1}. {exercise.name}</h2>
+                  <h2 className="exercise-name">{index + 1}. {exercise.exercise.name}</h2>
                   <p className="exercise-info">Sets: {exercise.sets}, Reps: {exercise.reps}</p>
-                  <p className="exercise-notes">Notes: {exercise.notes}</p>
+                  <p className="exercise-notes">Notes: {exercise.exercise.notes}</p>
                   <div className="exercise-video-container">
                     <img 
                     src={placeholderImage} 
                     width="250"
                     alt="Walkthrough Video" 
                     className="exercise-video-placeholder"
-                    onClick={() => handleImageClick(exercise.videoUrl)}
+                    onClick={() => handleImageClick(exercise.exercise.videoUrl)}
                   />
                   </div>
               
