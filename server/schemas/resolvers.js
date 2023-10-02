@@ -21,7 +21,7 @@ const resolvers = {
       if (context.user.role !== 'Admin') {
         throw new AuthenticationError('You are not authorized to access this resource.');
       }
-      return await Workout.find().populate("exercises");
+      return await Workout.find().populate("exercises.exercise");
   
     },
     workout: async (_parent, { workoutId }) => {
@@ -196,20 +196,22 @@ const resolvers = {
         throw new Error("Failed to remove schedule");
       }
     },
-    updateWorkout: async (_, { workoutId, name, notes, exerciseIds }) => {
+    updateWorkout: async (_, { workoutId, input }) => {
+      const { name, notes, adminNotes, exercises } = input;
       const updateFields = {};
-      if (name !== null && name !== undefined) {
-        updateFields.name = name;
-      }
-      if (notes !== null && notes !== undefined) {
-        updateFields.notes = notes;
-      }
-      if (exerciseIds !== null && exerciseIds !== undefined) {
-        updateFields.exercises = exerciseIds;
-      }
-
-      return await Workout.findByIdAndUpdate(workoutId, updateFields, { new: true }).populate('exercises');
+    
+      if (name) updateFields.name = name;
+      if (notes) updateFields.notes = notes;
+      if (adminNotes) updateFields.adminNotes = adminNotes;
+      if (exercises) updateFields.exercises = exercises.map(ex => ({
+        exercise: ex.exercise,
+        sets: ex.sets,
+        targetReps: ex.targetReps
+      }));
+    
+      return await Workout.findByIdAndUpdate(workoutId, updateFields, { new: true }).populate('exercises.exercise');
     },
+    
     updateSchedule: async (_, { scheduleId, input }) => {
       // Find the schedule by ID and update it
       const updatedSchedule = await Schedule.findByIdAndUpdate(

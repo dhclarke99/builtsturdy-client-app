@@ -72,11 +72,15 @@ query Query {
     name
     notes
     exercises {
-      _id
-    name
-    notes
-    adminNotes
-    videoUrl
+      exercise {
+        _id
+        name
+        notes
+        adminNotes
+        videoUrl
+      }
+      sets
+      targetReps
     }
   }
 }
@@ -130,11 +134,14 @@ query findWorkoutById($workoutId: ID!) {
     name
     notes
     exercises {
-      _id
+      exercise {
+        _id
       name
       notes
       adminNotes
       videoUrl
+      }
+      
     }
     
   }

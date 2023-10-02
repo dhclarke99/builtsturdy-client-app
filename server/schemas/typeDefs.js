@@ -70,9 +70,21 @@ input UpdateUserInput {
   type Workout {
     _id: ID
     name: String
-    exercises: [Exercise]
+    exercises: [ExerciseInWorkout]
     notes: String
     
+  }
+
+  type ExerciseInWorkout {
+    exercise: Exercise
+    sets: Int
+    targetReps: String
+  }
+
+  input ExerciseInWorkoutInput {
+    exercise: ID!
+    sets: Int!
+    targetReps: String!
   }
 
   type Exercise {
@@ -112,6 +124,13 @@ input UpdateUserInput {
     notes: String
     adminNotes: String
     videoUrl: String
+  }
+
+  input UpdateWorkoutDetailsInput {
+    name: String
+    notes: String
+    adminNotes: String
+    exercises: [ExerciseInWorkoutInput]
   }
 
   input UpdateWorkoutInput {
@@ -177,7 +196,7 @@ input UpdateUserInput {
     createSchedule(name: String!): Schedule
     addWorkoutToSchedule(scheduleId: ID!, workoutId: ID!, day: String!): Schedule
     removeWorkoutFromSchedule(scheduleId: ID!, workoutId: ID!): Schedule
-    updateWorkout(workoutId: ID!, name: String, notes: String, exerciseIds: [ID]): Workout
+    updateWorkout(workoutId: ID!, input: UpdateWorkoutDetailsInput!): Workout
     updateSchedule(scheduleId: ID!, input: UpdateScheduleInput!): Schedule
     addDailyTracking(userId: ID!, trackingData: [DailyTrackingInput!]!): User
     updateWorkoutTracking(userId: ID!, date: String!, exerciseName: String!, sets: Int, targetReps: String, actualReps: Int, weight: Int): User

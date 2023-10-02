@@ -91,6 +91,10 @@ useEffect(() => {
       console.error(err);
     }
   };
+  if (dataWorkouts && dataWorkouts.workouts) {
+console.log(dataWorkouts)
+console.log(dataWorkouts.workouts[0].exercises[0].exercise.name)
+  }
 
   if (loadingWorkouts || loadingUsers || loadingExercises || loadingSchedules) return <p>Loading...</p>;
   if (errorWorkouts || errorUsers || errorExercises || errorSchedules) return <p>Error: {errorWorkouts?.message || errorUsers?.message || errorExercises?.message || errorSchedules?.message}</p>;
@@ -172,8 +176,8 @@ useEffect(() => {
                 <button onClick={() => window.location.href = `/admin/edit-workout/${workout._id}`}>Edit</button>
                 <ul>
                   {workout.exercises ? workout.exercises.map((exercise) => (
-                    <li key={exercise._id}>
-                      {exercise.name}
+                    <li key={exercise.exercise._id}>
+                      {exercise.exercise.name}
                     </li>
                   )) : <li>No Exercises assigned</li>}
                 </ul>
