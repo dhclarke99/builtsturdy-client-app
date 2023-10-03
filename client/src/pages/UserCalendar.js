@@ -38,7 +38,11 @@ const UserCalendar = () => {
   const handleTrackClick = (exercise) => {
     console.log("Track button clicked"); // Add this line
     setSelectedExercise(exercise);
-    setShowForm(true);
+    if (showForm === false) {
+      setShowForm(true);
+    } else {
+      setShowForm(false)
+    }
 
   };
 
@@ -168,6 +172,7 @@ if (completedDays.length > 0) {
   
 
   const handleEventClick = async (event) => {
+    setShowForm(false)
     setSelectedEvent(event);
     const selectedDateUnix = event.start.getTime().toString();
   const dayToComplete = completedDays.find(day => day.date === selectedDateUnix);
