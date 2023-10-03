@@ -172,6 +172,7 @@ if (completedDays.length > 0) {
   
 
   const handleEventClick = async (event) => {
+    await setCurrentVideoUrl(null);
     setShowForm(false)
     setSelectedEvent(event);
     const selectedDateUnix = event.start.getTime().toString();
