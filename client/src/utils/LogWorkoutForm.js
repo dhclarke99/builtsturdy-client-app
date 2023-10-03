@@ -9,28 +9,38 @@ const LogWorkoutForm = (props) => {
   const exerciseName = props.exercise.exercise.name
   const date = props.date.start
   const setsArray = Array.from({ length: props.exercise.sets }, (_, i) => i + 1);
-  const [weight, setWeight] = useState(0);
-  const [actualReps, setActualReps] = useState(0);
+const initialSetData = setsArray.map(() => ({ actualReps: 0, weight: 0 }));
+
+const [setDetails, setSetDetails] = useState(initialSetData);
 
 console.log("Date: ", date)
+
+const handleChange = (index, event) => {
+  const { name, value } = event.target;
+  const newSetDetails = [...setDetails];
+  newSetDetails[index][name] = value;
+  setSetDetails(newSetDetails);
+};
+
+
 const handleSubmit = async (e) => {
   e.preventDefault();
   console.log("form contacted");
 
   // Prepare the workouts data
-  const workouts = [{
-    exerciseName: exerciseName,
-    sets: [
-      {
-        actualReps: actualReps,/* get this value from the form */
-        weight: weight /* get this value from the form */
-      }
-      // Add more sets if needed
-    ]
-  }];
+  // const workouts = [{
+  //   exerciseName: exerciseName,
+  //   sets: [
+  //     {
+  //       actualReps: actualReps,/* get this value from the form */
+  //       weight: weight /* get this value from the form */
+  //     }
+  //     // Add more sets if needed
+  //   ]
+  // }];
 
   // Call the resolver
-  await props.onSubmit(userId, date, workouts);
+  // await props.onSubmit(userId, date, workouts);
 };
 
     
@@ -50,22 +60,24 @@ const handleSubmit = async (e) => {
             <div>
             <label className="form-label">Reps Completed</label>
             <input
-              type="number"
+              type="Number"
               className="form-control"
               placeholder="Reps"
-              name={`actualReps-${actualReps}`}
-              value={actualReps}
+              name="actualReps"
+              value={setDetails[index].actualReps}
+          onChange={(e) => handleChange(index, e)}
               // add your onChange handler here
             />
             </div>
           <div>
           <label className="form-label">Weight Used</label>
             <input
-              type="number"
+              type="Number"
               className="form-control"
               placeholder="Weight"
-              name={`weight-${weight}`}
-              value={weight}
+              name="weight"
+              value={setDetails[index].weight}
+          onChange={(e) => handleChange(index, e)}
               // add your onChange handler here
             />
           </div>
