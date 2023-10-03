@@ -361,50 +361,14 @@ const resolvers = {
         throw new Error('Something went wrong');
       }
     },
-    updateWorkoutTracking: async (_, { userId, date, exerciseName, sets, targetReps, actualReps, weight }) => {
-      try {
-        // Find the user by userId
-        const user = await User.findById(userId);
-        if (!user) {
-          throw new Error('User not found');
-        }
-
-        // Find the specific day by date in the completedDays array
-        const day = user.completedDays.find(d => d.date.toISOString() === new Date(date).toISOString());
-
-        if (!day) {
-          throw new Error('Day not found');
-        }
-
-        // Find or create the workout object for the specific exercise
-        let workout = day.workout.find(w => w.exerciseName === exerciseName);
-        if (!workout) {
-          workout = {
-            exerciseName,
-            sets: 0,
-            targetReps: '',
-            actualReps: 0,
-            weight: 0
-          };
-          day.workout.push(workout);
-        }
-
-        // Update the workout object with new data
-        if (typeof sets !== 'undefined') workout.sets = sets;
-        if (typeof targetReps !== 'undefined') workout.targetReps = targetReps;
-        if (typeof actualReps !== 'undefined') workout.actualReps = actualReps;
-        if (typeof weight !== 'undefined') workout.weight = weight;
-
-        // Save the updated user document
-        await user.save();
-
-        return user;
-      } catch (error) {
-        console.error(error);
-        throw new Error('Failed to update workout tracking');
-      }
+    logCompletedWorkout: async (parent, { userId, date, workouts }, context) => {
+      // Find the user and update the completedDays array
+      return User.findOneAndUpdate(
+        { _id: userId, "completedDays.date": new Date(date) },
+        { $set: { "completedDays.$.workout": workouts } },
+        { new: true }
+      );
     },
-    
   },
 };
 

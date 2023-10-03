@@ -9,6 +9,8 @@ import {UPDATE_USER_COMPLETION} from '../utils/mutations'
 import placeholderImage from '../assets/images/placeholderImage.png';
 import '../utils/userCalendar.css';
 import ProgressBar from 'react-bootstrap/ProgressBar'; 
+import LogWorkoutForm from '../utils/LogWorkoutForm';
+
 
 
 
@@ -29,9 +31,20 @@ const UserCalendar = () => {
   const [completedDays, setCompletedDays] = useState([]);
   const [updateUserCompletion] = useMutation(UPDATE_USER_COMPLETION);
   const [isWorkoutCompleted, setIsWorkoutCompleted] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedExercise, setSelectedExercise] = useState(null);
 
   
-  
+  const handleTrackClick = (date) => {
+    setSelectedDate(date);
+    setShowForm(true);
+  };
+
+  const handleSubmit = (workoutData) => {
+    // Call the logCompletedWorkout GraphQL mutation
+    setShowForm(false);
+  };
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -208,11 +221,17 @@ return (
                     onClick={() => handleImageClick(exercise.exercise.videoUrl)}
                   />
                   </div>
-                  <button>Track</button>
-              
+                  <button onClick={() => handleTrackClick(exercise)}>Track</button>
+                
                 </div>
-              ))}
+              ))} 
             </ol>
+            {showForm && (
+        <LogWorkoutForm
+          exercise={selectedExercise}
+          onSubmit={handleSubmit}
+        />
+      )}
           </div>
         )}
         {selectedEvent && (

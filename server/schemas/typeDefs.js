@@ -169,6 +169,16 @@ input UpdateUserInput {
     completed: Boolean
   }
 
+  input CompletedWorkoutInput {
+    exerciseName: String!
+    sets: [SetInput!]!
+  }
+  
+  input SetInput {
+    actualReps: Int!
+    weight: Int!
+  }
+
   type Query {
     users: [User]
     user(id: String!): User
@@ -200,7 +210,7 @@ input UpdateUserInput {
     updateWorkout(workoutId: ID!, input: UpdateWorkoutDetailsInput!): Workout
     updateSchedule(scheduleId: ID!, input: UpdateScheduleInput!): Schedule
     addDailyTracking(userId: ID!, trackingData: [DailyTrackingInput!]!): User
-    updateWorkoutTracking(userId: ID!, date: String!, exerciseName: String!, sets: Int, targetReps: String, actualReps: Int, weight: Int): User
+    logCompletedWorkout(userId: ID!, date: String!, workouts: [CompletedWorkoutInput!]!): User
     }
     
   
