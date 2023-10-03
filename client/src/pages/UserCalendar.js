@@ -232,6 +232,7 @@ return (
         <LogWorkoutForm
           exercise={selectedExercise}
           onSubmit={handleSubmit}
+          date={selectedEvent}
         />
       )}
           </div>
