@@ -9,16 +9,35 @@ const LogWorkoutForm = (props) => {
   const exerciseName = props.exercise.exercise.name
   const date = props.date.start
   const setsArray = Array.from({ length: props.exercise.sets }, (_, i) => i + 1);
-const initialSetData = setsArray.map(() => ({ actualReps: 0, weight: 0 }));
+  // Find the completed workout for the selected exercise and date
+  const completedWorkout = props.userData.completedDays.find(day => 
+    day.date === props.date.start.getTime().toString() &&
+    day.workout.some(w => w.exerciseName === exerciseName)
+  );
+
+  console.log(props.userData.completedDays)
+  console.log(props.date.start.getTime().toString())
+  console.log(exerciseName)
+  console.log(completedWorkout)
+ // Initialize state based on completedWorkout
+ let initialSetData;
+if (completedWorkout) {
+  const specificWorkout = completedWorkout.workout.find(w => w.exerciseName === exerciseName);
+  initialSetData = specificWorkout ? specificWorkout.sets : setsArray.map(() => ({ actualReps: 0, weight: 0 }));
+} else {
+  initialSetData = setsArray.map(() => ({ actualReps: 0, weight: 0 }));
+}
 
 const [setDetails, setSetDetails] = useState(initialSetData);
-
+console.log(setDetails)
 console.log("Date: ", date)
 
 const handleChange = (index, event) => {
   const { name, value } = event.target;
   const newSetDetails = [...setDetails];
-  newSetDetails[index][name] = parseInt(value);
+  const updatedSetDetail = { ...newSetDetails[index] };
+  updatedSetDetail[name] = parseInt(value);
+  newSetDetails[index] = updatedSetDetail;
   setSetDetails(newSetDetails);
 };
 
@@ -27,10 +46,15 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   console.log("form contacted");
 
+  const cleanedSetDetails = setDetails.map(set => {
+    const {__typename, ...cleanedSet} = set;
+    return cleanedSet
+  })
+
   // Prepare the workouts data
   const workouts = [{
     exerciseName: exerciseName,
-    sets: setDetails // Use the setDetails array here
+    sets: cleanedSetDetails // Use the setDetails array here
   }];
 
   // Call the resolver
