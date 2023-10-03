@@ -134,6 +134,7 @@ query findWorkoutById($workoutId: ID!) {
     _id
     name
     notes
+    adminNotes
     exercises {
       exercise {
         _id

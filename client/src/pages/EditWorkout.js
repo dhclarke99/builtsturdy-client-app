@@ -15,6 +15,7 @@ const EditWorkout = () => {
 
   const [name, setName] = useState('');
   const [notes, setNotes] = useState('');
+  const [adminNotes, setAdminNotes] = useState('');
   const [selectedExercise, setSelectedExercise] = useState('');
   const [updateWorkout] = useMutation(UPDATE_WORKOUT);
   const [allExercises, setAllExercises] = useState([]);
@@ -26,6 +27,7 @@ const EditWorkout = () => {
     if (data) {
       setName(data.workout.name);
       setNotes(data.workout.notes);
+      setAdminNotes(data.workout.adminNotes);
       setAllExercises(data.workout.exercises); // Updated to hold more details
     }
   }, [data]);
@@ -47,10 +49,10 @@ const EditWorkout = () => {
   
       if (selectedExercise !== "") {
         const updatedExercises = [...preparedExercises, { exercise: selectedExercise, sets, targetReps }];
-        await updateWorkout({ variables: { workoutId, input: { name, notes, exercises: updatedExercises } } });
+        await updateWorkout({ variables: { workoutId, input: { name, notes, adminNotes, exercises: updatedExercises } } });
         window.location.reload();
       } else {
-        await updateWorkout({ variables: { workoutId, input: { name, notes, exercises: preparedExercises } } });
+        await updateWorkout({ variables: { workoutId, input: { name, notes, adminNotes, exercises: preparedExercises } } });
         window.location.reload();
       }
     } catch (err) {
@@ -110,8 +112,13 @@ const EditWorkout = () => {
 
       </label>
       <label>
-        Notes:
+        User Notes:
         <input type="text" value={notes} onChange={(e) => setNotes(e.target.value)} />
+
+      </label>
+      <label>
+        Admin Notes:
+        <input type="text" value={adminNotes} onChange={(e) => setAdminNotes(e.target.value)} />
 
       </label>
       <label>
