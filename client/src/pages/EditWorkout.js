@@ -85,20 +85,26 @@ const EditWorkout = () => {
     if (index > 0) {
       const newExercises = swapArrayElements([...allExercises], index, index - 1);
       setAllExercises(newExercises);
-      await updateWorkout({ variables: { workoutId, input: { exercises: newExercises } } });
-      window.location.reload();
+      try {
+        await updateWorkout({ variables: { workoutId, input: { exercises: newExercises } } });
+      } catch (error) {
+        console.error("Failed to update workout:", error);
+      }
     }
   };
-
-
+  
   const moveExerciseDown = async (index) => {
     if (index < allExercises.length - 1) {
       const newExercises = swapArrayElements([...allExercises], index, index + 1);
       setAllExercises(newExercises);
-      await updateWorkout({ variables: { workoutId, input: { exercises: newExercises } } });
-      window.location.reload();
+      try {
+        await updateWorkout({ variables: { workoutId, input: { exercises: newExercises } } });
+      } catch (error) {
+        console.error("Failed to update workout:", error);
+      }
     }
   };
+  
 
   console.log(data)
 

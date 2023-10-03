@@ -136,11 +136,11 @@ console.log(dataSchedules)
                           <li className="list-group-item">Notes: {relevantWorkoutDetail.workout.notes}</li>
                           <li className="list-group-item">
                             Exercises:
-                            <ul className="list-group list-group-flush mt-2">
+                            <ol className="list-group list-group-flush mt-2">
                               {relevantWorkoutDetail.workout.exercises.map((exercise, index) => (
-                                <li className="list-group-item" key={index}>Exercise: {exercise.exercise.name}</li>
+                                <li className="list-group-item" key={index}>{exercise.exercise.name}: {exercise.sets} sets of {exercise.targetReps} reps</li>
                               ))}
-                            </ul>
+                            </ol>
                           </li>
                         </ul>
                       )}

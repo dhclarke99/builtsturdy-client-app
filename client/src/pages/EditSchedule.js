@@ -163,8 +163,9 @@ console.log(dataSchedule)
         <ul>
         {sortedWorkouts.map((workout, index) => {
                   const relevantWorkoutDetail = workoutDetails.find(
-                    (detail) => detail.workout._id === workout.workoutId
+                    (detail) => detail && detail.workout && detail.workout._id === workout.workoutId
                   );
+                  
                   return (
                     <li className="list-group-item" key={index}>
                       <strong>Day:</strong> {workout.day}, <strong>Workout ID:</strong> {workout.workoutId}
@@ -180,7 +181,7 @@ console.log(dataSchedule)
                     </li>
                      
                   );
-                })}
+                })} 
         </ul>
       </label>
       <label>
