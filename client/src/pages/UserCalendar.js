@@ -12,6 +12,12 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 import LogWorkoutForm from '../utils/LogWorkoutForm';
 
 const localizer = momentLocalizer(moment);
+// Set Monday as the first day of the week
+moment.updateLocale('en', {
+  week: {
+    dow: 1, // Monday is the first day of the week
+  }
+});
 
 const UserCalendar = () => {
   const [events, setEvents] = useState([]);
@@ -95,18 +101,23 @@ const UserCalendar = () => {
   
         for (let i = 0; i < weeks; i++) {
           workouts.forEach((workout, index) => {
-            const workoutDate = moment(startDate).add(i, 'weeks').day(userData.user.schedule.workouts[index].day);
-            calendarEvents.push({
-              workoutId: workout,
-              id: index,
-              title: workout.name,
-              notes: workout.notes,
-              start: workoutDate.toDate(),
-              end: workoutDate.toDate(),
-              allDay: true,
-            });
+            let workoutDate = moment(startDate).add(i, 'weeks').day(userData.user.schedule.workouts[index].day);
+        
+            // Only add the workout to the calendar if it's on or after the startDate
+            if (workoutDate.isSameOrAfter(startDate, 'day')) {
+              calendarEvents.push({
+                workoutId: workout,
+                id: index,
+                title: workout.name,
+                notes: workout.notes,
+                start: workoutDate.toDate(),
+                end: workoutDate.toDate(),
+                allDay: true,
+              });
+            }
           });
         }
+        
   
         console.log("Calendar Events:", calendarEvents);
         setEvents(calendarEvents);
@@ -129,7 +140,7 @@ const UserCalendar = () => {
     const dayToCompleteIndex = completedDays.findIndex(day => day.date === selectedDateUnix);
   
     if (dayToCompleteIndex !== -1) {
-      const dayToComplete = { ...completedDays[dayToCompleteIndex] };
+      const { workout, ...dayToComplete } = { ...completedDays[dayToCompleteIndex] };
       dayToComplete.completed = !dayToComplete.completed; // Toggle the completion status
   
       const { __typename, ...cleanedDayToComplete } = dayToComplete;
