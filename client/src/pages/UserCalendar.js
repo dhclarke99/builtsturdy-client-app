@@ -11,9 +11,6 @@ import '../utils/userCalendar.css';
 import ProgressBar from 'react-bootstrap/ProgressBar'; 
 import LogWorkoutForm from '../utils/LogWorkoutForm';
 
-
-
-
 const localizer = momentLocalizer(moment);
 
 const UserCalendar = () => {
@@ -36,10 +33,15 @@ const UserCalendar = () => {
   const [selectedExercise, setSelectedExercise] = useState(null);
 
   
-  const handleTrackClick = (date) => {
-    setSelectedDate(date);
+  const handleTrackClick = (exercise) => {
+    console.log("Track button clicked"); // Add this line
+    setSelectedExercise(exercise);
     setShowForm(true);
+
   };
+
+  console.log(showForm, selectedExercise); // Debugging line
+  
 
   const handleSubmit = (workoutData) => {
     // Call the logCompletedWorkout GraphQL mutation
