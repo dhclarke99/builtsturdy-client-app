@@ -224,17 +224,17 @@ return (
                   />
                   </div>
                   <button onClick={() => handleTrackClick(exercise)}>Track</button>
-                
-                </div>
-              ))} 
-            </ol>
-            {showForm && (
+                  {showForm && selectedExercise.exercise._id === exercise.exercise._id &&(
         <LogWorkoutForm
           exercise={selectedExercise}
           onSubmit={handleSubmit}
           date={selectedEvent}
         />
       )}
+                </div>
+              ))} 
+            </ol>
+            
           </div>
         )}
         {selectedEvent && (

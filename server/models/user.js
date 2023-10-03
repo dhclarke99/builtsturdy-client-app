@@ -81,47 +81,47 @@ const userSchema = new Schema({
     ],
     completedDays: [
         {
-          date: Date,
-          completed: Boolean,
-          workout: [
-            {
-              exerciseName: String,
-              sets: [{
-              actualReps: Number,  // Actual reps set by user
-              weight: Number
-            }]
-            }
-          ]
+            date: Date,
+            completed: Boolean,
+            workout: [
+                {
+                    exerciseName: String,
+                    sets: [{
+                        actualReps: Number,  // Actual reps set by user
+                        weight: Number
+                    }]
+                }
+            ]
         },
-      ]
+    ]
 });
 
 userSchema.pre('save', function (next) {
     if (this.isModified('startDate') || this.isModified('weeks')) {
-      // Logic for dailyTracking
-      const startDate = new Date(this.startDate);
-      const programLength = this.weeks;
-      const dailyTracking = [];
-      const completedDays = []; // Initialize completedDays array
-      for (let i = 0; i < programLength * 7; i++) {
-        const date = new Date(startDate);
-        date.setDate(startDate.getDate() + i);
-        dailyTracking.push({
-          date,
-          weight: null,
-          calorieIntake: null,
-          proteinIntake: null,
-        });
-        completedDays.push({
-          date,
-          completed: false, // Initialize as not completed
-        });
-      }
-      this.dailyTracking = dailyTracking;
-      this.completedDays = completedDays; // Update completedDays field
+        // Logic for dailyTracking
+        const startDate = new Date(this.startDate);
+        const programLength = this.weeks;
+        const dailyTracking = [];
+        const completedDays = []; // Initialize completedDays array
+        for (let i = 0; i < programLength * 7; i++) {
+            const date = new Date(startDate);
+            date.setDate(startDate.getDate() + i);
+            dailyTracking.push({
+                date,
+                weight: null,
+                calorieIntake: null,
+                proteinIntake: null,
+            });
+            completedDays.push({
+                date,
+                completed: false, // Initialize as not completed
+            });
+        }
+        this.dailyTracking = dailyTracking;
+        this.completedDays = completedDays; // Update completedDays field
     }
     next();
-  });
+});
 
 userSchema.pre('save', async function (next) {
     if (this.isNew || this.isModified('password')) {
