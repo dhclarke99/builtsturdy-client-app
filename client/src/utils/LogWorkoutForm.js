@@ -36,7 +36,11 @@ const handleChange = (index, event) => {
   const { name, value } = event.target;
   const newSetDetails = [...setDetails];
   const updatedSetDetail = { ...newSetDetails[index] };
-  updatedSetDetail[name] = parseInt(value);
+  
+  // Check if value is null or empty string, if so set it to 0
+  const sanitizedValue = value === null || value === '' ? 0 : value;
+  
+  updatedSetDetail[name] = parseInt(sanitizedValue, 10);
   newSetDetails[index] = updatedSetDetail;
   setSetDetails(newSetDetails);
 };
