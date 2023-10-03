@@ -72,6 +72,7 @@ input UpdateUserInput {
     name: String
     exercises: [ExerciseInWorkout]
     notes: String
+    adminNotes: String
     
   }
 

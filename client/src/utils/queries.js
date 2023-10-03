@@ -71,6 +71,7 @@ query fetchAllWorkouts {
     _id
     name
     notes
+    adminNotes
     exercises {
       exercise {
         _id
