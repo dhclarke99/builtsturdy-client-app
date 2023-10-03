@@ -98,6 +98,8 @@ const EditWorkout = () => {
     }
   };
 
+  console.log(data)
+
   return (
     <div>
       <h1>Edit Workout</h1>
@@ -117,7 +119,7 @@ const EditWorkout = () => {
         <ul>
           {data.workout.exercises.map((exercise, index) => (
             <li key={exercise.exercise._id}>
-              {exercise.exercise.name}
+              {exercise.exercise.name}: {exercise.sets} sets of {exercise.targetReps} reps
               <button onClick={() => handleRemoveExercise(exercise.exercise._id)}>Remove</button>
               <button onClick={() => moveExerciseUp(index)}>Move Up</button>
               <button onClick={() => moveExerciseDown(index)}>Move Down</button>

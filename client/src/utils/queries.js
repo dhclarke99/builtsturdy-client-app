@@ -141,6 +141,8 @@ query findWorkoutById($workoutId: ID!) {
       adminNotes
       videoUrl
       }
+      sets
+      targetReps
       
     }
     
