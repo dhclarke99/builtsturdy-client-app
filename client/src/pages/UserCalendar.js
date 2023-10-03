@@ -229,6 +229,7 @@ return (
           exercise={selectedExercise}
           onSubmit={handleSubmit}
           date={selectedEvent}
+          userData={userData.user}
         />
       )}
                 </div>

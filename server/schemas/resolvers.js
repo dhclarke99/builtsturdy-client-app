@@ -362,13 +362,37 @@ const resolvers = {
       }
     },
     logCompletedWorkout: async (parent, { userId, date, workouts }, context) => {
-      // Find the user and update the completedDays array
-      return User.findOneAndUpdate(
-        { _id: userId, "completedDays.date": new Date(date) },
-        { $set: { "completedDays.$.workout": workouts } },
-        { new: true }
-      );
+      // Find the user
+      const user = await User.findById(userId);
+      
+      // Find the specific day in completedDays
+      const day = user.completedDays.find(d => d.date.toISOString() === new Date(date).toISOString());
+      
+      if (day) {
+        workouts.forEach(workout => {
+          // Find the specific exercise in the workout array
+          const exercise = day.workout.find(e => e.exerciseName === workout.exerciseName);
+          
+          if (exercise) {
+            // Update the existing exercise
+            exercise.sets = workout.sets;
+          } else {
+            // Push the new exercise
+            day.workout.push(workout);
+          }
+        });
+        
+        // Save the updated user document
+        await user.save();
+        
+        return user;
+      } else {
+        // Handle the case where the day does not exist
+        // ...
+        throw new Error("Day does not exist!")
+      }
     },
+    
   },
 };
 
