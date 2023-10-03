@@ -5,7 +5,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Auth from '../utils/auth';
 import { useQuery, useApolloClient, useMutation } from '@apollo/client';
 import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID } from '../utils/queries';
-import {UPDATE_USER_COMPLETION} from '../utils/mutations'
+import {UPDATE_USER_COMPLETION, LOG_COMPLETED_WORKOUT} from '../utils/mutations'
 import placeholderImage from '../assets/images/placeholderImage.png';
 import '../utils/userCalendar.css';
 import ProgressBar from 'react-bootstrap/ProgressBar'; 
@@ -31,6 +31,8 @@ const UserCalendar = () => {
   const [showForm, setShowForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedExercise, setSelectedExercise] = useState(null);
+  const [logCompletedWorkout, { data, loading, error }] = useMutation(LOG_COMPLETED_WORKOUT);
+
 
   
   const handleTrackClick = (exercise) => {
@@ -43,10 +45,27 @@ const UserCalendar = () => {
   console.log(showForm, selectedExercise); // Debugging line
   
 
-  const handleSubmit = (workoutData) => {
-    // Call the logCompletedWorkout GraphQL mutation
-    setShowForm(false);
+  const handleSubmit = async (userId, date, workoutData) => {
+    console.log("userId: ", userId);
+    console.log("date: ", date);
+    console.log("workoutData: ", workoutData);
+    
+    try {
+      const { data } = await logCompletedWorkout({
+        variables: {
+          userId,  // Make sure this is defined
+          date: new Date(date).toISOString(),  // Make sure this is defined
+          workouts: workoutData
+        }
+      });
+      console.log("Mutation successful, returned data: ", data);
+      setShowForm(false);
+    } catch (err) {
+      console.error("An error occurred: ", err);
+    }
   };
+  
+  
 
   useEffect(() => {
     const fetchWorkouts = async () => {

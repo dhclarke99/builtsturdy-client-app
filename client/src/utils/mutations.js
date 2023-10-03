@@ -274,3 +274,22 @@ mutation updateUserCompletion($userId: ID!, $input: CompletedDaysInput!) {
   }
 }
 `;
+
+export const LOG_COMPLETED_WORKOUT = gql `
+mutation logCompletedWorkout($userId: ID!, $date: String!, $workouts: [CompletedWorkoutInput!]!) {
+  logCompletedWorkout(userId: $userId, date: $date, workouts: $workouts) {
+    _id
+    completedDays {
+      completed
+      date
+      workout {
+        exerciseName
+        sets {
+          actualReps
+          weight
+        }
+      }
+    }
+  }
+}
+`;

@@ -18,7 +18,7 @@ console.log("Date: ", date)
 const handleChange = (index, event) => {
   const { name, value } = event.target;
   const newSetDetails = [...setDetails];
-  newSetDetails[index][name] = value;
+  newSetDetails[index][name] = parseInt(value);
   setSetDetails(newSetDetails);
 };
 
@@ -28,20 +28,15 @@ const handleSubmit = async (e) => {
   console.log("form contacted");
 
   // Prepare the workouts data
-  // const workouts = [{
-  //   exerciseName: exerciseName,
-  //   sets: [
-  //     {
-  //       actualReps: actualReps,/* get this value from the form */
-  //       weight: weight /* get this value from the form */
-  //     }
-  //     // Add more sets if needed
-  //   ]
-  // }];
+  const workouts = [{
+    exerciseName: exerciseName,
+    sets: setDetails // Use the setDetails array here
+  }];
 
   // Call the resolver
-  // await props.onSubmit(userId, date, workouts);
+  await props.onSubmit(userId, date, workouts);
 };
+
 
     
   // Form logic here

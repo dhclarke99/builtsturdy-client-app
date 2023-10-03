@@ -60,6 +60,13 @@ query findUserById($userId: String!) {
     completedDays{
       date
       completed
+      workout {
+        exerciseName
+        sets {
+          actualReps
+          weight
+        }
+      }
     }
   }
 }

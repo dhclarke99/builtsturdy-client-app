@@ -164,9 +164,20 @@ input UpdateUserInput {
     completed: Boolean
   }
 
+  type Set{
+    actualReps: Int
+    weight: Int
+  }
+
+  type CompletedWorkout{
+    exerciseName: String
+    sets: [Set]
+  }
+
   type CompletedDays {
     date: String
     completed: Boolean
+    workout: [CompletedWorkout]
   }
 
   input CompletedWorkoutInput {
