@@ -18,6 +18,8 @@ const EditWorkout = () => {
   const [selectedExercise, setSelectedExercise] = useState('');
   const [updateWorkout] = useMutation(UPDATE_WORKOUT);
   const [allExercises, setAllExercises] = useState([]);
+  const [sets, setSets] = useState(3); // default to 3 sets
+  const [targetReps, setTargetReps] = useState('8-10'); // default to '8-10' reps
 
   // Initialize state variables once data is available
   useEffect(() => {
@@ -44,7 +46,7 @@ const EditWorkout = () => {
       }));
   
       if (selectedExercise !== "") {
-        const updatedExercises = [...preparedExercises, { exercise: selectedExercise, sets: 3, targetReps: '8-10' }];
+        const updatedExercises = [...preparedExercises, { exercise: selectedExercise, sets, targetReps }];
         await updateWorkout({ variables: { workoutId, input: { name, notes, exercises: updatedExercises } } });
         window.location.reload();
       } else {
@@ -96,10 +98,6 @@ const EditWorkout = () => {
     }
   };
 
-
-
-
-
   return (
     <div>
       <h1>Edit Workout</h1>
@@ -137,6 +135,14 @@ const EditWorkout = () => {
             </option>
           ))}
         </select>
+      </label>
+      <label>
+        Sets:
+        <input type="number" value={sets} onChange={(e) => setSets(parseInt(e.target.value, 10))} />
+      </label>
+      <label>
+        Target Reps:
+        <input type="text" value={targetReps} onChange={(e) => setTargetReps(e.target.value)} />
       </label>
       <button onClick={handleUpdateWorkout}>Update Workout </button>
     </div>
