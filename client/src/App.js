@@ -21,6 +21,7 @@ import Nutrition from './pages/Nutrition';
 import Trends from './pages/Trends';
 import AdminTrends from './pages/AdminTrends.js';
 
+
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
   uri: '/graphql',

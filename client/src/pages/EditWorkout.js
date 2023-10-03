@@ -81,12 +81,34 @@ const EditWorkout = () => {
   };
   
 
+  const removeTypeName = (obj) => {
+    if (Array.isArray(obj)) {
+      return obj.map(removeTypeName);
+    } else if (obj !== null && typeof obj === 'object') {
+      const { __typename, ...rest } = obj;
+      Object.keys(rest).forEach(key => {
+        rest[key] = removeTypeName(rest[key]);
+      });
+      return rest;
+    }
+    return obj;
+  };
+  
+  
   const moveExerciseUp = async (index) => {
     if (index > 0) {
       const newExercises = swapArrayElements([...allExercises], index, index - 1);
       setAllExercises(newExercises);
+  
+      const cleanedExercises = removeTypeName(newExercises).map(exercise => {
+        return {
+          ...exercise,
+          exercise: exercise.exercise._id // Assuming '_id' is the field containing the ID
+        };
+      });
+  
       try {
-        await updateWorkout({ variables: { workoutId, input: { exercises: newExercises } } });
+        await updateWorkout({ variables: { workoutId, input: { exercises: cleanedExercises } } });
       } catch (error) {
         console.error("Failed to update workout:", error);
       }
@@ -97,13 +119,25 @@ const EditWorkout = () => {
     if (index < allExercises.length - 1) {
       const newExercises = swapArrayElements([...allExercises], index, index + 1);
       setAllExercises(newExercises);
+  
+      const cleanedExercises = removeTypeName(newExercises).map(exercise => {
+        return {
+          ...exercise,
+          exercise: exercise.exercise._id // Assuming '_id' is the field containing the ID
+        };
+      });
+  
       try {
-        await updateWorkout({ variables: { workoutId, input: { exercises: newExercises } } });
+        await updateWorkout({ variables: { workoutId, input: { exercises: cleanedExercises } } });
       } catch (error) {
         console.error("Failed to update workout:", error);
       }
     }
   };
+  
+  
+  
+  
   
 
   console.log(data)

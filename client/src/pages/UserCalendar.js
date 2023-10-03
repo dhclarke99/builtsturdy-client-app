@@ -195,7 +195,7 @@ return (
             <h3>Exercises:</h3>
             <ol>
               {selectedWorkout.exercises.map((exercise, index) => (
-                <div key={exercise._id} className="exercise-item">
+                <div key={exercise.exercise._id} className="exercise-item">
                   <h2 className="exercise-name">{index + 1}. {exercise.exercise.name}</h2>
                   <p className="exercise-info">Sets: {exercise.sets}, Reps: {exercise.targetReps}</p>
                   <p className="exercise-notes">Notes: {exercise.exercise.notes}</p>
@@ -208,6 +208,7 @@ return (
                     onClick={() => handleImageClick(exercise.exercise.videoUrl)}
                   />
                   </div>
+                  <button>Track</button>
               
                 </div>
               ))}

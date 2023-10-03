@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Auth from '../../utils/auth';
+import '../../utils/header.css'
 
 const Header = () => {
   const isLoggedIn = Auth.loggedIn();
