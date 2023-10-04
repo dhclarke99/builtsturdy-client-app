@@ -63,6 +63,18 @@ const userSchema = new Schema({
         type: String,
         enum: ['Burn Fat', 'Build Muscle', 'Recomp'],
     },
+    caloricTarget: {
+        type: Number,
+    },
+    proteinTarget: {
+        type: Number,
+    },
+    carbohydrateTarget: {
+        type: Number,
+    },
+    fatTarget: {
+        type: Number,
+    },
     startDate: {
         type: Date,
         require: true,
@@ -122,6 +134,39 @@ userSchema.pre('save', function (next) {
     }
     next();
 });
+
+userSchema.pre('save', function (next) {
+    let BMR;
+    let calories;
+    let caloriesRounded;
+
+    if (!this.$isEmpty('gender') && !this.$isEmpty('age') && !this.$isEmpty('currentWeight') && !this.$isEmpty('height') && !this.$isEmpty('trainingExperience') && !this.$isEmpty('mainPhysiqueGoal')) {
+        
+        const mass = this.currentWeight * 0.453592;
+        
+        if (!this.$isEmpty('estimatedBodyFat')) {
+            const LBM = (mass * (100 - this.estimatedBodyFat)) / 100;
+            BMR = 370 + (21.6 * LBM);
+        } else {
+            const h = this.height * 2.53;
+            const s = this.gender === "Male" ? 5 : -151;
+            BMR = (10 * mass + 6.25 * h - 5 * this.age) + s;
+        }
+
+        const BMRWithActivity = BMR * 1.55;
+
+        if (this.trainingExperience === "Beginner") {
+            calories = this.mainPhysiqueGoal === "Burn Fat" ? BMRWithActivity - 500 : BMRWithActivity + 500;
+        } else {
+            calories = this.mainPhysiqueGoal === "Burn Fat" ? BMRWithActivity - 300 : BMRWithActivity + 300;
+        }
+
+        caloriesRounded = Math.round(calories);
+        this.caloricTarget = caloriesRounded;
+    }
+    next();
+});
+
 
 userSchema.pre('save', async function (next) {
     if (this.isNew || this.isModified('password')) {

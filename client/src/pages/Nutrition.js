@@ -49,7 +49,7 @@ const Nutrition = () => {
 
 
 
-  const calculateDailyCalories = (currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, weight, trainingExperience) => {
+  const calculateDailyCalories = (currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, trainingExperience) => {
     const mass = currentWeight * 0.453592
     const h = height * 2.53
     if (gender === "Male") {
