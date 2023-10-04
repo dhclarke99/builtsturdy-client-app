@@ -24,7 +24,7 @@ const AdminDashboard = () => {
   const client = new ApolloClient({
     link: createHttpLink({ uri: '/graphql' }),
     cache: new InMemoryCache(),
-});
+  });
   const [workoutDetails, setWorkoutDetails] = useState([]);
   const [sortedSchedules, setSortedSchedules] = useState([]);
 
@@ -34,39 +34,39 @@ const AdminDashboard = () => {
     const workoutsCopy = [...workouts];
     return workoutsCopy.sort((a, b) => daysOfWeek.indexOf(a.day) - daysOfWeek.indexOf(b.day));
   };
-  
-console.log(dataSchedules)
-useEffect(() => {
-  if (dataSchedules) {
-    
+
+  console.log(dataSchedules)
+  useEffect(() => {
+    if (dataSchedules) {
+
       const workoutIds = dataSchedules.schedules.flatMap(schedule => schedule.workouts.map(w => w.workoutId));
 
       const fetchWorkoutDetails = async () => {
-          const details = await Promise.all(workoutIds.map(async workoutId => {
-              const { data } = await client.query({
-                  query: FETCH_WORKOUT_BY_ID,
-                  variables: { workoutId: workoutId.toString() },
-              });
-              return data;
-          }));
-          setWorkoutDetails(details);
+        const details = await Promise.all(workoutIds.map(async workoutId => {
+          const { data } = await client.query({
+            query: FETCH_WORKOUT_BY_ID,
+            variables: { workoutId: workoutId.toString() },
+          });
+          return data;
+        }));
+        setWorkoutDetails(details);
       };
 
       fetchWorkoutDetails();
-  }
-}, [dataSchedules]);
+    }
+  }, [dataSchedules]);
 
-useEffect(() => {
-  if (dataSchedules) {
-    const sorted = dataSchedules.schedules.map(schedule => {
-      return {
-        ...schedule,
-        workouts: sortWorkoutsByDay(schedule.workouts)
-      };
-    });
-    setSortedSchedules(sorted);
-  }
-}, [dataSchedules]);
+  useEffect(() => {
+    if (dataSchedules) {
+      const sorted = dataSchedules.schedules.map(schedule => {
+        return {
+          ...schedule,
+          workouts: sortWorkoutsByDay(schedule.workouts)
+        };
+      });
+      setSortedSchedules(sorted);
+    }
+  }, [dataSchedules]);
 
   const handleDeleteWorkout = async (workoutId) => {
     try {
@@ -92,8 +92,8 @@ useEffect(() => {
       console.error(err);
     }
   };
-  
-console.log(dataSchedules)
+
+  console.log(dataSchedules)
   if (loadingWorkouts || loadingUsers || loadingExercises || loadingSchedules) return <p>Loading...</p>;
   if (errorWorkouts || errorUsers || errorExercises || errorSchedules) return <p>Error: {errorWorkouts?.message || errorUsers?.message || errorExercises?.message || errorSchedules?.message}</p>;
 
@@ -106,85 +106,94 @@ console.log(dataSchedules)
           <button onClick={() => setActiveTab('schedules')}>Schedules</button>
           <button onClick={() => setActiveTab('workouts')}>Workouts</button>
           <button onClick={() => setActiveTab('exercises')}>Exercises</button>
-          
+
         </ul>
       </nav>
 
       {activeTab === 'schedules' && (
-  <div>
-    <h2>All Schedules</h2>
-    <div className="row">
-      {sortedSchedules.map((schedule, index) => (
-        <div className="col-md-6" key={schedule._id + index}>
-          <div className="card mb-4">
-            <div className="card-header">
-              {schedule.name}: {schedule.notes}
-            </div>
-            <button onClick={() => window.location.href = `/admin/edit-schedule/${schedule._id}`}>Edit</button>
-            <button onClick={() => handleDeleteSchedule(schedule._id)}>Delete</button>
-            <div className="card-body">
-              <ul className="list-group list-group-flush">
-                {schedule.workouts.map((workout, index) => {
-                  const relevantWorkoutDetail = workoutDetails.find(
-                    (detail) => detail && detail.workout && detail.workout._id === workout.workoutId
-                  );
-                  return (
-                    <li className="list-group-item" key={workout.workoutId + index}>
-                      <strong>Day:</strong> {workout.day}, <strong>Workout ID:</strong> {workout.workoutId}
-                      {relevantWorkoutDetail && (
-                        <ul className="list-group list-group-flush mt-2">
-                          <li className="list-group-item">Name: {relevantWorkoutDetail.workout.name}</li>
-                          <li className="list-group-item">Notes: {relevantWorkoutDetail.workout.notes}</li>
-                          <li className="list-group-item">
-                            Exercises:
-                            <ol className="list-group list-group-flush mt-2">
-                              {relevantWorkoutDetail.workout.exercises.map((exercise, index) => (
-                                <li className="list-group-item" key={index}>{exercise.exercise.name}: {exercise.sets} sets of {exercise.targetReps} reps</li>
-                              ))}
-                            </ol>
+        <div>
+          <h2>All Schedules</h2>
+          <div className="row">
+            {sortedSchedules.map((schedule, index) => (
+              <div className="col-md-6" key={schedule._id + index}>
+                <div className="card mb-4">
+                  <div className="card-header">
+                    {schedule.name}: {schedule.notes}
+                  </div>
+                  <button onClick={() => window.location.href = `/admin/edit-schedule/${schedule._id}`}>Edit</button>
+                  <button onClick={() => handleDeleteSchedule(schedule._id)}>Delete</button>
+                  <div className="card-body">
+                    <ul className="list-group list-group-flush">
+                      {schedule.workouts.map((workout, index) => {
+                        const relevantWorkoutDetail = workoutDetails.find(
+                          (detail) => detail && detail.workout && detail.workout._id === workout.workoutId
+                        );
+                        return (
+                          <li className="list-group-item" key={workout.workoutId + index}>
+                            <strong>Day:</strong> {workout.day}, <strong>Workout ID:</strong> {workout.workoutId}
+                            {relevantWorkoutDetail && (
+                              <ul className="list-group list-group-flush mt-2">
+                                <li className="list-group-item">Name: {relevantWorkoutDetail.workout.name}</li>
+                                <li className="list-group-item">Notes: {relevantWorkoutDetail.workout.notes}</li>
+                                <li className="list-group-item">
+                                  Exercises:
+                                  <ol className="list-group list-group-flush mt-2">
+                                    {relevantWorkoutDetail.workout.exercises.map((exercise, index) => (
+                                      <li className="list-group-item" key={index}>{exercise.exercise.name}: {exercise.sets} sets of {exercise.targetReps} reps</li>
+                                    ))}
+                                  </ol>
+                                </li>
+                              </ul>
+                            )}
                           </li>
-                        </ul>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+            ))}
           </div>
+          <Link to={`/admin/create-schedule`}>
+            <button>Create Schedule</button>
+          </Link>
         </div>
-        
-      ))}
-    </div>
-    <Link to={`/admin/create-schedule`}>
-        <button>Create Schedule</button>
-        </Link>
-  </div>
-)}
+      )}
 
 
       {activeTab === 'workouts' && (
         <div>
           <h2>All Workouts</h2>
           {/* Your Workouts code here */}
-          <ul>
+          <div className='row'>
+
             {dataWorkouts.workouts.map((workout) => (
-              <li key={workout._id}>
-                {workout.name} - {workout.notes}
-                <button onClick={() => handleDeleteWorkout(workout._id)}>Delete</button>
-                <button onClick={() => window.location.href = `/admin/edit-workout/${workout._id}`}>Edit</button>
-                <ul>
-                  {workout.exercises ? workout.exercises.map((exercise) => (
-                    <li key={exercise.exercise._id}>
-                      {exercise.exercise.name}
-                    </li>
-                  )) : <li>No Exercises assigned</li>}
-                </ul>
-              </li>
+              <div className="col-md-4" key={workout._id}>
+                <div className="card mb-4">
+                  <div className="card-body">
+                    <h4 className="card-title">{workout.name}</h4>
+                    <p className="card-text">User Notes: {workout.notes}</p>
+                    <p className="card-text"> Admin Notes: {workout.adminNotes}</p>
+                    <ol>
+                      {workout.exercises ? workout.exercises.map((exercise) => (
+                        <li key={exercise.exercise._id}>
+                          {exercise.exercise.name}
+                        </li>
+                      )) : <li>No Exercises assigned</li>}
+                    </ol>
+                    <button onClick={() => handleDeleteWorkout(workout._id)}>Delete</button>
+                    <button onClick={() => window.location.href = `/admin/edit-workout/${workout._id}`}>Edit</button>
+                  </div>
+                </div>
+              </div>
             ))}
-          </ul>
+
+
+          </div>
           <Link to={`/admin/create-workout`}>
-        <button>Create Workout</button>
-        </Link>
+            <button>Create Workout</button>
+          </Link>
         </div>
       )}
 
@@ -208,40 +217,40 @@ console.log(dataSchedules)
             ))}
           </div>
           <Link to={`/admin/create-user`}>
-        <button>Create User</button>
-        </Link>
+            <button>Create User</button>
+          </Link>
         </div>
       )}
 
       {activeTab === 'exercises' && (
         <div>
-        <h2>All Exercises</h2>
-        {/* Your Workouts code here */}
-        <ul>
-          {dataExercises.exercises.map((exercise) => (
-            <li key={exercise._id}>
-              {exercise.name} - {exercise.notes}
-              <ul>
-                <li>Sets: {exercise.sets}
-                </li>
-                <li>Reps: {exercise.reps}
-                </li>
-                <li>Weight: {exercise.weight}
-                </li>
-              </ul>
-              <button onClick={() => handleDeleteExercise(exercise._id)}>Delete</button>
-              <button onClick={() => window.location.href = `/admin/edit-exercise/${exercise._id}`}>Edit</button>
-              <ul>
-                
-              </ul>
-            </li>
-          ))}
-        </ul>
-        <Link to={`/admin/create-exercise`}>
-        <button>Create Exercise</button>
-        </Link>
-        
-      </div>
+          <h2>All Exercises</h2>
+          {/* Your Workouts code here */}
+          <ul>
+            {dataExercises.exercises.map((exercise) => (
+              <li key={exercise._id}>
+                {exercise.name} - {exercise.notes}
+                <ul>
+                  <li>Sets: {exercise.sets}
+                  </li>
+                  <li>Reps: {exercise.reps}
+                  </li>
+                  <li>Weight: {exercise.weight}
+                  </li>
+                </ul>
+                <button onClick={() => handleDeleteExercise(exercise._id)}>Delete</button>
+                <button onClick={() => window.location.href = `/admin/edit-exercise/${exercise._id}`}>Edit</button>
+                <ul>
+
+                </ul>
+              </li>
+            ))}
+          </ul>
+          <Link to={`/admin/create-exercise`}>
+            <button>Create Exercise</button>
+          </Link>
+
+        </div>
       )}
     </div>
   );
