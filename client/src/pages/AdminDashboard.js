@@ -28,6 +28,11 @@ const AdminDashboard = () => {
   const [workoutDetails, setWorkoutDetails] = useState([]);
   const [sortedSchedules, setSortedSchedules] = useState([]);
 
+  const [userSearch, setUserSearch] = useState('');
+  const [scheduleSearch, setScheduleSearch] = useState('');
+  const [workoutSearch, setWorkoutSearch] = useState('');
+  const [exerciseSearch, setExerciseSearch] = useState('');
+
   const sortWorkoutsByDay = (workouts) => {
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     // Create a copy of the array before sorting
@@ -113,47 +118,47 @@ const AdminDashboard = () => {
       {activeTab === 'schedules' && (
         <div>
           <h2>All Schedules</h2>
+          <input type="text" placeholder="Search Schedules" value={scheduleSearch} onChange={(e) => setScheduleSearch(e.target.value)} />
           <div className="row">
-            {sortedSchedules.map((schedule, index) => (
-              <div className="col-md-6" key={schedule._id + index}>
-                <div className="card mb-4">
-                  <div className="card-header">
-                    {schedule.name}: {schedule.notes}
-                  </div>
-                  <button onClick={() => window.location.href = `/admin/edit-schedule/${schedule._id}`}>Edit</button>
-                  <button onClick={() => handleDeleteSchedule(schedule._id)}>Delete</button>
-                  <div className="card-body">
-                    <ul className="list-group list-group-flush">
-                      {schedule.workouts.map((workout, index) => {
-                        const relevantWorkoutDetail = workoutDetails.find(
-                          (detail) => detail && detail.workout && detail.workout._id === workout.workoutId
-                        );
-                        return (
-                          <li className="list-group-item" key={workout.workoutId + index}>
-                            <strong>Day:</strong> {workout.day}, <strong>Workout ID:</strong> {workout.workoutId}
-                            {relevantWorkoutDetail && (
-                              <ul className="list-group list-group-flush mt-2">
-                                <li className="list-group-item">Name: {relevantWorkoutDetail.workout.name}</li>
-                                <li className="list-group-item">Notes: {relevantWorkoutDetail.workout.notes}</li>
-                                <li className="list-group-item">
-                                  Exercises:
-                                  <ol className="list-group list-group-flush mt-2">
-                                    {relevantWorkoutDetail.workout.exercises.map((exercise, index) => (
-                                      <li className="list-group-item" key={index}>{exercise.exercise.name}: {exercise.sets} sets of {exercise.targetReps} reps</li>
-                                    ))}
-                                  </ol>
-                                </li>
-                              </ul>
-                            )}
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
-                </div>
+          {sortedSchedules.filter(schedule => schedule.name.toLowerCase().includes(scheduleSearch.toLowerCase())).map((schedule, index) => (
+            <div className="col-md-6" key={schedule._id + index}>
+            <div className="card mb-4">
+              <div className="card-header">
+                {schedule.name}: {schedule.notes}
               </div>
-
-            ))}
+              <button onClick={() => window.location.href = `/admin/edit-schedule/${schedule._id}`}>Edit</button>
+              <button onClick={() => handleDeleteSchedule(schedule._id)}>Delete</button>
+              <div className="card-body">
+                <ul className="list-group list-group-flush">
+                  {schedule.workouts.map((workout, index) => {
+                    const relevantWorkoutDetail = workoutDetails.find(
+                      (detail) => detail && detail.workout && detail.workout._id === workout.workoutId
+                    );
+                    return (
+                      <li className="list-group-item" key={workout.workoutId + index}>
+                        <strong>Day:</strong> {workout.day}, <strong>Workout ID:</strong> {workout.workoutId}
+                        {relevantWorkoutDetail && (
+                          <ul className="list-group list-group-flush mt-2">
+                            <li className="list-group-item">Name: {relevantWorkoutDetail.workout.name}</li>
+                            <li className="list-group-item">Notes: {relevantWorkoutDetail.workout.notes}</li>
+                            <li className="list-group-item">
+                              Exercises:
+                              <ol className="list-group list-group-flush mt-2">
+                                {relevantWorkoutDetail.workout.exercises.map((exercise, index) => (
+                                  <li className="list-group-item" key={index}>{exercise.exercise.name}: {exercise.sets} sets of {exercise.targetReps} reps</li>
+                                ))}
+                              </ol>
+                            </li>
+                          </ul>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+          </div>
+          ))}
           </div>
           <Link to={`/admin/create-schedule`}>
             <button>Create Schedule</button>
@@ -161,35 +166,32 @@ const AdminDashboard = () => {
         </div>
       )}
 
-
       {activeTab === 'workouts' && (
         <div>
           <h2>All Workouts</h2>
+          <input type="text" placeholder="Search Workouts" value={workoutSearch} onChange={(e) => setWorkoutSearch(e.target.value)} />
           {/* Your Workouts code here */}
           <div className='row'>
-
-            {dataWorkouts.workouts.map((workout) => (
+          {dataWorkouts.workouts.filter(workout => workout.name.toLowerCase().includes(workoutSearch.toLowerCase())).map((workout) => (
               <div className="col-md-3" key={workout._id}>
-                <div className="card mb-3">
-                  <div className="card-body">
-                    <h4 className="card-title">{workout.name}</h4>
-                    <p className="card-text">User Notes: {workout.notes}</p>
-                    <p className="card-text"> Admin Notes: {workout.adminNotes}</p>
-                    <ol>
-                      {workout.exercises ? workout.exercises.map((exercise) => (
-                        <li key={exercise.exercise._id}>
-                          {exercise.exercise.name}
-                        </li>
-                      )) : <li>No Exercises assigned</li>}
-                    </ol>
-                    <button onClick={() => handleDeleteWorkout(workout._id)}>Delete</button>
-                    <button onClick={() => window.location.href = `/admin/edit-workout/${workout._id}`}>Edit</button>
-                  </div>
+              <div className="card mb-3">
+                <div className="card-body">
+                  <h4 className="card-title">{workout.name}</h4>
+                  <p className="card-text">User Notes: {workout.notes}</p>
+                  <p className="card-text"> Admin Notes: {workout.adminNotes}</p>
+                  <ol>
+                    {workout.exercises ? workout.exercises.map((exercise) => (
+                      <li key={exercise.exercise._id}>
+                        {exercise.exercise.name}
+                      </li>
+                    )) : <li>No Exercises assigned</li>}
+                  </ol>
+                  <button onClick={() => handleDeleteWorkout(workout._id)}>Delete</button>
+                  <button onClick={() => window.location.href = `/admin/edit-workout/${workout._id}`}>Edit</button>
                 </div>
               </div>
-            ))}
-
-
+            </div>
+          ))}
           </div>
           <Link to={`/admin/create-workout`}>
             <button>Create Workout</button>
@@ -200,9 +202,12 @@ const AdminDashboard = () => {
       {activeTab === 'users' && (
         <div>
           <h2>All Users</h2>
-          {/* Your Users code here */}
+
+          <input type="text" placeholder="Search Users" value={userSearch} onChange={(e) => setUserSearch(e.target.value)} />
           <div className="row">
-            {dataUsers.users.map((user) => (
+            {/* Filter by name search */}
+          {dataUsers.users.filter(user => user.firstname.toLowerCase().includes(userSearch.toLowerCase()) || user.lastname.toLowerCase().includes(userSearch.toLowerCase())).map((user) => (
+      // Display Each User
               <div className="col-md-3" key={user._id}>
                 <Link to={`/admin/user/${user._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                   <div className="card mb-3">
@@ -214,8 +219,12 @@ const AdminDashboard = () => {
                   </div>
                 </Link>
               </div>
-            ))}
+
+            
+          ))}
           </div>
+          {/* Your Users code here */}
+
           <Link to={`/admin/create-user`}>
             <button>Create User</button>
           </Link>
@@ -225,27 +234,31 @@ const AdminDashboard = () => {
       {activeTab === 'exercises' && (
         <div>
           <h2>All Exercises</h2>
-          {/* Your Workouts code here */}
-          <ul>
-            {dataExercises.exercises.map((exercise) => (
-              <li key={exercise._id}>
-                {exercise.name} - {exercise.notes}
-                <ul>
-                  <li>Sets: {exercise.sets}
-                  </li>
-                  <li>Reps: {exercise.reps}
-                  </li>
-                  <li>Weight: {exercise.weight}
-                  </li>
-                </ul>
-                <button onClick={() => handleDeleteExercise(exercise._id)}>Delete</button>
-                <button onClick={() => window.location.href = `/admin/edit-exercise/${exercise._id}`}>Edit</button>
-                <ul>
+          <input type="text" placeholder="Search Exercises" value={exerciseSearch} onChange={(e) => setExerciseSearch(e.target.value)} />
+          {dataExercises.exercises.filter(exercise => exercise.name.toLowerCase().includes(exerciseSearch.toLowerCase())).map((exercise) => (
+             <ul>
+            
+             <li key={exercise._id}>
+               {exercise.name} - {exercise.notes}
+               <ul>
+                 <li>Sets: {exercise.sets}
+                 </li>
+                 <li>Reps: {exercise.reps}
+                 </li>
+                 <li>Weight: {exercise.weight}
+                 </li>
+               </ul>
+               <button onClick={() => handleDeleteExercise(exercise._id)}>Delete</button>
+               <button onClick={() => window.location.href = `/admin/edit-exercise/${exercise._id}`}>Edit</button>
+               <ul>
 
-                </ul>
-              </li>
-            ))}
-          </ul>
+               </ul>
+             </li>
+           
+         </ul>
+          ))}
+          {/* Your Workouts code here */}
+         
           <Link to={`/admin/create-exercise`}>
             <button>Create Exercise</button>
           </Link>
