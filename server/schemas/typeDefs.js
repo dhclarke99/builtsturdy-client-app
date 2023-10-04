@@ -18,6 +18,10 @@ type User {
   age: Int
   trainingExperience: String
   mainPhysiqueGoal: String
+  caloricTarge: Int
+  proteinTarget: Int
+  carbohydrateTarget: Int
+  fatTarget: Int
   startDate: String
   weeks: Int
   dailyTracking: [DailyTracking]
