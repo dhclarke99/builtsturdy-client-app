@@ -41,6 +41,10 @@ query findUserById($userId: String!) {
     trainingExperience
     username
     weeks
+    caloricTarget
+    proteinTarget
+    carbohydrateTarget
+    fatTarget
     startDate
     schedule {
       _id
@@ -109,6 +113,10 @@ query findAllUsers {
     mainPhysiqueGoal
     role
     startDate
+    caloricTarget
+    proteinTarget
+    carbohydrateTarget
+    fatTarget
     weeks
     schedule {
       _id

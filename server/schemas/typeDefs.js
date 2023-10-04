@@ -18,7 +18,7 @@ type User {
   age: Int
   trainingExperience: String
   mainPhysiqueGoal: String
-  caloricTarge: Int
+  caloricTarget: Int
   proteinTarget: Int
   carbohydrateTarget: Int
   fatTarget: Int
