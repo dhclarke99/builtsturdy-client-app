@@ -285,6 +285,7 @@ const UniqueUser = () => {
               <li>Body Fat: {user.estimatedBodyFat} %</li>
               <li>Experience: {user.trainingExperience}</li>
               <li>Goal: {user.mainPhysiqueGoal}</li>
+              <li>Caloric Target: {user.caloricTarget}</li>
               <li>Program Start Date: {unixToString(parseInt(user.startDate))}</li>
               <li>Program Length: {user.weeks} weeks</li>
             </ul>
@@ -526,6 +527,7 @@ const UniqueUser = () => {
               </select>
 
             </label>
+            
             <label> Schedule:
               <select name="schedule" placeholder="Physique Goal"
                 value={formData.schedule || ''} onChange={handleChange}>
