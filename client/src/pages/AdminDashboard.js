@@ -169,8 +169,8 @@ const AdminDashboard = () => {
           <div className='row'>
 
             {dataWorkouts.workouts.map((workout) => (
-              <div className="col-md-4" key={workout._id}>
-                <div className="card mb-4">
+              <div className="col-md-3" key={workout._id}>
+                <div className="card mb-3">
                   <div className="card-body">
                     <h4 className="card-title">{workout.name}</h4>
                     <p className="card-text">User Notes: {workout.notes}</p>
@@ -203,9 +203,9 @@ const AdminDashboard = () => {
           {/* Your Users code here */}
           <div className="row">
             {dataUsers.users.map((user) => (
-              <div className="col-md-4" key={user._id}>
+              <div className="col-md-3" key={user._id}>
                 <Link to={`/admin/user/${user._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <div className="card mb-4">
+                  <div className="card mb-3">
                     <div className="card-body">
                       <h5 className="card-title">{user.firstname} {user.lastname}</h5>
                       <p className="card-text">{user.email}</p>

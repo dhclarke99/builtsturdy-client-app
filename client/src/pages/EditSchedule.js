@@ -190,7 +190,7 @@ console.log(dataSchedule)
           <option value="" disabled>Select a workout</option>
           {dataWorkouts.workouts.map((workout) => (
             <option key={workout._id} value={workout._id}>
-              {workout.name}
+              {workout.name} - {workout.adminNotes}
             </option>
           ))}
         </select>
