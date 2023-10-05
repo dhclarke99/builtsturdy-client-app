@@ -60,7 +60,7 @@
       "videoUrl": ""
     },
     {
-      "name": "Backward Lunge",
+      "name": "Alternating Backward Lunge",
       "notes": "",
       "adminNotes": "",
       "videoUrl": ""
@@ -178,6 +178,149 @@
       "notes": "",
       "adminNotes": "",
       "videoUrl": ""
+    },
+    {
+      "name": "Wall Sit",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },  
+    {
+      "name": "Lat Pulldown",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    }, 
+    {
+      "name": "Dumbbell Romanian Deadlift",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    }, 
+    {
+      "name": "Skull Crusher",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    }, 
+    {
+      "name": "Low to High Cable Fly",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    }, 
+    {
+      "name": "Cable Chest Fly",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },  
+    {
+      "name": "High to Low Cable Fly",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    }, 
+    {
+      "name": "Cable Front Raise",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    }, 
+    {
+      "name": "Dumbbell Curl",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    }, 
+    {
+      "name": "Hip Huggers",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    }, 
+    {
+      "name": "Rear Delt Machine Fly",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Single Arm Tricep Extension",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Banded Internal Rotation",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Banded External Rotation",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Cable Curl",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Leg Press",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Dumbbell Hammer Curl",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Single Leg Calf Raise",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Single Arm Dumbbell Row",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Dumbbell High Pull",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Machine Preacher Curl",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Lying Hamstring Walkout",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Lying Straight Leg Marches",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Barbell Split Squat",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
     }
-    
   ]
