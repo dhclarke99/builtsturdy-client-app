@@ -18,10 +18,10 @@ type User {
   age: Int
   trainingExperience: String
   mainPhysiqueGoal: String
-  caloricTarget: Int
-  proteinTarget: Int
-  carbohydrateTarget: Int
-  fatTarget: Int
+  caloricTarget: Float
+  proteinTarget: Float
+  carbohydrateTarget: Float
+  fatTarget: Float
   startDate: String
   weeks: Int
   dailyTracking: [DailyTracking]

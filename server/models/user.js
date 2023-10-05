@@ -141,9 +141,9 @@ userSchema.pre('save', function (next) {
     let caloriesRounded;
 
     if (!this.$isEmpty('gender') && !this.$isEmpty('age') && !this.$isEmpty('currentWeight') && !this.$isEmpty('height') && !this.$isEmpty('trainingExperience') && !this.$isEmpty('mainPhysiqueGoal')) {
-        
+
         const mass = this.currentWeight * 0.453592;
-        
+
         if (!this.$isEmpty('estimatedBodyFat')) {
             const LBM = (mass * (100 - this.estimatedBodyFat)) / 100;
             BMR = 370 + (21.6 * LBM);
@@ -164,6 +164,34 @@ userSchema.pre('save', function (next) {
         caloriesRounded = Math.round(calories);
         this.caloricTarget = caloriesRounded;
     }
+    next();
+});
+
+userSchema.pre('save', async function (next) {
+    // Validate that caloricTarget and currentWeight are set and not zero
+    if (!this.caloricTarget || !this.currentWeight || this.caloricTarget === 0 || this.currentWeight === 0) {
+        return next(new Error('Caloric target and current weight must be set and non-zero'));
+    }
+
+    let proteinPerc;
+
+    // Calculate protein target based on 25% of caloric target or current weight, whichever is larger
+    if ((this.caloricTarget * 0.25) / 4 >= this.currentWeight) {
+        proteinPerc = 25;
+        this.proteinTarget = (this.caloricTarget * 0.25) / 4;
+    } else {
+        proteinPerc = Math.round(((this.currentWeight * 4) / this.caloricTarget) * 100);
+        this.proteinTarget = this.currentWeight;
+    }
+
+    // Calculate percentage for carbs and fats
+    const carbsPerc = Math.round((100 - proteinPerc) / 2 + 5);
+    const fatPerc = 100 - proteinPerc - carbsPerc;
+
+    // Calculate target in grams for carbs and fats
+    this.carbohydrateTarget = Math.round((this.caloricTarget * (carbsPerc / 100)) / 4);
+    this.fatTarget = Math.round((this.caloricTarget * (fatPerc / 100)) / 9);
+
     next();
 });
 

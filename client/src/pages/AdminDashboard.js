@@ -99,6 +99,7 @@ const AdminDashboard = () => {
   };
 
   console.log(dataSchedules)
+  console.log(dataUsers)
   if (loadingWorkouts || loadingUsers || loadingExercises || loadingSchedules) return <p>Loading...</p>;
   if (errorWorkouts || errorUsers || errorExercises || errorSchedules) return <p>Error: {errorWorkouts?.message || errorUsers?.message || errorExercises?.message || errorSchedules?.message}</p>;
 
