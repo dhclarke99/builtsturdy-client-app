@@ -147,7 +147,9 @@ const AdminDashboard = () => {
                                   Exercises:
                                   <ol className="list-group list-group-flush mt-2">
                                     {relevantWorkoutDetail.workout.exercises.map((exercise, index) => (
-                                      <li className="list-group-item" key={index}>{exercise.exercise.name}: {exercise.sets} sets of {exercise.targetReps} reps</li>
+                                      <li className="list-group-item" key={index}>
+                                        {exercise.exercise ? `${exercise.exercise.name}: ${exercise.sets} sets of ${exercise.targetReps} reps` : 'Exercise data missing'}
+                                      </li>
                                     ))}
                                   </ol>
                                 </li>
