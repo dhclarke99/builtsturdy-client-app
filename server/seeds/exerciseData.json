@@ -1,23 +1,183 @@
 [
     {
-      "name": "Pull Up",
-      "sets": 3,
-      "reps": 8,
-      "weight": 60,
-      "notes": "Slow and controlled"
+      "name": "Barbell Bench Press",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
     },
     {
-        "name": "Squat",
-        "sets": 2,
-        "reps": 10,
-      "weight": 135,
-      "notes": "Slow and controlled"
-      },
-      {
-        "name": "Burpee",
-      "sets": 1,
-      "reps": 20,
-      "weight": 0,
-      "notes": "Fast paced - body weight"
-      }
+      "name": "Pull Up",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Incline Dumbbell Bench Press",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Barbell Row",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Lateral Raise",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Rear Delt Cable Crossover",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Barbell Romanian Deadlift",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Barbell Back Squat",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Lying Hamstring Curl",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Leg Extension",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Backward Lunge",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Seated Vertical Jump",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Depth Jump",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "RFE Cycle",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Single Leg Box Jump",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Reactive Jump",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Patrick Step Up",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "ATG Split Squat",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Nordic Curl",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Seated Hamstring Curl",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Bulgarian Split Squat",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Machine Chest Fly",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Chest Supported Dumbbell Row",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Barbell Shrug",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Standing Dumbbell Shoulder Press",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Tricep Dip",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Chin Up",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Striaght Bar Curl",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Tricep Extension",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    },
+    {
+      "name": "Depth Jump",
+      "notes": "",
+      "adminNotes": "",
+      "videoUrl": ""
+    }
+    
   ]

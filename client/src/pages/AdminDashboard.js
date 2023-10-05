@@ -100,6 +100,7 @@ const AdminDashboard = () => {
 
   console.log(dataSchedules)
   console.log(dataUsers)
+  console.log(dataWorkouts)
   if (loadingWorkouts || loadingUsers || loadingExercises || loadingSchedules) return <p>Loading...</p>;
   if (errorWorkouts || errorUsers || errorExercises || errorSchedules) return <p>Error: {errorWorkouts?.message || errorUsers?.message || errorExercises?.message || errorSchedules?.message}</p>;
 
@@ -177,23 +178,28 @@ const AdminDashboard = () => {
               <div className="col-md-3" key={workout._id}>
                 <div className="card mb-3">
                   <div className='card-header'>
-                  <h4 className="card-title">{workout.name}</h4>
+                    <h4 className="card-title">{workout.name}</h4>
                     <p className="card-text">User Notes: {workout.notes}</p>
                     <p className="card-text"> Admin Notes: {workout.adminNotes}</p>
-                    </div>
+                  </div>
                   <div className="card-body">
-                   
+
                     <ol>
-                      {workout.exercises ? workout.exercises.map((exercise) => (
-                        <li key={exercise.exercise._id}>
-                          {exercise.exercise.name}
-                        </li>
+                      {workout.exercises ? workout.exercises.map((exercise, index) => (
+                        exercise.exercise ? (
+                          <li key={exercise.exercise._id}>
+                            {exercise.exercise.name}
+                          </li>
+                        ) : (
+                          <li key={index}>Exercise data missing</li>
+                        )
                       )) : <li>No Exercises assigned</li>}
                     </ol>
+
                     <button onClick={() => handleDeleteWorkout(workout._id)}>Delete</button>
                     <button onClick={() => window.location.href = `/admin/edit-workout/${workout._id}`}>Edit</button>
                   </div>
-                 
+
                 </div>
               </div>
             ))}
@@ -245,12 +251,12 @@ const AdminDashboard = () => {
               <div className="col-md-3" key={exercise._id}>
                 <div className="card mb-3">
                   <div className="card-header">
-                  <h5 className="card-title">{exercise.name}</h5>
+                    <h5 className="card-title">{exercise.name}</h5>
                     <p className="card-text">Notes: {exercise.notes}</p>
                     <p className="card-text">Admin Notes: {exercise.adminNotes}</p>
                   </div>
                   <div className="card-body">
-                    
+
                     <p>Video: {exercise.videoUrl} </p>
 
                     <button onClick={() => handleDeleteExercise(exercise._id)}>Delete</button>

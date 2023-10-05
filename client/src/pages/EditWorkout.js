@@ -61,8 +61,15 @@ const EditWorkout = () => {
   };
   
 
-  const handleRemoveExercise = async (exerciseIdToRemove) => {
-    const updatedExercises = allExercises.filter(ex => ex.exercise._id !== exerciseIdToRemove);
+  const handleRemoveExercise = async (exerciseIdToRemove, index = null) => {
+    let updatedExercises;
+  
+    if (exerciseIdToRemove) {
+      updatedExercises = allExercises.filter(ex => ex.exercise._id !== exerciseIdToRemove);
+    } else if (index !== null) {
+      updatedExercises = [...allExercises];
+      updatedExercises.splice(index, 1);
+    }
   
     // Prepare the exercises array for the mutation
     const preparedExercises = updatedExercises.map(ex => ({
@@ -79,6 +86,7 @@ const EditWorkout = () => {
       console.error(err);
     }
   };
+  
   
 
   const removeTypeName = (obj) => {
@@ -164,15 +172,22 @@ const EditWorkout = () => {
       <label>
         Current Exercises:
         <ul>
-          {data.workout.exercises.map((exercise, index) => (
-            <li key={exercise.exercise._id}>
-              {exercise.exercise.name}: {exercise.sets} sets of {exercise.targetReps} reps
-              <button onClick={() => handleRemoveExercise(exercise.exercise._id)}>Remove</button>
-              <button onClick={() => moveExerciseUp(index)}>Move Up</button>
-              <button onClick={() => moveExerciseDown(index)}>Move Down</button>
-            </li>
-          ))}
-        </ul>
+  {data.workout.exercises.map((exercise, index) => (
+    exercise.exercise ? (
+      <li key={exercise.exercise._id}>
+        {exercise.exercise.name}: {exercise.sets} sets of {exercise.targetReps} reps  
+        <button onClick={() => handleRemoveExercise(exercise.exercise._id)}>Remove</button>
+        <button onClick={() => moveExerciseUp(index)}>Move Up</button>
+        <button onClick={() => moveExerciseDown(index)}>Move Down</button>
+      </li>
+    ) : (
+      <li key={index}>Exercise data missing
+        <button onClick={() => handleRemoveExercise(null, index)}>Remove</button>
+      </li>
+    )
+  ))}
+</ul>
+
       </label>
       <label>
         Assign Exercise:
