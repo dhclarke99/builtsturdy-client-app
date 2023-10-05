@@ -285,7 +285,10 @@ const UniqueUser = () => {
               <li>Body Fat: {user.estimatedBodyFat} %</li>
               <li>Experience: {user.trainingExperience}</li>
               <li>Goal: {user.mainPhysiqueGoal}</li>
-              <li>Caloric Target: {user.caloricTarget}</li>
+              <li>Caloric Target: {user.caloricTarget} calories</li>
+              <li>Protein Target: {user.proteinTarget} grams</li>
+              <li>Carbs Target: {user.carbohydrateTarget} grams</li>
+              <li>Fats Target: {user.fatTarget} grams</li>
               <li>Program Start Date: {unixToString(parseInt(user.startDate))}</li>
               <li>Program Length: {user.weeks} weeks</li>
             </ul>
