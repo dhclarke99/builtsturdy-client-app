@@ -320,7 +320,8 @@ const Nutrition = () => {
       <li>Experience: {data.user.trainingExperience}</li>
       <li>Goal: {data.user.mainPhysiqueGoal}</li>
 
-      <p>Based on your stats, your daily calorie target is: {dailyCalories} calories</p>
+      <p>Based on your stats, your daily calorie target is: {data.user.caloricTarget} calories</p>
+      <p>You should eat {data.user.proteinTarget} grams of protein per day.</p>
       <button onClick={checkMealTemplate}>Generate Meal Plan</button>
       <h2>Daily Tracking</h2>
       
