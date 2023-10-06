@@ -173,46 +173,69 @@ const Nutrition = () => {
   };
 
   const createMealPlanTemplate = async () => {
-    console.log("template needs to be created")
+    console.log("template being created...")
     console.log(data)
-    const description = data.user.mainPhysiqueGoal;
-    const calorieTarget = dailyCalories;
-    console.log(caloriesRounded)
-    const proteinPerc = await calculateProteinPerc(calorieTarget, data)
-    const carbsPerc = Math.round((100 - proteinPerc) / 2 + 5)
-    const fatPerc = 100 - proteinPerc - carbsPerc
+    
+    const proteinPerc = Math.round(((data.user.proteinTarget * 4) / data.user.caloricTarget)*100)
+    const carbsPerc = Math.round(((data.user.carbohydrateTarget * 4) / data.user.caloricTarget)*100)
+    const fatPerc = Math.round(((data.user.fatTarget * 9) / data.user.caloricTarget)*100)
     const firstname = data.user.firstname
     const lastname = data.user.lastname
+    const description = data.user.mainPhysiqueGoal;
 
-    console.log(description, calorieTarget, proteinPerc, carbsPerc, fatPerc, firstname, lastname,)
-    // const createTemplateMutation = `
-    // mutation {
-    //   createMealPlanTemplate(
-    //     description: "Custom Meal Plan Template"
-    //     customOptions: {
-    //     calories: 1500
-    //     carbsPerc: 45
-    //     proteinPerc: 25
-    //     fatPerc: 30
-    //     program: "UHJvZ3JhbTozMzNhZjZiYi0xYTg4LTQzYzQtYjExZC1kYjJjZWNkMjk3YjA="
-    //     }
-    //     name: "New Meal Plan Template"
-    //   )
-    //   {
-    //     message
-    //     id
-    //     success
-    //   }
-    // }
-    // `
+    console.log(description, data.user.caloricTarget, proteinPerc, carbsPerc, fatPerc, firstname, lastname,)
+    const createTemplateMutation = `
+    mutation {
+      createMealPlanTemplate(
+        description: "${firstname}'s ${description} meal plan template at ${data.user.currentWeight}"
+        customOptions: {
+        calories: ${data.user.caloricTarget}
+        carbsPerc: ${carbsPerc}
+        proteinPerc: ${proteinPerc}
+        fatPerc: ${fatPerc}
+        program: "UHJvZ3JhbTpiMDlmOWE2MC0yOWIyLTQ4MmMtOWI0Ni00NmQyMGJkNWU5Y2U="
+        }
+        name: "${firstname} ${lastname}'s Meal Plan Template"
+      )
+      {
+        message
+        success
+      }
+    }
+    `
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`
+      },
+      body: JSON.stringify({ query: createTemplateMutation })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(createTemplateMutation)
+        console.log(data)
+        console.log(data.data.createMealPlanTemplate.message)
+
+      })
+      .catch(error => console.error('Error:', error))
+  
+
 
   }
 
   const generateMealPlan = async () => {
-
+    console.log("meal plan generated")
   }
 
   const checkMealTemplate = async () => {
+    if (data.user.mealPlanTemplate === null) {
+      console.log("no template for user yet, create one")
+
+    } else {
+      generateMealPlan();
+    }
     const existingMealTemplateQuery = `
     query {
       mealPlanTemplates {
@@ -229,6 +252,7 @@ const Nutrition = () => {
               meals {
                 recipe {
                   name
+                  instructions
                 }
                 calories
                 numOfServings
@@ -252,11 +276,14 @@ const Nutrition = () => {
         console.log(templateData)
         console.log(templateData.data.mealPlanTemplates.edges)
 
-
-
+        const description = `"${data.user.firstname}'s ${data.user.mainPhysiqueGoal} meal plan template at ${data.user.currentWeight}"`
+        const idToGenerate = templateData.data.mealPlanTemplates.edges.findIndex(plan => plan.node.description === description);
+        console.log(description)
+        console.log(idToGenerate)
         if (templateData.data.mealPlanTemplates.edges.length === 0) {
           createMealPlanTemplate()
         } else {
+          
           console.log("Templates already exist:", templateData)
         }
 
@@ -265,6 +292,7 @@ const Nutrition = () => {
     console.log(dailyCalories)
 
   }
+
   useEffect(() => {
 
     const programQuery = `{

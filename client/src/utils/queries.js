@@ -46,6 +46,7 @@ query findUserById($userId: String!) {
     carbohydrateTarget
     fatTarget
     startDate
+    mealPlanTemplate
     schedule {
       _id
       name
@@ -117,6 +118,7 @@ query findAllUsers {
     proteinTarget
     carbohydrateTarget
     fatTarget
+    mealPlanTemplate
     weeks
     schedule {
       _id

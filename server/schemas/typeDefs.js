@@ -24,6 +24,7 @@ type User {
   fatTarget: Float
   startDate: String
   weeks: Int
+  mealPlanTemplate: String
   dailyTracking: [DailyTracking]
   completedDays: [CompletedDays]
 }
@@ -63,6 +64,7 @@ input UpdateUserInput {
   schedule: ID
   startDate: String
   weeks: Int
+  mealPlanTemplate: String
   dailyTracking: [DailyTrackingInput!]
 
 }

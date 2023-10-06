@@ -83,6 +83,9 @@ const userSchema = new Schema({
         type: Number,
         require: true,
     },
+    mealPlanTemplate: {
+        type: String,
+    },
     dailyTracking: [
         {
             date: Date,
