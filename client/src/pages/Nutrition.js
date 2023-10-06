@@ -276,10 +276,12 @@ const Nutrition = () => {
         console.log(templateData)
         console.log(templateData.data.mealPlanTemplates.edges)
 
-        const description = `"${data.user.firstname}'s ${data.user.mainPhysiqueGoal} meal plan template at ${data.user.currentWeight}"`
-        const idToGenerate = templateData.data.mealPlanTemplates.edges.findIndex(plan => plan.node.description === description);
-        console.log(description)
+        const description = `${data.user.firstname}'s ${data.user.mainPhysiqueGoal} meal plan template at ${data.user.currentWeight}`
+        const trimmedDescription = description.trim();
+
+        const idToGenerate = templateData.data.mealPlanTemplates.edges.findIndex(plan => plan.node.description.trim() === trimmedDescription);     
         console.log(idToGenerate)
+
         if (templateData.data.mealPlanTemplates.edges.length === 0) {
           createMealPlanTemplate()
         } else {
