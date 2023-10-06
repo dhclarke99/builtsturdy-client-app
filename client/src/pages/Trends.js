@@ -59,11 +59,6 @@ const { loading, error, data } = useQuery(QUERY_USER_by_id, {
   console.log(groupedByWeek)
   console.log(weeklyAverages)
 
-// Step 4: Prepare Data for Charting
-// You can now use `weeklyAverages` to create your charts
-
-
-
 
   
 

@@ -281,7 +281,8 @@ const Nutrition = () => {
 
         const idToGenerate = templateData.data.mealPlanTemplates.edges.findIndex(plan => plan.node.description.trim() === trimmedDescription);     
         console.log(idToGenerate)
-
+        const matchingTemplateId = templateData.data.mealPlanTemplates.edges[idToGenerate].node.id
+        console.log(matchingTemplateId)
         if (templateData.data.mealPlanTemplates.edges.length === 0) {
           createMealPlanTemplate()
         } else {
