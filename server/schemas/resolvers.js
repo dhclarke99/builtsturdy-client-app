@@ -121,6 +121,32 @@ const resolvers = {
         throw new Error("Failed to update user");
       }
     },
+    updateUserMealTemplate: async (_, { userId, mealPlanTemplate }) => {
+      try {
+        // Filter out any fields that are null or undefined
+      
+        // Find the user by ID and update it
+        const updatedUser = await User.findByIdAndUpdate(
+          userId,
+          { $set: mealPlanTemplate },
+          { 
+            new: true, 
+            runValidators: true, 
+          }
+        );
+        console.log(updatedUser)
+  
+        // If the user doesn't exist, throw an error
+        if (!updatedUser) {
+          throw new Error('User not found');
+        }
+  
+        return updatedUser;
+      } catch (error) {
+        console.error("Error in updateUser:", error);
+        throw new Error("Failed to update user");
+      }
+    },
     login: async (_parent, { email, password }) => {
       try {
         const user = await User.findOne({ email });

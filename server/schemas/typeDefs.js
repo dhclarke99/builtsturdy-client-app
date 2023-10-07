@@ -212,6 +212,7 @@ input UpdateUserInput {
     createUser(input: CreateUserInput!): Auth
     updateUser(userId: ID!, input: UpdateUserInput!): User
     updateUserCompletion(userId: ID!, input: CompletedDaysInput!): User
+    updateUserMealTemplate(userId: ID!, mealPlanTemplate: String!): User
     deleteUser(userId: ID!): User
     login(email: String!, password: String!): Auth
     logout: Boolean
