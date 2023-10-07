@@ -227,7 +227,7 @@ const Nutrition = () => {
   }
 
   const generateMealPlan = async () => {
-    console.log("meal plan generated")
+    console.log("meal plan generating...")
   }
 
   const assignToUser = async (id) => {
@@ -248,67 +248,69 @@ const Nutrition = () => {
     if (data.user.mealPlanTemplate === null) {
       console.log("no template for user yet, create one")
 
-    } else {
-      generateMealPlan();
-    }
-    const existingMealTemplateQuery = `
-    query {
-      mealPlanTemplates {
-        edges {
-          node {
-            id
-            description
-            createdAt
-            coachId
-            isPublic
-            name
-            days {
-              day
-              meals {
-                recipe {
-                  name
-                  instructions
+      const existingMealTemplateQuery = `
+      query {
+        mealPlanTemplates {
+          edges {
+            node {
+              id
+              description
+              createdAt
+              coachId
+              isPublic
+              name
+              days {
+                day
+                meals {
+                  recipe {
+                    name
+                    instructions
+                  }
+                  calories
+                  numOfServings
                 }
-                calories
-                numOfServings
               }
             }
           }
         }
-      }
-    }`
-
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`
-      },
-      body: JSON.stringify({ query: existingMealTemplateQuery })
-    })
-      .then(response => response.json())
-      .then(templateData => {
-        console.log(templateData)
-        console.log(templateData.data.mealPlanTemplates.edges)
-
-        const description = `${data.user.firstname}'s ${data.user.mainPhysiqueGoal} meal plan template at ${data.user.currentWeight}`
-        const trimmedDescription = description.trim();
-
-        const idToGenerate = templateData.data.mealPlanTemplates.edges.findIndex(plan => plan.node.description.trim() === trimmedDescription);     
-        console.log(idToGenerate)
-        const matchingTemplateId = templateData.data.mealPlanTemplates.edges[idToGenerate].node.id
-        console.log(matchingTemplateId)
-        
-        if (templateData.data.mealPlanTemplates.edges.length === 0) {
-          createMealPlanTemplate()
-        } else {
-          assignToUser(matchingTemplateId)
-          console.log("Templates already exist:", templateData)
-        }
-
+      }`
+  
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`
+        },
+        body: JSON.stringify({ query: existingMealTemplateQuery })
       })
-      .catch(error => console.error('Error:', error))
-    console.log(dailyCalories)
+        .then(response => response.json())
+        .then(templateData => {
+          console.log(templateData)
+          console.log(templateData.data.mealPlanTemplates.edges)
+  
+          const description = `${data.user.firstname}'s ${data.user.mainPhysiqueGoal} meal plan template at ${data.user.currentWeight}`
+          const trimmedDescription = description.trim();
+  
+          const idToGenerate = templateData.data.mealPlanTemplates.edges.findIndex(plan => plan.node.description.trim() === trimmedDescription);     
+          console.log(idToGenerate)
+          const matchingTemplateId = templateData.data.mealPlanTemplates.edges[idToGenerate].node.id
+          console.log(matchingTemplateId)
+          
+          if (templateData.data.mealPlanTemplates.edges.length === 0) {
+            createMealPlanTemplate()
+          } else {
+            assignToUser(matchingTemplateId)
+            console.log("Templates already exist:", templateData)
+          }
+  
+        })
+        .catch(error => console.error('Error:', error))
+      console.log(dailyCalories)
+
+    } else {
+      generateMealPlan();
+    }
+   
 
   }
 
