@@ -293,3 +293,14 @@ mutation logCompletedWorkout($userId: ID!, $date: String!, $workouts: [Completed
   }
 }
 `;
+
+export const UPDATE_USER_MEAL_PLAN_TEMPLATE = gql `
+mutation updateUserMealPlanTemplate($userId: ID!, $mealPlanTemplate: String!) {
+  updateUserMealTemplate(userId: $userId, mealPlanTemplate: $mealPlanTemplate) {
+    _id
+    firstname
+    lastname
+    mealPlanTemplate
+  }
+}
+`;

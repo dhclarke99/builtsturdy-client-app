@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import { QUERY_USER_by_id } from '../utils/queries';
-import { ADD_DAILY_TRACKING } from '../utils/mutations';
+import { ADD_DAILY_TRACKING, UPDATE_USER_MEAL_PLAN_TEMPLATE } from '../utils/mutations';
 import Auth from '../utils/auth';
 import { Link } from 'react-router-dom';
 import '../utils/userNutrition.css';
@@ -29,6 +29,7 @@ const Nutrition = () => {
     variables: { userId: Auth.getProfile().data._id },
 
   });
+  const [updateMealPlan] = useMutation(UPDATE_USER_MEAL_PLAN_TEMPLATE);
 
 
 
@@ -229,6 +230,20 @@ const Nutrition = () => {
     console.log("meal plan generated")
   }
 
+  const assignToUser = async (id) => {
+    console.log("assigning to user")
+    console.log(id)
+    const userId = Auth.getProfile().data._id
+    console.log(userId)
+
+    try {
+      await updateMealPlan({  variables: {userId: userId, mealPlanTemplate: id }});
+      
+    } catch (error) {
+      console.error("Failed to update workout:", error);
+    }
+  }
+
   const checkMealTemplate = async () => {
     if (data.user.mealPlanTemplate === null) {
       console.log("no template for user yet, create one")
@@ -283,10 +298,11 @@ const Nutrition = () => {
         console.log(idToGenerate)
         const matchingTemplateId = templateData.data.mealPlanTemplates.edges[idToGenerate].node.id
         console.log(matchingTemplateId)
+        
         if (templateData.data.mealPlanTemplates.edges.length === 0) {
           createMealPlanTemplate()
         } else {
-          
+          assignToUser(matchingTemplateId)
           console.log("Templates already exist:", templateData)
         }
 

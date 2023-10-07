@@ -122,13 +122,14 @@ const resolvers = {
       }
     },
     updateUserMealTemplate: async (_, { userId, mealPlanTemplate }) => {
+      console.log(mealPlanTemplate)
       try {
         // Filter out any fields that are null or undefined
       
         // Find the user by ID and update it
         const updatedUser = await User.findByIdAndUpdate(
           userId,
-          { $set: mealPlanTemplate },
+          { $set: {mealPlanTemplate: mealPlanTemplate} },
           { 
             new: true, 
             runValidators: true, 
