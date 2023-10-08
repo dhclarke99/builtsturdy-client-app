@@ -30,6 +30,8 @@ const Nutrition = () => {
 
   });
   const [updateMealPlan] = useMutation(UPDATE_USER_MEAL_PLAN_TEMPLATE);
+  const [mealPlanData, setMealPlanData] = useState(null);
+
 
 
 
@@ -246,6 +248,7 @@ const Nutrition = () => {
             numOfServings
             recipe {
               name
+              mainImage
               instructions
               numberOfServings
               nutrientsPerServing {
@@ -271,7 +274,8 @@ const Nutrition = () => {
     })
       .then(response => response.json())
       .then(mealPlan => {
-        console.log(mealPlan)
+        console.log(mealPlan);
+        setMealPlanData(mealPlan.data.generateMealPlan.mealPlan);
       })
       .catch(error => console.error('Error:', error))
   }
@@ -400,6 +404,9 @@ const Nutrition = () => {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
   };
 
+  const renderMealDetails = (recipe) => {
+    alert(`Instructions: ${recipe.instructions.join('. ')}\nCalories: ${recipe.nutrientsPerServing.calories}\nProtein: ${recipe.nutrientsPerServing.protein}\nFat: ${recipe.nutrientsPerServing.fat}\nCarbs: ${recipe.nutrientsPerServing.carbs}`);
+  };
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -418,6 +425,24 @@ const Nutrition = () => {
       <p>Based on your stats, your daily calorie target is: {data.user.caloricTarget} calories</p>
       <p>You should eat {data.user.proteinTarget} grams of protein per day.</p>
       <button onClick={checkMealTemplate}>Generate Meal Plan</button>
+      {mealPlanData && (
+        <div>
+          <h2>Your Meal Plan</h2>
+          {mealPlanData.map((day, index) => (
+            <div key={index} className="day-card">
+              <h3>Day {day.day} - {day.date}</h3>
+              {day.meals.map((meal, i) => (
+                <div key={i} className="meal-item" onClick={() => renderMealDetails(meal.recipe)}>
+                  <h4>{meal.meal}</h4>
+                  <h5>{meal.recipe.name}</h5>
+                  <img src={meal.recipe.mainImage} alt={meal.recipe.name} />
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+
       <h2>Daily Tracking</h2>
       
       <button onClick={() => setCurrentStartWeek(Math.max(1, currentStartWeek - 4))}>Previous 4 Weeks</button>
