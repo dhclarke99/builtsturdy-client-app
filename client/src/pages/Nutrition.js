@@ -248,6 +248,11 @@ const Nutrition = () => {
             recipe {
               name
               mainImage
+              ingredientLines
+              ingredients{
+                name
+              }
+            ingredientsCount
               instructions
               numberOfServings
               nutrientsPerServing {
@@ -438,7 +443,12 @@ const Nutrition = () => {
       <div className="recipe-details">
         <h3>{selectedRecipe.name}</h3>
         <img src={selectedRecipe.mainImage} alt={selectedRecipe.name} />
-        <p>Instructions: {selectedRecipe.instructions.join('. ')}</p>
+        <p>Instructions:</p>
+        <ol>
+          {selectedRecipe.instructions.map((instruction, index)=>
+          <li key={index}>{instruction}</li>
+          )}
+        </ol>
         {/* ... (other details) */}
       </div>
     )}

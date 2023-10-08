@@ -79,6 +79,7 @@ margin-top: 10px;
 .generated-meal-plan table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed; /* New */
 }
 
 .generated-meal-plan th,
@@ -86,7 +87,16 @@ margin-top: 10px;
   border: 1px solid #ccc;
   padding: 10px;
   text-align: center;
+  overflow: hidden; /* New */
+  text-overflow: ellipsis; /* New */
+  white-space: nowrap; /* New */
 }
+
+.generated-meal-plan img {
+  max-width: 50px; /* New */
+  max-height: 50px; /* New */
+}
+
 
 /* Daily Tracking Styles */
 .daily-tracking {
@@ -105,9 +115,11 @@ margin-top: 10px;
   text-align: center;
 }
 
+/* Make tables scrollable */
 .table-wrapper {
   max-height: 400px;
   overflow-y: auto;
+  overflow-x: auto; 
   border: 1px solid #ccc;
   margin-top: 20px;
   border-radius: 5px;
@@ -121,9 +133,62 @@ margin-top: 10px;
   margin: 20px 0;
   border-radius: 5px;
   text-align: center;
+  position: relative; 
+  z-index: 1; 
 }
 
 .recipe-details img {
   max-width: 100%;
   height: auto;
+}
+
+/* Media Queries for Desktop */
+@media (min-width: 768px) {
+  /* Adjust container width */
+  .nutrition-container {
+    max-width: 1200px;
+  }
+
+  .generated-meal-plan img {
+    max-width: 100px; /* New */
+    max-height: 100px; /* New */
+  }
+
+  /* Adjust table wrapper */
+  .table-wrapper {
+    max-height: 600px;
+  }
+
+  /* Adjust recipe details card */
+  .recipe-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .recipe-details img {
+    max-width: 40%;
+  }
+}
+
+/* Additional styles for aesthetics */
+.header-section {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.personal-stats li {
+  font-size: 1rem;
+  color: #fff;
+}
+
+.tabs button {
+  font-size: 1rem;
+}
+
+.generated-meal-plan th,
+.generated-meal-plan td,
+.daily-tracking th,
+.daily-tracking td {
+  font-size: 0.9rem;
 }
