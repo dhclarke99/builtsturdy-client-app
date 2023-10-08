@@ -440,24 +440,24 @@ const Nutrition = () => {
     </div>
 
     {selectedRecipe && (
-      <div className="recipe-details">
-        <h3>{selectedRecipe.name}</h3>
-        <img src={selectedRecipe.mainImage} alt={selectedRecipe.name} />
-        <p>Ingredients:</p>
-        <ol>
-          {selectedRecipe.ingredientLines.map((ingredient, index)=>
-          <li key={index}>{ingredient}</li>
-          )}
-        </ol>
-        <p>Instructions:</p>
-        <ol>
-          {selectedRecipe.instructions.map((instruction, index)=>
-          <li key={index}>{instruction}</li>
-          )}
-        </ol>
-        {/* ... (other details) */}
-      </div>
-    )}
+  <div className="recipe-details">
+    <h3 className="recipe-title">{selectedRecipe.name}</h3>
+    <img className="recipe-image" src={selectedRecipe.mainImage} alt={selectedRecipe.name} />
+    <p className="ingredients-title">Ingredients:</p>
+    <ol className="ingredients-list">
+      {selectedRecipe.ingredientLines.map((ingredient, index) =>
+        <li key={index} className="ingredient-item">{ingredient}</li>
+      )}
+    </ol>
+    <p className="instructions-title">Instructions:</p>
+    <ol className="instructions-list">
+      {selectedRecipe.instructions.map((instruction, index) =>
+        <li key={index} className="instruction-item">{instruction}</li>
+      )}
+    </ol>
+  </div>
+)}
+
 
 
       {showTab === 'mealPlan' && mealPlanData && (
