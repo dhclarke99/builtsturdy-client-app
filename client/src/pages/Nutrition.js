@@ -31,6 +31,7 @@ const Nutrition = () => {
   });
   const [updateMealPlan] = useMutation(UPDATE_USER_MEAL_PLAN_TEMPLATE);
   const [mealPlanData, setMealPlanData] = useState(null);
+  const [showTab, setShowTab] = useState('tracking');
 
 
 
@@ -411,7 +412,8 @@ const Nutrition = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div>
+    <div className="nutrition-container">
+      <div className="header-section">
       <h1>{data.user.firstname}'s Nutrition Calculator</h1>
       <h2>Your Personal Stats</h2>
       <li>Age: {data.user.age}</li>
@@ -424,25 +426,60 @@ const Nutrition = () => {
 
       <p>Based on your stats, your daily calorie target is: {data.user.caloricTarget} calories</p>
       <p>You should eat {data.user.proteinTarget} grams of protein per day.</p>
+      
       <button onClick={checkMealTemplate}>Generate Meal Plan</button>
-      {mealPlanData && (
-        <div>
-          <h2>Your Meal Plan</h2>
-          {mealPlanData.map((day, index) => (
-            <div key={index} className="day-card">
-              <h3>Day {day.day} - {day.date}</h3>
-              {day.meals.map((meal, i) => (
-                <div key={i} className="meal-item" onClick={() => renderMealDetails(meal.recipe)}>
-                  <h4>{meal.meal}</h4>
-                  <h5>{meal.recipe.name}</h5>
-                  <img src={meal.recipe.mainImage} alt={meal.recipe.name} />
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      )}
+      </div>
 
+      <div className="tabs">
+      <button onClick={() => setShowTab('mealPlan')}>Meal Plan</button>
+      <button onClick={() => setShowTab('tracking')}>Daily Tracking</button>
+    </div>
+
+
+      {showTab === 'mealPlan' && mealPlanData && (
+      <div className='generated-meal-plan'>
+        <h2>Your Meal Plan</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Meal Type</th>
+              <th>Day 1</th>
+              <th>Day 2</th>
+              <th>Day 3</th>
+              <th>Day 4</th>
+              <th>Day 5</th>
+              <th>Day 6</th>
+              <th>Day 7</th>
+            </tr>
+          </thead>
+          <tbody>
+            {['Breakfast', 'Lunch', 'Dinner', 'Snack'].map((mealType) => (
+              <tr key={mealType}>
+                <td>{mealType}</td>
+                {Array.from({ length: 7 }, (_, i) => i + 1).map((day) => {
+                  const meal = mealPlanData.find((d) => d.day === day)?.meals.find((m) => m.meal === mealType);
+                  return (
+                    <td key={day} onClick={() => meal && renderMealDetails(meal.recipe)}>
+                      {meal ? (
+                        <>
+                          <div>{meal.recipe.name}</div>
+                          <img src={meal.recipe.mainImage} alt={meal.recipe.name} />
+                        </>
+                      ) : (
+                        'N/A'
+                      )}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+
+{showTab === 'tracking' && (
+  <div className='daily-tracking'>
       <h2>Daily Tracking</h2>
       
       <button onClick={() => setCurrentStartWeek(Math.max(1, currentStartWeek - 4))}>Previous 4 Weeks</button>
@@ -494,7 +531,8 @@ const Nutrition = () => {
 </tbody>
 
       </table>
-
+      </div>
+)}
     </div>
   );
 };
