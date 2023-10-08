@@ -213,3 +213,66 @@ margin-top: 10px;
 .daily-tracking td {
   font-size: 0.9rem;
 }
+
+@media screen and (min-width: 1024px) and (max-width: 1366px) {
+  /* Nutrition Container */
+  .nutrition-container {
+    max-width: 1000px;
+    padding: 30px;
+  }
+
+  /* Recipe Details */
+  .recipe-details {
+    max-width: 700px;
+    margin: 20px auto;
+  }
+
+  .recipe-title {
+    font-size: 28px;
+  }
+
+  .recipe-image {
+    max-width: 60%;
+  }
+
+  .ingredients-title,
+  .instructions-title {
+    font-size: 20px;
+  }
+
+  .ingredients-list,
+  .instructions-list {
+    margin: 0 30px;
+    font-size: 16px;
+  }
+
+  /* Meal Plan Table */
+  .generated-meal-plan table {
+    font-size: 14px;
+  }
+
+  .generated-meal-plan th,
+  .generated-meal-plan td {
+    padding: 12px;
+  }
+
+  .generated-meal-plan img {
+    max-width: 40px;
+    max-height: 40px;
+  }
+
+  /* Daily Tracking Table */
+  .daily-tracking table {
+    font-size: 14px;
+  }
+
+  .daily-tracking th,
+  .daily-tracking td {
+    padding: 12px;
+  }
+
+  /* Table Wrapper */
+  .table-wrapper {
+    max-height: 500px;
+  }
+}

@@ -455,6 +455,8 @@ const Nutrition = () => {
         <li key={index} className="instruction-item">{instruction}</li>
       )}
     </ol>
+    <p>Calories: {selectedRecipe.nutrientsPerServing.calories}</p>
+    <p>Protein: {selectedRecipe.nutrientsPerServing.protein}</p>
   </div>
 )}
 
