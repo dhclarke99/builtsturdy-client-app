@@ -32,9 +32,7 @@ const Nutrition = () => {
   const [updateMealPlan] = useMutation(UPDATE_USER_MEAL_PLAN_TEMPLATE);
   const [mealPlanData, setMealPlanData] = useState(null);
   const [showTab, setShowTab] = useState('tracking');
-
-
-
+  const [selectedRecipe, setSelectedRecipe] = useState(null); // Add this line to manage selected recipe
 
   useEffect(() => {
     if (data && data.user) {
@@ -406,8 +404,9 @@ const Nutrition = () => {
   };
 
   const renderMealDetails = (recipe) => {
-    alert(`Instructions: ${recipe.instructions.join('. ')}\nCalories: ${recipe.nutrientsPerServing.calories}\nProtein: ${recipe.nutrientsPerServing.protein}\nFat: ${recipe.nutrientsPerServing.fat}\nCarbs: ${recipe.nutrientsPerServing.carbs}`);
+    setSelectedRecipe(recipe); // Update this line
   };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -435,8 +434,18 @@ const Nutrition = () => {
       <button onClick={() => setShowTab('tracking')}>Daily Tracking</button>
     </div>
 
+    {selectedRecipe && (
+      <div className="recipe-details">
+        <h3>{selectedRecipe.name}</h3>
+        <img src={selectedRecipe.mainImage} alt={selectedRecipe.name} />
+        <p>Instructions: {selectedRecipe.instructions.join('. ')}</p>
+        {/* ... (other details) */}
+      </div>
+    )}
+
 
       {showTab === 'mealPlan' && mealPlanData && (
+        <div className='table-wrapper'>
       <div className='generated-meal-plan'>
         <h2>Your Meal Plan</h2>
         <table>
@@ -476,9 +485,11 @@ const Nutrition = () => {
           </tbody>
         </table>
       </div>
+      </div>
     )}
 
 {showTab === 'tracking' && (
+  <div className='table-wrapper'>
   <div className='daily-tracking'>
       <h2>Daily Tracking</h2>
       
@@ -531,6 +542,7 @@ const Nutrition = () => {
 </tbody>
 
       </table>
+      </div>
       </div>
 )}
     </div>

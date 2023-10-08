@@ -104,3 +104,26 @@ margin-top: 10px;
   padding: 10px;
   text-align: center;
 }
+
+.table-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  margin-top: 20px;
+  border-radius: 5px;
+}
+
+/* Recipe Details Card */
+.recipe-details {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.recipe-details img {
+  max-width: 100%;
+  height: auto;
+}
