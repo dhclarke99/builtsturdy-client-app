@@ -228,6 +228,52 @@ const Nutrition = () => {
 
   const generateMealPlan = async () => {
     console.log("meal plan generating...")
+    console.log(data.user.mealPlanTemplate)
+    const generateMeals = `
+    mutation {
+      generateMealPlan(
+        fromTemplate: "${data.user.mealPlanTemplate}"
+      ) {
+        success
+        message
+        mealPlan {
+          day
+          date
+          meals {
+            id
+            calories
+            meal
+            numOfServings
+            recipe {
+              name
+              instructions
+              numberOfServings
+              nutrientsPerServing {
+                calories
+                protein
+                fat
+                carbs
+              }
+            }
+          }
+        }
+      }
+    }`
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`,
+        'sg-user': '1f1a1f0f-0fc4-4c20-98eb-ee601ebf2863'
+      },
+      body: JSON.stringify({ query: generateMeals })
+    })
+      .then(response => response.json())
+      .then(mealPlan => {
+        console.log(mealPlan)
+      })
+      .catch(error => console.error('Error:', error))
   }
 
   const assignToUser = async (id) => {
