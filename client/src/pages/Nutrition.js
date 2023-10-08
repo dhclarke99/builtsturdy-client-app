@@ -443,6 +443,12 @@ const Nutrition = () => {
       <div className="recipe-details">
         <h3>{selectedRecipe.name}</h3>
         <img src={selectedRecipe.mainImage} alt={selectedRecipe.name} />
+        <p>Ingredients:</p>
+        <ol>
+          {selectedRecipe.ingredientLines.map((ingredient, index)=>
+          <li key={index}>{ingredient}</li>
+          )}
+        </ol>
         <p>Instructions:</p>
         <ol>
           {selectedRecipe.instructions.map((instruction, index)=>
