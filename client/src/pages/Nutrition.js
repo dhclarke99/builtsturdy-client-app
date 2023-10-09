@@ -1,5 +1,5 @@
 // Nutrition.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import { QUERY_USER_by_id } from '../utils/queries';
 import { ADD_DAILY_TRACKING, UPDATE_USER_MEAL_PLAN_TEMPLATE } from '../utils/mutations';
@@ -32,7 +32,10 @@ const Nutrition = () => {
   const [updateMealPlan] = useMutation(UPDATE_USER_MEAL_PLAN_TEMPLATE);
   const [mealPlanData, setMealPlanData] = useState(null);
   const [showTab, setShowTab] = useState('tracking');
-  const [selectedRecipe, setSelectedRecipe] = useState(null); // Add this line to manage selected recipe
+  const [selectedRecipe, setSelectedRecipe] = useState(null); 
+  const recipeRef = useRef(null);
+  const mealPlanRef = useRef(null);
+  const trackerRef = useRef(null);
 
   useEffect(() => {
     if (data && data.user) {
@@ -44,8 +47,6 @@ const Nutrition = () => {
   }, [data]);
 
   console.log(data)
-
-
   const [addDailyTracking] = useMutation(ADD_DAILY_TRACKING);
 
 
@@ -228,6 +229,7 @@ const Nutrition = () => {
   }
 
   const generateMealPlan = async () => {
+    
     console.log("meal plan generating...")
     console.log(data.user.mealPlanTemplate)
     const generateMeals = `
@@ -281,6 +283,8 @@ const Nutrition = () => {
       .then(mealPlan => {
         console.log(mealPlan);
         setMealPlanData(mealPlan.data.generateMealPlan.mealPlan);
+        setShowTab('mealPlan')
+    mealPlanRef.current.scrollIntoView({ behavior: 'smooth' });
       })
       .catch(error => console.error('Error:', error))
   }
@@ -300,6 +304,7 @@ const Nutrition = () => {
   }
 
   const checkMealTemplate = async () => {
+    
     if (data.user.mealPlanTemplate === null) {
       console.log("no template for user yet, create one")
 
@@ -409,9 +414,20 @@ const Nutrition = () => {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
   };
 
-  const renderMealDetails = (recipe) => {
-    setSelectedRecipe(recipe); // Update this line
+  const renderMealDetails = async (recipe) => {
+   await setSelectedRecipe(recipe); // Update this line
+    recipeRef.current.scrollIntoView({ behavior: 'smooth' });
   };
+
+  const setDailyTrackingDiv = async () => {
+    await setShowTab('tracking');
+    trackerRef.current.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  const setMealPlanDiv = async () => {
+    await setShowTab('mealPlan');
+    mealPlanRef.current.scrollIntoView({ behavior: 'smooth' });
+  }
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -436,12 +452,12 @@ const Nutrition = () => {
       </div>
 
       <div className="tabs">
-      <button onClick={() => setShowTab('mealPlan')}>Meal Plan</button>
-      <button onClick={() => setShowTab('tracking')}>Daily Tracking</button>
+      <button onClick={() => setMealPlanDiv()}>Meal Plan</button>
+      <button onClick={() => setDailyTrackingDiv()}>Daily Tracking</button>
     </div>
 
     {showTab === 'mealPlan' && selectedRecipe && (
-  <div className="recipe-details">
+  <div ref={recipeRef} className="recipe-details">
     <div className="recipe-header">
     <h3 className="recipe-title">{selectedRecipe.name}</h3>
     <img className="recipe-image" src={selectedRecipe.mainImage} alt={selectedRecipe.name} />
@@ -454,7 +470,7 @@ const Nutrition = () => {
         <li key={index} className="ingredient-item">{ingredient}</li>
       )}
     </ol>
-    <p className="instructions-title">Instructions:</p>
+    <h5 className="instructions-title">Instructions:</h5>
     <ol className="instructions-list">
       {selectedRecipe.instructions.map((instruction, index) =>
         <li key={index} className="instruction-item">{instruction}</li>
@@ -474,7 +490,7 @@ const Nutrition = () => {
 
 
       {showTab === 'mealPlan' && mealPlanData && (
-        <div className='table-wrapper'>
+        <div ref={mealPlanRef} className='table-wrapper'>
       <div className='generated-meal-plan'>
         <h2>Your Meal Plan</h2>
         <table>
@@ -518,7 +534,7 @@ const Nutrition = () => {
     )}
 
 {showTab === 'tracking' && (
-  <div className='table-wrapper'>
+  <div ref={trackerRef} className='table-wrapper'>
   <div className='daily-tracking'>
       <h2>Daily Tracking</h2>
       
