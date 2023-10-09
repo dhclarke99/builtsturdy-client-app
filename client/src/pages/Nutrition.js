@@ -248,6 +248,7 @@ const Nutrition = () => {
             recipe {
               name
               mainImage
+              numberOfServings
               ingredientLines
               ingredients{
                 name
@@ -439,11 +440,12 @@ const Nutrition = () => {
       <button onClick={() => setShowTab('tracking')}>Daily Tracking</button>
     </div>
 
-    {selectedRecipe && (
+    {showTab === 'mealPlan' && selectedRecipe && (
   <div className="recipe-details">
     <h3 className="recipe-title">{selectedRecipe.name}</h3>
     <img className="recipe-image" src={selectedRecipe.mainImage} alt={selectedRecipe.name} />
-    <p className="ingredients-title">Ingredients:</p>
+    <h5>Number of Servings: {selectedRecipe.numberOfServings}</h5>
+    <h5 className="ingredients-title">Ingredients:</h5>
     <ol className="ingredients-list">
       {selectedRecipe.ingredientLines.map((ingredient, index) =>
         <li key={index} className="ingredient-item">{ingredient}</li>
