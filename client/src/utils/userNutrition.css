@@ -154,6 +154,16 @@ margin-top: 10px;
 }
 
 .recipe-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.recipe-footer-header {
+  display: flex
+}
+
+.recipe-footer-body {
   display: flex
 }
 .macro-summary {

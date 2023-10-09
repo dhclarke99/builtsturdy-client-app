@@ -478,10 +478,16 @@ const Nutrition = () => {
     </ol>
     </div>
     <div className='recipe-footer'>
+      <div className='recipe-footer-header'>
+        <h5 className='macro-header'>MacroNutrient Breakdown (per serving)</h5>
+        </div>
+    <div className='recipe-footer-body'>
     <p className='macro-summary'>Calories: {selectedRecipe.nutrientsPerServing.calories}</p>
     <p className='macro-summary'>Protein: {selectedRecipe.nutrientsPerServing.protein}</p>
     <p className='macro-summary'>Carbs: {selectedRecipe.nutrientsPerServing.carbs} </p>
     <p className='macro-summary'>Fat: {selectedRecipe.nutrientsPerServing.fat} </p>
+    </div>
+    
     </div>
     
   </div>
