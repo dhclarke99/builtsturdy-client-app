@@ -461,7 +461,7 @@ const Nutrition = () => {
     <div className="recipe-header">
     <h3 className="recipe-title">{selectedRecipe.name}</h3>
     <img className="recipe-image" src={selectedRecipe.mainImage} alt={selectedRecipe.name} />
-    <h5>Number of Servings: {selectedRecipe.numberOfServings}</h5>
+    <h5>Recipe makes {selectedRecipe.numberOfServings} servings</h5>
     </div>
     <div className='recipe-body'>
     <h5 className="ingredients-title">Ingredients:</h5>
@@ -518,6 +518,8 @@ const Nutrition = () => {
                         <>
                           <div>{meal.recipe.name}</div>
                           <img src={meal.recipe.mainImage} alt={meal.recipe.name} />
+                          <p>{meal.numOfServings} servings</p>
+                          <p>{Math.round(meal.calories)} calories</p>
                         </>
                       ) : (
                         'N/A'
