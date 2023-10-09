@@ -442,9 +442,12 @@ const Nutrition = () => {
 
     {showTab === 'mealPlan' && selectedRecipe && (
   <div className="recipe-details">
+    <div className="recipe-header">
     <h3 className="recipe-title">{selectedRecipe.name}</h3>
     <img className="recipe-image" src={selectedRecipe.mainImage} alt={selectedRecipe.name} />
     <h5>Number of Servings: {selectedRecipe.numberOfServings}</h5>
+    </div>
+    <div className='recipe-body'>
     <h5 className="ingredients-title">Ingredients:</h5>
     <ol className="ingredients-list">
       {selectedRecipe.ingredientLines.map((ingredient, index) =>
@@ -457,8 +460,14 @@ const Nutrition = () => {
         <li key={index} className="instruction-item">{instruction}</li>
       )}
     </ol>
-    <p>Calories: {selectedRecipe.nutrientsPerServing.calories}</p>
-    <p>Protein: {selectedRecipe.nutrientsPerServing.protein}</p>
+    </div>
+    <div className='recipe-footer'>
+    <p className='macro-summary'>Calories: {selectedRecipe.nutrientsPerServing.calories}</p>
+    <p className='macro-summary'>Protein: {selectedRecipe.nutrientsPerServing.protein}</p>
+    <p className='macro-summary'>Carbs: {selectedRecipe.nutrientsPerServing.carbs} </p>
+    <p className='macro-summary'>Fat: {selectedRecipe.nutrientsPerServing.fat} </p>
+    </div>
+    
   </div>
 )}
 
