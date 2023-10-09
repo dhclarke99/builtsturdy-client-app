@@ -487,10 +487,10 @@ const Nutrition = () => {
   </div>
 )}
 
-
-
-      {showTab === 'mealPlan' && mealPlanData && (
-        <div ref={mealPlanRef} className='table-wrapper'>
+{showTab === 'mealPlan' && (
+  <div ref={mealPlanRef}>
+    {mealPlanData ? (
+        <div  className='table-wrapper'>
       <div className='generated-meal-plan'>
         <h2>Your Meal Plan</h2>
         <table>
@@ -531,7 +531,11 @@ const Nutrition = () => {
         </table>
       </div>
       </div>
+    ) : (
+      <h2>No Meal Plan Data Available</h2>
     )}
+  </div>
+)}
 
 {showTab === 'tracking' && (
   <div ref={trackerRef} className='table-wrapper'>
