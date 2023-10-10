@@ -414,6 +414,11 @@ const Nutrition = () => {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
   };
 
+  const calculateDailyMacros = (meal) => {
+    const totalProtein = meal.recipe.nutrientsPerServing.protein * meal.numOfServings
+    return totalProtein
+  }
+
   const renderMealDetails = async (recipe) => {
    await setSelectedRecipe(recipe); // Update this line
     recipeRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -479,7 +484,7 @@ const Nutrition = () => {
     </div>
     <div className='recipe-footer'>
       <div className='recipe-footer-header'>
-        <h5 className='macro-header'>MacroNutrient Breakdown (per serving)</h5>
+        <h5 className='macro-title'>MacroNutrient Breakdown (per serving)</h5>
         </div>
     <div className='recipe-footer-body'>
     <p className='macro-summary'>Calories: {selectedRecipe.nutrientsPerServing.calories}</p>
@@ -526,6 +531,7 @@ const Nutrition = () => {
                           <img src={meal.recipe.mainImage} alt={meal.recipe.name} />
                           <p>{meal.numOfServings} servings</p>
                           <p>{Math.round(meal.calories)} calories</p>
+                          <p>Protein: {calculateDailyMacros(meal)}</p>
                         </>
                       ) : (
                         'N/A'

@@ -171,7 +171,8 @@ margin-top: 10px;
 }
 
 .ingredients-title,
-.instructions-title {
+.instructions-title,
+.macro-title {
   font-weight: bold;
   margin-top: 20px;
   margin-bottom: 10px;
