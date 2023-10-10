@@ -4,6 +4,11 @@
     font-family: Arial, sans-serif;
   }
 
+  .calendar-page {
+    background-color: rgb(35, 33, 33);
+    color: #c6a10d;
+    font-family: Arial, sans-serif;
+  }
   .user-calendar .rbc-off-range-bg {
     background-color: rgb(35, 33, 33);
   }

@@ -435,7 +435,7 @@ const Nutrition = () => {
   }
 
   // Step 1: Preprocess the mealPlanData to rename multiple snacks
-const preprocessedMealPlanData = mealPlanData.map(day => {
+const preprocessedMealPlanData = mealPlanData?.map(day => {
   const snackCount = day.meals.filter(meal => meal.meal === 'Snack').length;
   if (snackCount > 1) {
     let snackIndex = 1;

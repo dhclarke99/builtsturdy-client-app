@@ -211,6 +211,7 @@ if (completedDays.length > 0) {
   if (userError) return <p>Error: {userError.message}</p>;
 console.log(userData.user)
 return (
+  <div className='calendar-page'>
   <div className="calendar-container">
     <h1 id="user-name">{userData.user.firstname}'s Calendar</h1>
     <h2>Program Progress</h2>
@@ -227,8 +228,10 @@ return (
           className="user-calendar"
         />
       </div>
-      
+      </div>
+     
     {selectedEvent && (
+    
       <div ref={videoRef} className="workout-details">
         <h2 className="workout-title">Workout Details for {selectedEvent.title}</h2>
         {currentVideoUrl && (
@@ -240,7 +243,9 @@ return (
             </video>
             <button className="close-video-btn" onClick={() => setCurrentVideoUrl(null)}>Close Video</button>
           </div>
+          
         )}
+        
         {selectedWorkout && (
           <div ref={workoutRef} className="exercise-list">
             <h3>Exercises:</h3>
@@ -282,7 +287,7 @@ return (
 )}
       </div>
     )}
-  </div>
+    </div>
 );
 
 };
