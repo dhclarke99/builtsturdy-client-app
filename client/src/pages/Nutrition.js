@@ -415,7 +415,7 @@ const Nutrition = () => {
   };
 
   const calculateDailyMacros = (meal) => {
-    const totalProtein = meal.recipe.nutrientsPerServing.protein * meal.numOfServings
+    const totalProtein = Math.round(meal.recipe.nutrientsPerServing.protein * meal.numOfServings)
     return totalProtein
   }
 
@@ -448,6 +448,20 @@ const preprocessedMealPlanData = mealPlanData.map(day => {
   }
   return day;
 });
+
+const calculateDailyTotals = (dayNumber, mealPlanData) => {
+  const mealsForDay = mealPlanData.find(day => day.day === dayNumber)?.meals || [];
+  let totalCalories = 0;
+  let totalProtein = 0;
+
+  mealsForDay.forEach(meal => {
+    totalCalories += Math.round(meal.calories);
+    totalProtein += calculateDailyMacros(meal); // Assuming this function returns a number
+  });
+
+  return { totalCalories, totalProtein };
+};
+
 
 // Step 2: Render the table (use preprocessedMealPlanData instead of mealPlanData)
 
@@ -563,6 +577,19 @@ const preprocessedMealPlanData = mealPlanData.map(day => {
 
 
             </tbody>
+            <tr>
+  <td>Totals</td>
+  {Array.from({ length: 7 }, (_, i) => i + 1).map((day) => {
+    const { totalCalories, totalProtein } = calculateDailyTotals(day, preprocessedMealPlanData);
+    return (
+      <td key={day}>
+        <p>{totalCalories} total calories</p>
+        <p>{totalProtein} total protein</p>
+      </td>
+    );
+  })}
+</tr>
+
           </table>
         </div>
       </div>
