@@ -434,6 +434,24 @@ const Nutrition = () => {
     mealPlanRef.current.scrollIntoView({ behavior: 'smooth' });
   }
 
+  // Step 1: Preprocess the mealPlanData to rename multiple snacks
+const preprocessedMealPlanData = mealPlanData.map(day => {
+  const snackCount = day.meals.filter(meal => meal.meal === 'Snack').length;
+  if (snackCount > 1) {
+    let snackIndex = 1;
+    day.meals = day.meals.map(meal => {
+      if (meal.meal === 'Snack') {
+        return { ...meal, meal: `Snack ${snackIndex++}` };
+      }
+      return meal;
+    });
+  }
+  return day;
+});
+
+// Step 2: Render the table (use preprocessedMealPlanData instead of mealPlanData)
+
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -501,49 +519,52 @@ const Nutrition = () => {
 {showTab === 'mealPlan' && (
   <div ref={mealPlanRef}>
     {mealPlanData ? (
-        <div  className='table-wrapper'>
-      <div className='generated-meal-plan'>
-        <h2>Your Meal Plan</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Meal Type</th>
-              <th>Day 1</th>
-              <th>Day 2</th>
-              <th>Day 3</th>
-              <th>Day 4</th>
-              <th>Day 5</th>
-              <th>Day 6</th>
-              <th>Day 7</th>
-            </tr>
-          </thead>
-          <tbody>
-            {['Breakfast', 'Lunch', 'Dinner', 'Snack'].map((mealType) => (
-              <tr key={mealType}>
-                <td>{mealType}</td>
-                {Array.from({ length: 7 }, (_, i) => i + 1).map((day) => {
-                  const meal = mealPlanData.find((d) => d.day === day)?.meals.find((m) => m.meal === mealType);
-                  return (
-                    <td key={day} onClick={() => meal && renderMealDetails(meal.recipe)}>
-                      {meal ? (
-                        <>
-                          <div>{meal.recipe.name}</div>
-                          <img src={meal.recipe.mainImage} alt={meal.recipe.name} />
-                          <p>{meal.numOfServings} servings</p>
-                          <p>{Math.round(meal.calories)} calories</p>
-                          <p>Protein: {calculateDailyMacros(meal)}</p>
-                        </>
-                      ) : (
-                        'N/A'
-                      )}
-                    </td>
-                  );
-                })}
+      <div className='table-wrapper'>
+        <div className='generated-meal-plan'>
+          <h2>Your Meal Plan</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Meal Type</th>
+                <th>Day 1</th>
+                <th>Day 2</th>
+                <th>Day 3</th>
+                <th>Day 4</th>
+                <th>Day 5</th>
+                <th>Day 6</th>
+                <th>Day 7</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+            
+    {Array.from(new Set(preprocessedMealPlanData.flatMap(day => day.meals.map(meal => meal.meal)))).map((mealType) => (
+  <tr key={mealType}>
+    <td>{mealType}</td>
+    {Array.from({ length: 7 }, (_, i) => i + 1).map((day) => {
+      const meal = preprocessedMealPlanData.find((d) => d.day === day)?.meals.find((m) => m.meal === mealType);
+      return (
+        <td key={day} onClick={() => meal && renderMealDetails(meal.recipe)}>
+          {meal ? (
+            <>
+              <div>{meal.recipe.name}</div>
+              <img src={meal.recipe.mainImage} alt={meal.recipe.name} />
+              <p>{meal.numOfServings} servings</p>
+              <p>{Math.round(meal.calories)} calories</p>
+              <p>Protein: {calculateDailyMacros(meal)}</p>
+            </>
+          ) : (
+            'N/A'
+          )}
+        </td>
+      );
+    })}
+  </tr>
+))}
+
+
+            </tbody>
+          </table>
+        </div>
       </div>
     ) : (
       <h2>No Meal Plan Data Available</h2>
