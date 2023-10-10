@@ -593,6 +593,15 @@ const UniqueUser = () => {
                 onChange={handleChange}
               />
             </label>
+            <label> Meal Plan Template:
+              <input
+                type="text"
+                name="mealPlanTemplate"
+                placeholder="Meal Plan Template"
+                value={formData.mealPlanTemplate || ''}
+                readOnly
+              />
+            </label>
             <button type="submit">Update User</button>
           </form>
         </div>
