@@ -32,10 +32,37 @@ const Nutrition = () => {
   const [updateMealPlan] = useMutation(UPDATE_USER_MEAL_PLAN_TEMPLATE);
   const [mealPlanData, setMealPlanData] = useState(null);
   const [showTab, setShowTab] = useState('tracking');
-  const [selectedRecipe, setSelectedRecipe] = useState(null); 
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
   const recipeRef = useRef(null);
   const mealPlanRef = useRef(null);
   const trackerRef = useRef(null);
+
+  const existingMealTemplateQuery = `
+  query {
+    mealPlanTemplates {
+      edges {
+        node {
+          id
+          description
+          createdAt
+          coachId
+          isPublic
+          name
+          days {
+            day
+            meals {
+              recipe {
+                name
+                instructions
+              }
+              calories
+              numOfServings
+            }
+          }
+        }
+      }
+    }
+  }`
 
   useEffect(() => {
     if (data && data.user) {
@@ -102,7 +129,7 @@ const Nutrition = () => {
     setUpdatedTracking(newTracking);
     console.log(updatedTracking)
   };
-  
+
 
   const calculateProteinPerc = async (calorieTarget, data) => {
     console.log(data.user.currentWeight)
@@ -178,10 +205,10 @@ const Nutrition = () => {
   const createMealPlanTemplate = async () => {
     console.log("template being created...")
     console.log(data)
-    
-    const proteinPerc = Math.round(((data.user.proteinTarget * 4) / data.user.caloricTarget)*100)
-    const carbsPerc = Math.round(((data.user.carbohydrateTarget * 4) / data.user.caloricTarget)*100)
-    const fatPerc = Math.round(((data.user.fatTarget * 9) / data.user.caloricTarget)*100)
+
+    const proteinPerc = Math.round(((data.user.proteinTarget * 4) / data.user.caloricTarget) * 100)
+    const carbsPerc = Math.round(((data.user.carbohydrateTarget * 4) / data.user.caloricTarget) * 100)
+    const fatPerc = Math.round(((data.user.fatTarget * 9) / data.user.caloricTarget) * 100)
     const firstname = data.user.firstname
     const lastname = data.user.lastname
     const description = data.user.mainPhysiqueGoal;
@@ -223,13 +250,13 @@ const Nutrition = () => {
 
       })
       .catch(error => console.error('Error:', error))
-  
+
 
 
   }
 
   const generateMealPlan = async () => {
-    
+
     console.log("meal plan generating...")
     console.log(data.user.mealPlanTemplate)
     const generateMeals = `
@@ -284,7 +311,7 @@ const Nutrition = () => {
         console.log(mealPlan);
         setMealPlanData(mealPlan.data.generateMealPlan.mealPlan);
         setShowTab('mealPlan')
-    mealPlanRef.current.scrollIntoView({ behavior: 'smooth' });
+        mealPlanRef.current.scrollIntoView({ behavior: 'smooth' });
       })
       .catch(error => console.error('Error:', error))
   }
@@ -296,45 +323,18 @@ const Nutrition = () => {
     console.log(userId)
 
     try {
-      await updateMealPlan({  variables: {userId: userId, mealPlanTemplate: id }});
-      
+      await updateMealPlan({ variables: { userId: userId, mealPlanTemplate: id } });
+
     } catch (error) {
       console.error("Failed to update workout:", error);
     }
   }
 
   const checkMealTemplate = async () => {
-    
+
     if (data.user.mealPlanTemplate === null) {
       console.log("no template for user yet, create one")
 
-      const existingMealTemplateQuery = `
-      query {
-        mealPlanTemplates {
-          edges {
-            node {
-              id
-              description
-              createdAt
-              coachId
-              isPublic
-              name
-              days {
-                day
-                meals {
-                  recipe {
-                    name
-                    instructions
-                  }
-                  calories
-                  numOfServings
-                }
-              }
-            }
-          }
-        }
-      }`
-  
       fetch(url, {
         method: 'POST',
         headers: {
@@ -347,22 +347,22 @@ const Nutrition = () => {
         .then(templateData => {
           console.log(templateData)
           console.log(templateData.data.mealPlanTemplates.edges)
-  
+
           const description = `${data.user.firstname}'s ${data.user.mainPhysiqueGoal} meal plan template at ${data.user.currentWeight}`
           const trimmedDescription = description.trim();
-  
-          const idToGenerate = templateData.data.mealPlanTemplates.edges.findIndex(plan => plan.node.description.trim() === trimmedDescription);     
+
+          const idToGenerate = templateData.data.mealPlanTemplates.edges.findIndex(plan => plan.node.description.trim() === trimmedDescription);
           console.log(idToGenerate)
           const matchingTemplateId = templateData.data.mealPlanTemplates.edges[idToGenerate].node.id
           console.log(matchingTemplateId)
-          
+
           if (templateData.data.mealPlanTemplates.edges.length === 0) {
             createMealPlanTemplate()
           } else {
             assignToUser(matchingTemplateId)
             console.log("Templates already exist:", templateData)
           }
-  
+
         })
         .catch(error => console.error('Error:', error))
       console.log(dailyCalories)
@@ -370,7 +370,7 @@ const Nutrition = () => {
     } else {
       generateMealPlan();
     }
-   
+
 
   }
 
@@ -420,7 +420,7 @@ const Nutrition = () => {
   }
 
   const renderMealDetails = async (recipe) => {
-   await setSelectedRecipe(recipe); // Update this line
+    await setSelectedRecipe(recipe); // Update this line
     recipeRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -435,35 +435,35 @@ const Nutrition = () => {
   }
 
   // Step 1: Preprocess the mealPlanData to rename multiple snacks
-const preprocessedMealPlanData = mealPlanData?.map(day => {
-  const snackCount = day.meals.filter(meal => meal.meal === 'Snack').length;
-  if (snackCount > 1) {
-    let snackIndex = 1;
-    day.meals = day.meals.map(meal => {
-      if (meal.meal === 'Snack') {
-        return { ...meal, meal: `Snack ${snackIndex++}` };
-      }
-      return meal;
-    });
-  }
-  return day;
-});
-
-const calculateDailyTotals = (dayNumber, mealPlanData) => {
-  const mealsForDay = mealPlanData.find(day => day.day === dayNumber)?.meals || [];
-  let totalCalories = 0;
-  let totalProtein = 0;
-
-  mealsForDay.forEach(meal => {
-    totalCalories += Math.round(meal.calories);
-    totalProtein += calculateDailyMacros(meal); // Assuming this function returns a number
+  const preprocessedMealPlanData = mealPlanData?.map(day => {
+    const snackCount = day.meals.filter(meal => meal.meal === 'Snack').length;
+    if (snackCount > 1) {
+      let snackIndex = 1;
+      day.meals = day.meals.map(meal => {
+        if (meal.meal === 'Snack') {
+          return { ...meal, meal: `Snack ${snackIndex++}` };
+        }
+        return meal;
+      });
+    }
+    return day;
   });
 
-  return { totalCalories, totalProtein };
-};
+  const calculateDailyTotals = (dayNumber, mealPlanData) => {
+    const mealsForDay = mealPlanData.find(day => day.day === dayNumber)?.meals || [];
+    let totalCalories = 0;
+    let totalProtein = 0;
+
+    mealsForDay.forEach(meal => {
+      totalCalories += Math.round(meal.calories);
+      totalProtein += calculateDailyMacros(meal); // Assuming this function returns a number
+    });
+
+    return { totalCalories, totalProtein };
+  };
 
 
-// Step 2: Render the table (use preprocessedMealPlanData instead of mealPlanData)
+  // Step 2: Render the table (use preprocessedMealPlanData instead of mealPlanData)
 
 
   if (loading) return <p>Loading...</p>;
@@ -472,190 +472,190 @@ const calculateDailyTotals = (dayNumber, mealPlanData) => {
   return (
     <div className="nutrition-container">
       <div className="header-section">
-      <h1>{data.user.firstname}'s Nutrition Calculator</h1>
-      <h2>Your Personal Stats</h2>
-      <li>Age: {data.user.age}</li>
-      <li>Gender: {data.user.gender}</li>
-      <li>Height: {data.user.height}</li>
-      <li>Weight: {data.user.currentWeight}</li>
-      <li>Body Fat: {data.user.estimatedBodyFat}</li>
-      <li>Experience: {data.user.trainingExperience}</li>
-      <li>Goal: {data.user.mainPhysiqueGoal}</li>
+        <h1>{data.user.firstname}'s Nutrition Calculator</h1>
+        <h2>Your Personal Stats</h2>
+        <li>Age: {data.user.age}</li>
+        <li>Gender: {data.user.gender}</li>
+        <li>Height: {data.user.height}</li>
+        <li>Weight: {data.user.currentWeight}</li>
+        <li>Body Fat: {data.user.estimatedBodyFat}</li>
+        <li>Experience: {data.user.trainingExperience}</li>
+        <li>Goal: {data.user.mainPhysiqueGoal}</li>
 
-      <p>Based on your stats, your daily calorie target is: {data.user.caloricTarget} calories</p>
-      <p>You should eat {data.user.proteinTarget} grams of protein per day.</p>
-      
-      <button onClick={checkMealTemplate}>Generate Meal Plan</button>
+        <p>Based on your stats, your daily calorie target is: {data.user.caloricTarget} calories</p>
+        <p>You should eat {data.user.proteinTarget} grams of protein per day.</p>
+
+        <button onClick={checkMealTemplate}>Generate Meal Plan</button>
       </div>
 
       <div className="tabs">
-      <button onClick={() => setMealPlanDiv()}>Meal Plan</button>
-      <button onClick={() => setDailyTrackingDiv()}>Daily Tracking</button>
-    </div>
+        <button onClick={() => setMealPlanDiv()}>Meal Plan</button>
+        <button onClick={() => setDailyTrackingDiv()}>Daily Tracking</button>
+      </div>
 
-    {showTab === 'mealPlan' && selectedRecipe && (
-  <div ref={recipeRef} className="recipe-details">
-    <div className="recipe-header">
-    <h3 className="recipe-title">{selectedRecipe.name}</h3>
-    <img className="recipe-image" src={selectedRecipe.mainImage} alt={selectedRecipe.name} />
-    <h5>Recipe makes {selectedRecipe.numberOfServings} servings</h5>
-    </div>
-    <div className='recipe-body'>
-    <h5 className="ingredients-title">Ingredients:</h5>
-    <ol className="ingredients-list">
-      {selectedRecipe.ingredientLines.map((ingredient, index) =>
-        <li key={index} className="ingredient-item">{ingredient}</li>
-      )}
-    </ol>
-    <h5 className="instructions-title">Instructions:</h5>
-    <ol className="instructions-list">
-      {selectedRecipe.instructions.map((instruction, index) =>
-        <li key={index} className="instruction-item">{instruction}</li>
-      )}
-    </ol>
-    </div>
-    <div className='recipe-footer'>
-      <div className='recipe-footer-header'>
-        <h5 className='macro-title'>MacroNutrient Breakdown (per serving)</h5>
+      {showTab === 'mealPlan' && selectedRecipe && (
+        <div ref={recipeRef} className="recipe-details">
+          <div className="recipe-header">
+            <h3 className="recipe-title">{selectedRecipe.name}</h3>
+            <img className="recipe-image" src={selectedRecipe.mainImage} alt={selectedRecipe.name} />
+            <h5>Recipe makes {selectedRecipe.numberOfServings} servings</h5>
+          </div>
+          <div className='recipe-body'>
+            <h5 className="ingredients-title">Ingredients:</h5>
+            <ol className="ingredients-list">
+              {selectedRecipe.ingredientLines.map((ingredient, index) =>
+                <li key={index} className="ingredient-item">{ingredient}</li>
+              )}
+            </ol>
+            <h5 className="instructions-title">Instructions:</h5>
+            <ol className="instructions-list">
+              {selectedRecipe.instructions.map((instruction, index) =>
+                <li key={index} className="instruction-item">{instruction}</li>
+              )}
+            </ol>
+          </div>
+          <div className='recipe-footer'>
+            <div className='recipe-footer-header'>
+              <h5 className='macro-title'>MacroNutrient Breakdown (per serving)</h5>
+            </div>
+            <div className='recipe-footer-body'>
+              <p className='macro-summary'>Calories: {selectedRecipe.nutrientsPerServing.calories}</p>
+              <p className='macro-summary'>Protein: {selectedRecipe.nutrientsPerServing.protein}</p>
+              <p className='macro-summary'>Carbs: {selectedRecipe.nutrientsPerServing.carbs} </p>
+              <p className='macro-summary'>Fat: {selectedRecipe.nutrientsPerServing.fat} </p>
+            </div>
+
+          </div>
+
         </div>
-    <div className='recipe-footer-body'>
-    <p className='macro-summary'>Calories: {selectedRecipe.nutrientsPerServing.calories}</p>
-    <p className='macro-summary'>Protein: {selectedRecipe.nutrientsPerServing.protein}</p>
-    <p className='macro-summary'>Carbs: {selectedRecipe.nutrientsPerServing.carbs} </p>
-    <p className='macro-summary'>Fat: {selectedRecipe.nutrientsPerServing.fat} </p>
-    </div>
-    
-    </div>
-    
-  </div>
-)}
+      )}
 
-{showTab === 'mealPlan' && (
-  <div ref={mealPlanRef}>
-    {mealPlanData ? (
-      <div className='table-wrapper'>
-        <div className='generated-meal-plan'>
-          <h2>Your Meal Plan</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Meal Type</th>
-                <th>Day 1</th>
-                <th>Day 2</th>
-                <th>Day 3</th>
-                <th>Day 4</th>
-                <th>Day 5</th>
-                <th>Day 6</th>
-                <th>Day 7</th>
-              </tr>
-            </thead>
-            <tbody>
-            
-    {Array.from(new Set(preprocessedMealPlanData.flatMap(day => day.meals.map(meal => meal.meal)))).map((mealType) => (
-  <tr key={mealType}>
-    <td>{mealType}</td>
-    {Array.from({ length: 7 }, (_, i) => i + 1).map((day) => {
-      const meal = preprocessedMealPlanData.find((d) => d.day === day)?.meals.find((m) => m.meal === mealType);
-      return (
-        <td key={day} onClick={() => meal && renderMealDetails(meal.recipe)}>
-          {meal ? (
-            <>
-              <div>{meal.recipe.name}</div>
-              <img src={meal.recipe.mainImage} alt={meal.recipe.name} />
-              <p>{meal.numOfServings} servings</p>
-              <p>{Math.round(meal.calories)} calories</p>
-              <p>Protein: {calculateDailyMacros(meal)}</p>
-            </>
+      {showTab === 'mealPlan' && (
+        <div ref={mealPlanRef}>
+          {mealPlanData ? (
+            <div className='table-wrapper'>
+              <div className='generated-meal-plan'>
+                <h2>Your Meal Plan</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Meal Type</th>
+                      <th>Day 1</th>
+                      <th>Day 2</th>
+                      <th>Day 3</th>
+                      <th>Day 4</th>
+                      <th>Day 5</th>
+                      <th>Day 6</th>
+                      <th>Day 7</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    {Array.from(new Set(preprocessedMealPlanData.flatMap(day => day.meals.map(meal => meal.meal)))).map((mealType) => (
+                      <tr key={mealType}>
+                        <td>{mealType}</td>
+                        {Array.from({ length: 7 }, (_, i) => i + 1).map((day) => {
+                          const meal = preprocessedMealPlanData.find((d) => d.day === day)?.meals.find((m) => m.meal === mealType);
+                          return (
+                            <td key={day} onClick={() => meal && renderMealDetails(meal.recipe)}>
+                              {meal ? (
+                                <>
+                                  <div>{meal.recipe.name}</div>
+                                  <img src={meal.recipe.mainImage} alt={meal.recipe.name} />
+                                  <p>{meal.numOfServings} servings</p>
+                                  <p>{Math.round(meal.calories)} calories</p>
+                                  <p>Protein: {calculateDailyMacros(meal)}</p>
+                                </>
+                              ) : (
+                                'N/A'
+                              )}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+
+
+                  </tbody>
+                  <tr>
+                    <td>Totals</td>
+                    {Array.from({ length: 7 }, (_, i) => i + 1).map((day) => {
+                      const { totalCalories, totalProtein } = calculateDailyTotals(day, preprocessedMealPlanData);
+                      return (
+                        <td key={day}>
+                          <p>{totalCalories} total calories</p>
+                          <p>{totalProtein} total protein</p>
+                        </td>
+                      );
+                    })}
+                  </tr>
+
+                </table>
+              </div>
+            </div>
           ) : (
-            'N/A'
+            <h2>No Meal Plan Data Available</h2>
           )}
-        </td>
-      );
-    })}
-  </tr>
-))}
-
-
-            </tbody>
-            <tr>
-  <td>Totals</td>
-  {Array.from({ length: 7 }, (_, i) => i + 1).map((day) => {
-    const { totalCalories, totalProtein } = calculateDailyTotals(day, preprocessedMealPlanData);
-    return (
-      <td key={day}>
-        <p>{totalCalories} total calories</p>
-        <p>{totalProtein} total protein</p>
-      </td>
-    );
-  })}
-</tr>
-
-          </table>
         </div>
-      </div>
-    ) : (
-      <h2>No Meal Plan Data Available</h2>
-    )}
-  </div>
-)}
+      )}
 
-{showTab === 'tracking' && (
-  <div ref={trackerRef} className='table-wrapper'>
-  <div className='daily-tracking'>
-      <h2>Daily Tracking</h2>
-      
-      <button onClick={() => setCurrentStartWeek(Math.max(1, currentStartWeek - 4))}>Previous 4 Weeks</button>
-      <button onClick={() => setCurrentStartWeek( currentStartWeek + 4)}>Next 4 Weeks</button>
-      <button onClick={handleSave}>Save</button>
-      <Link to={`/trends`}>
-        <button>View Trends</button>
-        </Link>
-      <table>
-        <thead>
-          <tr>
-            <th>Week</th>
-            <th>Metric</th>
-            <th>Monday</th>
-            <th>Tuesday</th>
-            <th>Wednesday</th>
-            <th>Thursday</th>
-            <th>Friday</th>
-            <th>Saturday</th>
-            <th>Sunday</th>
-          </tr>
-        </thead>
-        <tbody>
-  {Object.keys(weeks).slice(currentStartWeek - 1, currentStartWeek + 3).map((weekNumber) => (
-    <React.Fragment key={weekNumber}>
-      {['Weight', 'Calories', 'Protein'].map((type, index) => (
-        <tr key={type} className={`week-${weekNumber}`}>
-          {index === 0 && <td rowSpan="3">Week {weekNumber} ({calculateWeekStartDate(parseInt(data.user.startDate), weekNumber)})</td>}
-          <td>{type}</td>
-          {Object.keys(weeks[weekNumber]).map((dateUnix) => (
-            <td key={dateUnix}>
-              <input
-                type="number"
-                value={
-                  (typeof updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)] !== 'undefined'
-                    ? updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)]
-                    : typeof weeks[weekNumber][dateUnix]?.[getTypeKey(type)] !== 'undefined'
-                    ? weeks[weekNumber][dateUnix]?.[getTypeKey(type)]
-                    : null) !== null ? (updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)] || weeks[weekNumber][dateUnix]?.[getTypeKey(type)] || "").toString() : ""
-                }
-                onChange={(e) => handleInputChange(dateUnix, weekNumber, getTypeKey(type), e.target.value)}
-              />
-            </td>
-          ))}
-        </tr>
-      ))}
-    </React.Fragment>
-  ))}
-</tbody>
+      {showTab === 'tracking' && (
+        <div ref={trackerRef} className='table-wrapper'>
+          <div className='daily-tracking'>
+            <h2>Daily Tracking</h2>
 
-      </table>
-      </div>
-      </div>
-)}
+            <button onClick={() => setCurrentStartWeek(Math.max(1, currentStartWeek - 4))}>Previous 4 Weeks</button>
+            <button onClick={() => setCurrentStartWeek(currentStartWeek + 4)}>Next 4 Weeks</button>
+            <button onClick={handleSave}>Save</button>
+            <Link to={`/trends`}>
+              <button>View Trends</button>
+            </Link>
+            <table>
+              <thead>
+                <tr>
+                  <th>Week</th>
+                  <th>Metric</th>
+                  <th>Monday</th>
+                  <th>Tuesday</th>
+                  <th>Wednesday</th>
+                  <th>Thursday</th>
+                  <th>Friday</th>
+                  <th>Saturday</th>
+                  <th>Sunday</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.keys(weeks).slice(currentStartWeek - 1, currentStartWeek + 3).map((weekNumber) => (
+                  <React.Fragment key={weekNumber}>
+                    {['Weight', 'Calories', 'Protein'].map((type, index) => (
+                      <tr key={type} className={`week-${weekNumber}`}>
+                        {index === 0 && <td rowSpan="3">Week {weekNumber} ({calculateWeekStartDate(parseInt(data.user.startDate), weekNumber)})</td>}
+                        <td>{type}</td>
+                        {Object.keys(weeks[weekNumber]).map((dateUnix) => (
+                          <td key={dateUnix}>
+                            <input
+                              type="number"
+                              value={
+                                (typeof updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)] !== 'undefined'
+                                  ? updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)]
+                                  : typeof weeks[weekNumber][dateUnix]?.[getTypeKey(type)] !== 'undefined'
+                                    ? weeks[weekNumber][dateUnix]?.[getTypeKey(type)]
+                                    : null) !== null ? (updatedTracking[weekNumber]?.[dateUnix]?.[getTypeKey(type)] || weeks[weekNumber][dateUnix]?.[getTypeKey(type)] || "").toString() : ""
+                              }
+                              onChange={(e) => handleInputChange(dateUnix, weekNumber, getTypeKey(type), e.target.value)}
+                            />
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </React.Fragment>
+                ))}
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

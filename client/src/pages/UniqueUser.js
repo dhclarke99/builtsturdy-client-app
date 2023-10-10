@@ -528,7 +528,42 @@ const UniqueUser = () => {
                 <option value='Recomp'>Recomp</option>
 
               </select>
-
+            </label>
+            <label> Caloric Target:
+              <input
+                type="text"
+                name="caloricTarget"
+                placeholder="Caloric Target"
+                value={formData.caloricTarget || ''}
+                onChange={handleChange}
+              />
+            </label>
+            <label> Protein Target:
+              <input
+                type="text"
+                name="proteinTarget"
+                placeholder="Protein Target"
+                value={formData.proteinTarget || ''}
+                onChange={handleChange}
+              />
+            </label>
+            <label> Carbohydrate Target:
+              <input
+                type="text"
+                name="carbohydrateTarget"
+                placeholder="Carb Target"
+                value={formData.carbohydrateTarget || ''}
+                onChange={handleChange}
+              />
+            </label>
+            <label> Fat Target:
+              <input
+                type="text"
+                name="fatTarget"
+                placeholder="Fat Target"
+                value={formData.fatTarget || ''}
+                onChange={handleChange}
+              />
             </label>
             
             <label> Schedule:
