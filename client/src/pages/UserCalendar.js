@@ -38,6 +38,7 @@ const UserCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [logCompletedWorkout, { data, loading, error }] = useMutation(LOG_COMPLETED_WORKOUT);
+  
 
 
   

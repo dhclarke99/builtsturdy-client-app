@@ -17,6 +17,8 @@ const UniqueUser = () => {
   const { loading: loadingSchedules, error: errorSchedules, data: dataSchedules } = useQuery(FETCH_SCHEDULES);
   const [events, setEvents] = useState([]);
   const [completedDays, setCompletedDays] = useState([]);
+  const url = 'https://production.suggestic.com/graphql';
+
 
   const client = new ApolloClient({
     link: createHttpLink({ uri: '/graphql' }),
@@ -37,6 +39,32 @@ const UniqueUser = () => {
   const [deleteUser] = useMutation(DELETE_USER);
   const [currentStartWeek, setCurrentStartWeek] = useState(1);
   const localizer = momentLocalizer(moment);
+  const existingMealTemplateQuery = `
+  query {
+    mealPlanTemplates {
+      edges {
+        node {
+          id
+          description
+          createdAt
+          coachId
+          isPublic
+          name
+          days {
+            day
+            meals {
+              recipe {
+                name
+                instructions
+              }
+              calories
+              numOfServings
+            }
+          }
+        }
+      }
+    }
+  }`
 
  
 
@@ -117,21 +145,130 @@ const UniqueUser = () => {
       setSortedWorkouts(newSortedWorkouts);
     }
   }, [dataUser]);
+
+  const createNewMealPlanTemplate = async (formattedData) => {
+    try {
+      console.log("template being created...");
+      console.log(formattedData);
+  
+      const proteinPerc = Math.round(((formattedData.proteinTarget * 4) / formattedData.caloricTarget) * 100);
+      const carbsPerc = Math.round(((formattedData.carbohydrateTarget * 4) / formattedData.caloricTarget) * 100);
+      const fatPerc = Math.round(((formattedData.fatTarget * 9) / formattedData.caloricTarget) * 100);
+      const firstname = formattedData.firstname;
+      const lastname = formattedData.lastname;
+      const description = formattedData.mainPhysiqueGoal;
+  
+      const createTemplateMutation = `
+        mutation {
+          createMealPlanTemplate(
+            description: "${firstname}'s ${description} meal plan template at ${formattedData.currentWeight} and ${formattedData.caloricTarget} calories",
+            customOptions: {
+              calories: ${formattedData.caloricTarget},
+              carbsPerc: ${carbsPerc},
+              proteinPerc: ${proteinPerc},
+              fatPerc: ${fatPerc},
+              program: "UHJvZ3JhbTpiMDlmOWE2MC0yOWIyLTQ4MmMtOWI0Ni00NmQyMGJkNWU5Y2U="
+            },
+            name: "${firstname} ${lastname}'s Meal Plan Template"
+          ) {
+            message,
+            success
+          }
+        }
+      `;
+  
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`
+        },
+        body: JSON.stringify({ query: createTemplateMutation })
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to create meal plan template');
+      }
+  
+      const data = await response.json();
+      console.log(data);
+  
+      const templateResponse = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`
+        },
+        body: JSON.stringify({ query: existingMealTemplateQuery })
+      });
+  
+      if (!templateResponse.ok) {
+        throw new Error('Failed to fetch existing meal plan templates');
+      }
+  
+      const templateData = await templateResponse.json();
+      console.log(templateData);
+  
+      const checkDescription = `${firstname}'s ${description} meal plan template at ${formattedData.currentWeight} and ${formattedData.caloricTarget} calories`;
+      const trimmedDescription = checkDescription.trim();
+  
+      const idToGenerate = templateData.data.mealPlanTemplates.edges.findIndex(plan => plan.node.description.trim() === trimmedDescription);
+      const matchingTemplateId = templateData.data.mealPlanTemplates.edges[idToGenerate].node.id;
+  
+      console.log(matchingTemplateId);
+  
+      return matchingTemplateId;
+  
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  
+  
  
   const handleChange = (event) => {
     const { name, value } = event.target;
+    let updatedFormData = {
+      ...formData,
+      [name]: value,
+    };
+  
+    if (name === 'proteinTarget') {
+      const newProteinTarget = parseFloat(value);
+      const { caloricTarget } = formData;
+  
+      // Calculate the protein calories
+      const proteinCalories = newProteinTarget * 4;
+  
+      // Calculate the remaining calories for carbs and fats
+      const remainingCalories = caloricTarget - proteinCalories;
+  
+      // Distribute the remaining calories between carbs and fats
+      // Add 5% to carbs and subtract 5% from fats
+      const carbCalories = remainingCalories * 0.55; // 50% + 5%
+      const fatCalories = remainingCalories * 0.45; // 50% - 5%
+  
+      // Convert the calories back to grams
+      const newCarbohydrateTarget = carbCalories / 4;
+      const newFatTarget = fatCalories / 9;
+  
+      updatedFormData = {
+        ...updatedFormData,
+        carbohydrateTarget: newCarbohydrateTarget.toFixed(2),
+        fatTarget: newFatTarget.toFixed(2),
+      };
+    }
+  
     if (name === 'startDate') {
       setFormData({
-        ...formData,
+        ...updatedFormData,
         [name]: value,
       });
     } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
+      setFormData(updatedFormData);
     }
   };
+  
   
 
   const handleDelete = async (event) => {
@@ -151,7 +288,7 @@ const UniqueUser = () => {
     try {
 
       const cleanedDailyTracking = formData.dailyTracking.map(({ __typename, ...rest }) => rest);
-      const { __typename, _id, completedDays, caloricTarget, carbohydrateTarget, proteinTarget, fatTarget, ...cleanedFormData } = {...formData, dailyTracking: cleanedDailyTracking}; // Remove __typename
+      const { __typename, _id, completedDays, ...cleanedFormData } = {...formData, dailyTracking: cleanedDailyTracking}; // Remove __typename
   
       console.log(cleanedFormData)
       const formattedData = {
@@ -159,6 +296,10 @@ const UniqueUser = () => {
         height: parseFloat(cleanedFormData.height),
         currentWeight: parseFloat(cleanedFormData.currentWeight),
         estimatedBodyFat: parseFloat(cleanedFormData.estimatedBodyFat),
+        caloricTarget: parseFloat(cleanedFormData.caloricTarget),
+        proteinTarget: parseFloat(cleanedFormData.proteinTarget),
+        carbohydrateTarget: parseFloat(cleanedFormData.carbohydrateTarget),
+        fatTarget: parseFloat(cleanedFormData.fatTarget),
         age: parseInt(cleanedFormData.age, 10),
         weeks: parseFloat(cleanedFormData.weeks),
         startDate: stringToUnix(formData.startDate).toString(),
@@ -166,10 +307,40 @@ const UniqueUser = () => {
       console.log(formData.startDate)
       console.log(stringToUnix(formData.startDate).toString())
       console.log(formattedData)
-      await updateUser({
-        variables: { userId: id, input: formattedData },
-      });
+       // Check if the macronutrient targets add up to 100% of the caloric target
+    const { caloricTarget, proteinTarget, carbohydrateTarget, fatTarget } = formattedData;
+    const proteinPercentage = (proteinTarget * 4) / caloricTarget;
+    const carbPercentage = (carbohydrateTarget * 4) / caloricTarget;
+    const fatPercentage = (fatTarget * 9) / caloricTarget;
+    const totalPercentage = (proteinPercentage + carbPercentage + fatPercentage) * 100;
 
+    if (Math.round(totalPercentage) !== 100) {
+      alert(`The sum of the macronutrient percentages is ${Math.round(totalPercentage)}, not 100.`)
+      throw new Error(`The sum of the macronutrient percentages is ${Math.round(totalPercentage)}, not 100.`);
+    }
+
+    // Check if any of the specific fields have changed
+    const fieldsToCheck = ['caloricTarget', 'proteinTarget', 'carbohydrateTarget', 'fatTarget'];
+    let shouldUpdateMealPlan = false;
+
+    for (const field of fieldsToCheck) {
+      if (formattedData[field] !== dataUser.user[field]) {
+        shouldUpdateMealPlan = true;
+        break;
+      }
+    }
+
+    // If any of the specific fields have changed, create a new meal plan template
+    if (shouldUpdateMealPlan) {
+      const newMealPlanTemplateID = await createNewMealPlanTemplate(formattedData);
+      formattedData.mealPlanTemplate = newMealPlanTemplateID;
+      console.log("New Meal Plan ID: ", newMealPlanTemplateID)
+    }
+
+    await updateUser({
+      variables: { userId: id, input: formattedData },
+    });
+    console.log(formattedData)
       console.log("data User: ", dataUser)
       window.location.reload()
 

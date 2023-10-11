@@ -61,6 +61,10 @@ input UpdateUserInput {
   age: Int
   trainingExperience: String
   mainPhysiqueGoal: String
+  caloricTarget: Float
+  proteinTarget: Float
+  carbohydrateTarget: Float
+  fatTarget: Float
   schedule: ID
   startDate: String
   weeks: Int
