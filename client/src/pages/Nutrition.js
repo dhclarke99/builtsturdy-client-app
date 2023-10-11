@@ -250,9 +250,6 @@ const Nutrition = () => {
 
       })
       .catch(error => console.error('Error:', error))
-
-
-
   }
 
   const generateMealPlan = async () => {
@@ -485,7 +482,7 @@ const Nutrition = () => {
         <p>Based on your stats, your daily calorie target is: {data.user.caloricTarget} calories</p>
         <p>You should eat {data.user.proteinTarget} grams of protein per day.</p>
 
-        <button onClick={checkMealTemplate}>Generate Meal Plan</button>
+        <button onClick={generateMealPlan}>Generate Meal Plan</button>
       </div>
 
       <div className="tabs">
