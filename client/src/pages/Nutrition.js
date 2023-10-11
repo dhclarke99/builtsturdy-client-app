@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import '../utils/userNutrition.css';
 
 
+
 const Nutrition = () => {
 
   let calories;
@@ -202,58 +203,105 @@ const Nutrition = () => {
     if (type === 'Protein') return 'proteinIntake';
   };
 
-  const createMealPlanTemplate = async () => {
-    console.log("template being created...")
-    console.log(data)
+  const assignToUser = async (id) => {
+    console.log("assigning to user")
+    console.log(id)
+    const userId = Auth.getProfile().data._id
+    console.log(userId)
 
-    const proteinPerc = Math.round(((data.user.proteinTarget * 4) / data.user.caloricTarget) * 100)
-    const carbsPerc = Math.round(((data.user.carbohydrateTarget * 4) / data.user.caloricTarget) * 100)
-    const fatPerc = Math.round(((data.user.fatTarget * 9) / data.user.caloricTarget) * 100)
-    const firstname = data.user.firstname
-    const lastname = data.user.lastname
-    const description = data.user.mainPhysiqueGoal;
-
-    console.log(description, data.user.caloricTarget, proteinPerc, carbsPerc, fatPerc, firstname, lastname,)
-    const createTemplateMutation = `
-    mutation {
-      createMealPlanTemplate(
-        description: "${firstname}'s ${description} meal plan template at ${data.user.currentWeight}"
-        customOptions: {
-        calories: ${data.user.caloricTarget}
-        carbsPerc: ${carbsPerc}
-        proteinPerc: ${proteinPerc}
-        fatPerc: ${fatPerc}
-        program: "UHJvZ3JhbTpiMDlmOWE2MC0yOWIyLTQ4MmMtOWI0Ni00NmQyMGJkNWU5Y2U="
-        }
-        name: "${firstname} ${lastname}'s Meal Plan Template"
-      )
-      {
-        message
-        success
-      }
+    try {
+      await updateMealPlan({ variables: { userId: userId, mealPlanTemplate: id } });
+      console.log("success!")
+    } catch (error) {
+      console.error("Failed to update meal plan:", error);
     }
-    `
+  }
 
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`
-      },
-      body: JSON.stringify({ query: createTemplateMutation })
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(createTemplateMutation)
-        console.log(data)
-        console.log(data.data.createMealPlanTemplate.message)
-
-      })
-      .catch(error => console.error('Error:', error))
+  const createMealPlanTemplate = async () => {
+    try {
+      console.log("template being created...");
+      console.log(data);
+  
+      const proteinPerc = Math.round(((data.user.proteinTarget * 4) / data.user.caloricTarget) * 100);
+      const carbsPerc = Math.round(((data.user.carbohydrateTarget * 4) / data.user.caloricTarget) * 100);
+      const fatPerc = Math.round(((data.user.fatTarget * 9) / data.user.caloricTarget) * 100);
+      const firstname = data.user.firstname;
+      const lastname = data.user.lastname;
+      const description = data.user.mainPhysiqueGoal;
+  
+      const createTemplateMutation = `
+        mutation {
+          createMealPlanTemplate(
+            description: "${firstname}'s ${description} meal plan template at ${data.user.currentWeight} and ${data.user.caloricTarget} calories",
+            customOptions: {
+              calories: ${data.user.caloricTarget},
+              carbsPerc: ${carbsPerc},
+              proteinPerc: ${proteinPerc},
+              fatPerc: ${fatPerc},
+              program: "UHJvZ3JhbTpiMDlmOWE2MC0yOWIyLTQ4MmMtOWI0Ni00NmQyMGJkNWU5Y2U="
+            },
+            name: "${firstname} ${lastname}'s Meal Plan Template"
+          ) {
+            message,
+            success
+          }
+        }
+      `;
+  
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`
+        },
+        body: JSON.stringify({ query: createTemplateMutation })
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to create meal plan template');
+      }
+  
+      const returnData = await response.json();
+      console.log(returnData);
+  
+      const templateResponse = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`
+        },
+        body: JSON.stringify({ query: existingMealTemplateQuery })
+      });
+  
+      if (!templateResponse.ok) {
+        throw new Error('Failed to fetch existing meal plan templates');
+      }
+  
+      const templateData = await templateResponse.json();
+      console.log(templateData);
+  
+      const checkDescription = `${firstname}'s ${description} meal plan template at ${data.user.currentWeight} and ${data.user.caloricTarget} calories`;
+      const trimmedDescription = checkDescription.trim();
+  
+      const idToGenerate = templateData.data.mealPlanTemplates.edges.findIndex(plan => plan.node.description.trim() === trimmedDescription);
+      const matchingTemplateId = templateData.data.mealPlanTemplates.edges[idToGenerate].node.id;
+  
+      console.log(matchingTemplateId);
+  
+      await assignToUser(matchingTemplateId)
+      return matchingTemplateId;
+  
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
 
   const generateMealPlan = async () => {
-
+if (data.user.mealPlanTemplate === null) {
+  console.log("need to generate template")
+  await createMealPlanTemplate();
+  
+}
     console.log("meal plan generating...")
     console.log(data.user.mealPlanTemplate)
     const generateMeals = `
@@ -313,19 +361,7 @@ const Nutrition = () => {
       .catch(error => console.error('Error:', error))
   }
 
-  const assignToUser = async (id) => {
-    console.log("assigning to user")
-    console.log(id)
-    const userId = Auth.getProfile().data._id
-    console.log(userId)
-
-    try {
-      await updateMealPlan({ variables: { userId: userId, mealPlanTemplate: id } });
-
-    } catch (error) {
-      console.error("Failed to update workout:", error);
-    }
-  }
+  
 
   const checkMealTemplate = async () => {
 
