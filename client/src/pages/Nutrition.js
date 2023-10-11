@@ -221,14 +221,14 @@ const Nutrition = () => {
     try {
       console.log("template being created...");
       console.log(data);
-  
+
       const proteinPerc = Math.round(((data.user.proteinTarget * 4) / data.user.caloricTarget) * 100);
       const carbsPerc = Math.round(((data.user.carbohydrateTarget * 4) / data.user.caloricTarget) * 100);
       const fatPerc = Math.round(((data.user.fatTarget * 9) / data.user.caloricTarget) * 100);
       const firstname = data.user.firstname;
       const lastname = data.user.lastname;
       const description = data.user.mainPhysiqueGoal;
-  
+
       const createTemplateMutation = `
         mutation {
           createMealPlanTemplate(
@@ -247,7 +247,7 @@ const Nutrition = () => {
           }
         }
       `;
-  
+
       const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -256,14 +256,14 @@ const Nutrition = () => {
         },
         body: JSON.stringify({ query: createTemplateMutation })
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to create meal plan template');
       }
-  
+
       const returnData = await response.json();
       console.log(returnData);
-  
+
       const templateResponse = await fetch(url, {
         method: 'POST',
         headers: {
@@ -272,36 +272,36 @@ const Nutrition = () => {
         },
         body: JSON.stringify({ query: existingMealTemplateQuery })
       });
-  
+
       if (!templateResponse.ok) {
         throw new Error('Failed to fetch existing meal plan templates');
       }
-  
+
       const templateData = await templateResponse.json();
       console.log(templateData);
-  
+
       const checkDescription = `${firstname}'s ${description} meal plan template at ${data.user.currentWeight} and ${data.user.caloricTarget} calories`;
       const trimmedDescription = checkDescription.trim();
-  
+
       const idToGenerate = templateData.data.mealPlanTemplates.edges.findIndex(plan => plan.node.description.trim() === trimmedDescription);
       const matchingTemplateId = templateData.data.mealPlanTemplates.edges[idToGenerate].node.id;
-  
+
       console.log(matchingTemplateId);
-  
+
       await assignToUser(matchingTemplateId)
       return matchingTemplateId;
-  
+
     } catch (error) {
       console.error('Error:', error);
     }
   }
 
   const generateMealPlan = async () => {
-if (data.user.mealPlanTemplate === null) {
-  console.log("need to generate template")
-  await createMealPlanTemplate();
-  
-}
+    if (data.user.mealPlanTemplate === null) {
+      console.log("need to generate template")
+      await createMealPlanTemplate();
+
+    }
     console.log("meal plan generating...")
     console.log(data.user.mealPlanTemplate)
     const generateMeals = `
@@ -359,52 +359,6 @@ if (data.user.mealPlanTemplate === null) {
         mealPlanRef.current.scrollIntoView({ behavior: 'smooth' });
       })
       .catch(error => console.error('Error:', error))
-  }
-
-  
-
-  const checkMealTemplate = async () => {
-
-    if (data.user.mealPlanTemplate === null) {
-      console.log("no template for user yet, create one")
-
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`
-        },
-        body: JSON.stringify({ query: existingMealTemplateQuery })
-      })
-        .then(response => response.json())
-        .then(templateData => {
-          console.log(templateData)
-          console.log(templateData.data.mealPlanTemplates.edges)
-
-          const description = `${data.user.firstname}'s ${data.user.mainPhysiqueGoal} meal plan template at ${data.user.currentWeight}`
-          const trimmedDescription = description.trim();
-
-          const idToGenerate = templateData.data.mealPlanTemplates.edges.findIndex(plan => plan.node.description.trim() === trimmedDescription);
-          console.log(idToGenerate)
-          const matchingTemplateId = templateData.data.mealPlanTemplates.edges[idToGenerate].node.id
-          console.log(matchingTemplateId)
-
-          if (templateData.data.mealPlanTemplates.edges.length === 0) {
-            createMealPlanTemplate()
-          } else {
-            assignToUser(matchingTemplateId)
-            console.log("Templates already exist:", templateData)
-          }
-
-        })
-        .catch(error => console.error('Error:', error))
-      console.log(dailyCalories)
-
-    } else {
-      generateMealPlan();
-    }
-
-
   }
 
   useEffect(() => {
