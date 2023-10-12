@@ -1,11 +1,10 @@
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
+const User = require('./models/user');
 const path = require('path');
 const { authMiddleware } = require('./utils/auth');
 const cors = require('cors');
 require('dotenv').config();
-
-// const seedDatabase = require('./seeds/seed'); 
 
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
@@ -18,11 +17,9 @@ const server = new ApolloServer({
   context: authMiddleware,
 });
 
-
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// Serve up static assets
 app.use('/images', express.static(path.join(__dirname, '../client/images')));
 
 if (process.env.NODE_ENV === 'production') {
@@ -33,8 +30,27 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
+app.get('/verify-email/:token', async (req, res) => {
+  const { token } = req.query;
 
-// Create a new instance of an Apollo server with the GraphQL schema
+  try {
+    const user = await User.findOne({ emailVerificationToken: token });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid token.' });
+    }
+
+    user.isEmailVerified = true;
+    user.emailVerificationToken = undefined;
+    await user.save();
+
+    res.json({ message: 'Email verified successfully.' });
+  } catch (error) {
+    console.error('Verification failed:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
   server.applyMiddleware({ app });
@@ -42,15 +58,10 @@ const startApolloServer = async (typeDefs, resolvers) => {
   db.once('open', () => {
     app.listen(PORT, () => {
       console.log('Successfully connected to the database');
-      // seedDatabase();
       console.log(`API server running on port ${PORT}!`);
       console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
-     
-    })
-    
-    
-  })
-  };
-  
-// Call the async function to start the server
-  startApolloServer(typeDefs, resolvers);
+    });
+  });
+};
+
+startApolloServer(typeDefs, resolvers);

@@ -1,3 +1,5 @@
+import emailjs from 'emailjs-com';
+
 export const swapArrayElements = (arr, index1, index2) => {
     if (index1 >= 0 && index1 < arr.length && index2 >= 0 && index2 < arr.length) {
       const temp = arr[index1];
@@ -6,3 +8,23 @@ export const swapArrayElements = (arr, index1, index2) => {
     }
     return arr;
   };
+
+
+
+export const sendVerificationEmail = (email, token, name) => {
+  
+  const templateParams = {
+    to_email: email,
+    to_name: name,
+    message: 'Your password is password123. Please change this after verifying your account',
+    from_email: 'dhclarke99@gmail.com',
+    verification_link: `http://localhost:3000/verify-email/token=${token}`
+  };
+
+  emailjs.send('service_bg8lqmf', 'template_nbn67je', templateParams, '3Mc2Gyl0Fense4EqS')
+    .then((response) => {
+      console.log('Email sent:', response.status, response.text);
+    }, (error) => {
+      console.log('Email error:', error);
+    });
+};

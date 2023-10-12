@@ -20,6 +20,7 @@ import UserCalendar from './pages/UserCalendar';
 import Nutrition from './pages/Nutrition';
 import Trends from './pages/Trends';
 import AdminTrends from './pages/AdminTrends.js';
+import Verification from './pages/Verification'
 
 
 // Construct our main GraphQL API endpoint
@@ -58,6 +59,8 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+
+
 const App = () => {
   return (
     <ApolloProvider client={client}>
@@ -82,6 +85,7 @@ const App = () => {
           <Route path="/nutrition" element={<Nutrition />} />
           <Route path="/trends" element={<Trends />}/>
           <Route path="/admin/user/:id/trends" element={<AdminTrends />}/>
+          <Route path="/verify-email/:token" element={<Verification />}/>
 
         </Routes>
       </Router>

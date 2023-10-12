@@ -218,6 +218,7 @@ input UpdateUserInput {
   type Mutation {
     createUser(input: CreateUserInput!): Auth
     updateUser(userId: ID!, input: UpdateUserInput!): User
+    changePassword(userId: ID!, oldPassword: String!, newPassword: String!): Boolean
     updateUserCompletion(userId: ID!, input: CompletedDaysInput!): User
     updateUserMealTemplate(userId: ID!, mealPlanTemplate: String!): User
     deleteUser(userId: ID!): User

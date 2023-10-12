@@ -1,13 +1,14 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 const Workout = require('./workout');
+const crypto = require('crypto');
 
 
 const userSchema = new Schema({
     username: {
         type: String,
         require: true,
-        unique: true,
+        unique: false,
         trim: true,
     },
     firstname: {
@@ -108,7 +109,17 @@ const userSchema = new Schema({
                 }
             ]
         },
-    ]
+    ],
+    isEmailVerified: {
+        type: Boolean,
+        default: false,
+      },
+      emailVerificationToken: {
+        type: String,
+        default: function() {
+          return crypto.randomBytes(20).toString('hex');
+        }
+      }
 });
 
 userSchema.pre('save', function (next) {

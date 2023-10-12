@@ -420,7 +420,22 @@ const resolvers = {
         throw new Error("Day does not exist!")
       }
     },
-    
+    changePassword: async (_, { userId, oldPassword, newPassword }) => {
+      const user = await User.findById(userId);
+      if (!user) {
+        throw new Error('User not found');
+      }
+  
+      const isCorrect = await user.isCorrectPassword(oldPassword);
+      if (!isCorrect) {
+        throw new Error('Incorrect old password');
+      }
+  
+      user.password = newPassword;
+      await user.save();
+  
+      return true;
+    },
   },
 };
 

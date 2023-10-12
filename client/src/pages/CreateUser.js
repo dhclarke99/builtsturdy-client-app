@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { CREATE_USER } from '../utils/mutations';
+import { sendVerificationEmail } from '../utils/helpers';
 
 const AdminCreateUser = () => {
   const [formData, setFormData] = useState({
@@ -47,6 +48,7 @@ const AdminCreateUser = () => {
         variables: { input: formattedData },
       });
       console.log('User created:', data);
+      sendVerificationEmail(data.createUser.user.email, data.createUser.token, data.createUser.user.firstname)
       window.location.href = '/admin/admindashboard';
     } catch (err) {
       console.error('Error creating user:', err);
