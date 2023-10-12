@@ -223,7 +223,7 @@ input UpdateUserInput {
     deleteUser(userId: ID!): User
     login(email: String!, password: String!): Auth
     logout: Boolean
-    createExercise(name: String!, notes: String, adminNotes: String, videoURL: String): Exercise
+    createExercise(name: String!, notes: String, adminNotes: String, videoUrl: String, tag: String): Exercise
     updateExercise(exerciseId: ID!, input: updateExerciseInput!): Exercise
     createWorkout(name: String!): Workout
     deleteExercise(exerciseId: ID!): Exercise

@@ -106,9 +106,13 @@ mutation updateUser($userId: ID!, $input: UpdateUserInput!) {
 
 
 export const CREATE_EXERCISE = gql`
-mutation Mutation($name: String!) {
-  createExercise(name: $name) {
+mutation Mutation($name: String!, $notes: String, $adminNotes: String, $videoUrl: String, $tag: String) {
+  createExercise(name: $name, notes: $notes, adminNotes: $adminNotes, videoUrl: $videoUrl, tag: $tag) {
     name
+    notes
+    adminNotes
+    videoUrl
+    tag
   }
 }
 `;
