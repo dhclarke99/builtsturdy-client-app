@@ -320,6 +320,7 @@ const Nutrition = () => {
             meal
             numOfServings
             recipe {
+              id
               name
               mainImage
               numberOfServings

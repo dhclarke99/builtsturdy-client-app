@@ -5,6 +5,7 @@ const exerciseSchema = new Schema({
   notes: String,
   adminNotes: String,
   videoUrl: String,
+  tag: String,
 });
 
 module.exports = model('Exercise', exerciseSchema);

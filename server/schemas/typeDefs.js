@@ -104,6 +104,7 @@ input UpdateUserInput {
     notes: String
     adminNotes: String
     videoUrl: String
+    tag: String
   }
 
   type Schedule {
@@ -128,6 +129,7 @@ input UpdateUserInput {
     notes: String
     adminNotes: String
     videoUrl: String
+    tag: String
   }
 
   input updateExerciseInput {
@@ -135,6 +137,7 @@ input UpdateUserInput {
     notes: String
     adminNotes: String
     videoUrl: String
+    tag: String
   }
 
   input UpdateWorkoutDetailsInput {

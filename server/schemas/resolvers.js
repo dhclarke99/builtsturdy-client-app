@@ -178,7 +178,7 @@ const resolvers = {
       
       return true;
     },
-    createExercise: async (_, { name, notes, adminNotes, videoURL }) => {
+    createExercise: async (_, { name, notes, adminNotes, videoURL, tag }) => {
       try {
         return await Exercise.create({ name, notes, adminNotes, videoURL });
       } catch (error) {
