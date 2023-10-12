@@ -8,10 +8,12 @@
       "gender": "Male",
       "role": "Admin",
       "height": 74,
-      "currentWeight": 180,
+      "currentWeight": 175,
       "estimatedBodyFat": 11.5,
       "age": 24,
-      "startDate": "10/02/2023",
+      "mainPhysiqueGoal": "Build Muscle",
+      "trainingExperience": "Intermediate",
+      "startDate": "10/09/2023",
       "weeks": 12
      
     }
