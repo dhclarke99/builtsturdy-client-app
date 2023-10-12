@@ -260,6 +260,7 @@ const AdminDashboard = () => {
                   <div className="card-body">
 
                     <p>Video: {exercise.videoUrl} </p>
+                    <p>Tag: {exercise.tag}</p>
 
                     <button onClick={() => handleDeleteExercise(exercise._id)}>Delete</button>
                     <button onClick={() => window.location.href = `/admin/edit-exercise/${exercise._id}`}>Edit</button>

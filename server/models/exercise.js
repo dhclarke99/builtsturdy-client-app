@@ -5,7 +5,10 @@ const exerciseSchema = new Schema({
   notes: String,
   adminNotes: String,
   videoUrl: String,
-  tag: String,
+  tag: {
+    type: String,
+    enum: ['Strength', 'Cardio', 'Abs', 'Plyometric'],
+},
 });
 
 module.exports = model('Exercise', exerciseSchema);

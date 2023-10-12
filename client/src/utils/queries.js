@@ -8,6 +8,7 @@ query findAllExercises {
     notes
     adminNotes
     videoUrl
+    tag
   }
 }
 `;
@@ -20,6 +21,7 @@ query findExerciseById($exerciseId: ID!) {
     notes
     adminNotes
     videoUrl
+    tag
   }
 }
 `;
@@ -91,6 +93,7 @@ query fetchAllWorkouts {
         notes
         adminNotes
         videoUrl
+        tag
       }
       sets
       targetReps
@@ -159,6 +162,7 @@ query findWorkoutById($workoutId: ID!) {
       notes
       adminNotes
       videoUrl
+      tag
       }
       sets
       targetReps

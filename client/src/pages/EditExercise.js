@@ -15,6 +15,7 @@ const EditExercise = () => {
   const [notes, setNotes] = useState('');
   const [adminNotes, setAdminNotes] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
+  const [tag, setTag] = useState('');
 
   const [updateExercise] = useMutation(UPDATE_EXERCISE);
   const [formData, setFormData] = useState({});
@@ -25,6 +26,7 @@ const EditExercise = () => {
       setNotes(data.exercise.notes || '');
       setAdminNotes(data.exercise.adminNotes || '');
       setVideoUrl(data.exercise.videoUrl || '');
+      setTag(data.exercise.tag || '');
     }
   }, [data]);
 console.log(data)
@@ -93,6 +95,21 @@ console.log(formData)
       <label>
         Video:
         <input type="text"  name="videoUrl" value={formData.videoUrl || ''} onChange={handleChange} />
+        
+      </label>
+      <label>
+        Tag:
+        <select type="text"
+                name="tag"
+                placeholder="Tag"
+                value={formData.tag || ''}
+                onChange={handleChange}>
+                  <option value='' disabled>Select One</option>
+                <option value="Strength">Strength</option>
+                <option value="Cardio">Cardio</option>
+                <option value="Abs">Abs</option>
+                <option value="Plyometric">Plyometric</option>
+              </select>
         
       </label>
       <button onClick={handleUpdate}>Update Exercise</button>
