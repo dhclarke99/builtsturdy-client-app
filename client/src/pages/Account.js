@@ -52,36 +52,73 @@ const Account = () => {
     }
   };
 
+  const unixToString = (startDate) => {
+  
+    const convertedStartDate = new Date(parseInt(startDate))
+    return `${convertedStartDate.getMonth() + 1}/${convertedStartDate.getDate()}/${convertedStartDate.getFullYear()}`;
+
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
+    <div>
+    <div>
+        <h1>{data.user.firstname}'s Account Settings</h1>
+        <h2>Your Information</h2>
+        <li>First Name: {data.user.firstname}</li>
+        <li>Last Name: {data.user.lastname}</li>
+        <li>Email: {data.user.email}</li>
+        <li>Age: {data.user.age}</li>
+        <li>Gender: {data.user.gender}</li>
+        <li>Height: {data.user.height}</li>
+        <li>Weight: {data.user.currentWeight}</li>
+        <li>Body Fat: {data.user.estimatedBodyFat}</li>
+        <li>Experience: {data.user.trainingExperience}</li>
+        <li>Goal: {data.user.mainPhysiqueGoal}</li>
+        <li>Program Start Date: {unixToString(parseInt(data.user.startDate))}</li>
+        <li>Program Length: {data.user.weeks} weeks</li>
+        <li>Current Schedule: {data.user.schedule.name} weeks</li>
+      </div>
+      <div>
+        <h3>Update Password</h3>
     <form onSubmit={handleSubmit}>
-      <input
+        <label>Enter Current Password
+        <input
         type="password"
         name="currentPassword"
         placeholder="Current Password"
         value={formData.currentPassword}
         onChange={handleChange}
       />
-      <input
+        </label>
+      <label>Enter New Password
+        <input
         type="password"
         name="newPassword"
         placeholder="New Password"
         value={formData.newPassword}
         onChange={handleChange}
       />
+      </label>
+      
+      <label>Confirm New Password
       <input
         type="password"
         name="confirmPassword"
-        placeholder="Confirm New Password"
+        placeholder="New Password"
         value={formData.confirmPassword}
         onChange={handleChange}
       />
+      </label>
+      
       <button type="submit" disabled={formData.newPassword !== formData.confirmPassword}>
         Change Password
       </button>
     </form>
+    </div>
+    </div>
   );
 };
 
