@@ -101,6 +101,12 @@ margin-top: 10px;
 /* Daily Tracking Styles */
 .daily-tracking {
   margin-top: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: auto; 
+  border: 1px solid #ccc;
+  margin-top: 20px;
+  border-radius: 5px;
 }
 
 .daily-tracking table {
@@ -117,12 +123,7 @@ margin-top: 10px;
 
 /* Make tables scrollable */
 .table-wrapper {
-  max-height: 400px;
-  overflow-y: auto;
-  overflow-x: auto; 
-  border: 1px solid #ccc;
-  margin-top: 20px;
-  border-radius: 5px;
+  
 }
 
 .recipe-details {
@@ -189,6 +190,47 @@ margin-top: 10px;
   margin-bottom: 5px;
 }
 
+
+
+/* Additional styles for aesthetics */
+.header-section {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.personal-stats li {
+  font-size: 1rem;
+  color: #fff;
+}
+
+.tabs button {
+  font-size: 1rem;
+}
+
+.generated-meal-plan th,
+.generated-meal-plan td,
+.daily-tracking th,
+.daily-tracking td {
+  font-size: 0.9rem;
+}
+
+.toggle-weeks {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px;
+
+}
+
+.save-viewtrends {
+  display: flex;
+  flex-direction: column;
+}
+
+.save-viewtrends a {
+  text-decoration: none;
+  color: black;
+}
+
 /* Media Queries for Desktop */
 @media (min-width: 768px) {
   /* Adjust container width */
@@ -218,26 +260,3 @@ margin-top: 10px;
     max-width: 40%;
   }
 }
-
-/* Additional styles for aesthetics */
-.header-section {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-}
-
-.personal-stats li {
-  font-size: 1rem;
-  color: #fff;
-}
-
-.tabs button {
-  font-size: 1rem;
-}
-
-.generated-meal-plan th,
-.generated-meal-plan td,
-.daily-tracking th,
-.daily-tracking td {
-  font-size: 0.9rem;
-}
-

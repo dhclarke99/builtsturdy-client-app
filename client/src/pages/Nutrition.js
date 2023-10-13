@@ -589,15 +589,16 @@ const Nutrition = () => {
 
       {showTab === 'tracking' && (
         <div ref={trackerRef} className='table-wrapper'>
-          <div className='daily-tracking'>
-            <h2>Daily Tracking</h2>
+          <div>
+          <h2>Daily Tracking</h2>
+          <div className='toggle-weeks'>
 
             <button onClick={() => setCurrentStartWeek(Math.max(1, currentStartWeek - 4))}>Previous 4 Weeks</button>
             <button onClick={() => setCurrentStartWeek(currentStartWeek + 4)}>Next 4 Weeks</button>
-            <button onClick={handleSave}>Save</button>
-            <Link to={`/trends`}>
-              <button>View Trends</button>
-            </Link>
+            </div>
+          <div className='daily-tracking'>
+            
+            
             <table>
               <thead>
                 <tr>
@@ -641,7 +642,19 @@ const Nutrition = () => {
               </tbody>
 
             </table>
+            
+            </div>
+            
           </div>
+          <div className='save-viewtrends'>
+          <button id='trends-button'>
+              <Link to={`/trends`}>
+                View Trends
+                </Link>
+                </button>
+            <button id='save-button' onClick={handleSave}>Save</button>
+            
+            </div>
         </div>
       )}
     </div>
