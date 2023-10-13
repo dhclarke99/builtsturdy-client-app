@@ -1,7 +1,6 @@
 /* Existing styles */
 h2 {
     color: white;
-    margin-left: 30px;
   }
   
   /* New styles */
@@ -28,8 +27,14 @@ h2 {
     color: white;
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 100%;
     margin: 30px;
+  }
+
+  .login-form-container div {
+  width: 80%;
+   
   }
   
   form {
@@ -58,7 +63,7 @@ h2 {
     align-items: center;
   }
   
-  .form-label {
+  .login-form-container .form-label {
     margin-bottom: 5px;
     color: white;
   }
@@ -79,7 +84,10 @@ h2 {
         background-color: white;
       }
 
-      h2 {
-        margin-left: 50px;
-      }
+    
+
+      .login-form-container div {
+        width: 60%;
+         
+        }
   }

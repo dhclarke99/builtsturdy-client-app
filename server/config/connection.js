@@ -2,12 +2,10 @@ require('dotenv').config({ path: '../.env'});
 const mongoose = require('mongoose');
 
 
-const encodedPassword = encodeURIComponent(process.env.MONGODB_PASSWORD); // Replace with your actual password
 
+const MONGODB_URI = process.env.MONGODB_URI;
 
-mongoose.connect(
-  
-  `mongodb+srv://dhclarke99:${encodedPassword}@cluster0.x4rweq2.mongodb.net/BuiltSturdy-Client`, // Replace 'yourDatabaseName' with the name of your database
+mongoose.connect(MONGODB_URI,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
