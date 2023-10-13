@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { FETCH_SCHEDULE_BY_ID, FETCH_ALL_WORKOUTS, FETCH_WORKOUT_BY_ID } from '../utils/queries';
 import { UPDATE_SCHEDULE } from '../utils/mutations';
 import { swapArrayElements } from '../utils/helpers';
+import '../utils/css/EditForms.css'
 
 const EditSchedule = () => {
   const { id: scheduleId } = useParams();
@@ -147,7 +148,7 @@ console.log(sortedWorkouts)
   
 console.log(dataSchedule)
   return (
-    <div className='form-container'>
+    <div className='edit-form-container'>
       <h1 className='form-title'>Edit Schedule</h1>
       <h2 className='element-name'>{dataSchedule.schedule.name}</h2>
       <form id="schedule-edit-form">
@@ -161,7 +162,7 @@ console.log(dataSchedule)
       </label>
       <label className="form-label">
         Current Workouts:
-        <ul>
+        <ul className='workout-exercises-list'>
         {sortedWorkouts.map((workout, index) => {
                   const relevantWorkoutDetail = workoutDetails.find(
                     (detail) => detail && detail.workout && detail.workout._id === workout.workoutId
@@ -187,7 +188,7 @@ console.log(dataSchedule)
       </label>
       <label className="form-label">
         Assign Workout:
-        <select value={selectedWorkout} onChange={(e) => setSelectedWorkout(e.target.value)}>
+        <select className="form-input" value={selectedWorkout} onChange={(e) => setSelectedWorkout(e.target.value)}>
           <option value="" disabled>Select a workout</option>
           {dataWorkouts.workouts.map((workout) => (
             <option key={workout._id} value={workout._id}>
@@ -196,7 +197,7 @@ console.log(dataSchedule)
           ))}
         </select>
         <label className="form-label"> Select Day:
-        <select value={selectedWorkoutDay} onChange={(e) => setSelectedWorkoutDay(e.target.value)}>
+        <select className="form-input" value={selectedWorkoutDay} onChange={(e) => setSelectedWorkoutDay(e.target.value)}>
             <option value="" disabled>Select a day</option>
             <option value="Monday">Monday</option>
             <option value="Tuesday">Tuesday</option>

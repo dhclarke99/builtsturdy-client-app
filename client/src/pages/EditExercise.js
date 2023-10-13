@@ -75,7 +75,7 @@ console.log(formData)
 
 
   return (
-    <div className='form-container'>
+    <div className='edit-form-container'>
       <h1 className="form-title">Edit Exercise</h1>
       <h2 className='element-name'>{data.exercise.name}</h2>
       <form id="exercise-edit-form">

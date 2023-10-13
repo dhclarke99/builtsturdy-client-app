@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { FETCH_WORKOUT_BY_ID, QUERY_EXERCISES } from '../utils/queries';
 import { UPDATE_WORKOUT } from '../utils/mutations';
 import { swapArrayElements } from '../utils/helpers';
+import '../utils/css/EditForms.css'
 
 const EditWorkout = () => {
   const { id: workoutId } = useParams();
@@ -46,7 +47,7 @@ const EditWorkout = () => {
         sets: ex.sets,
         targetReps: ex.targetReps,
       }));
-  
+
       if (selectedExercise !== "") {
         const updatedExercises = [...preparedExercises, { exercise: selectedExercise, sets, targetReps }];
         await updateWorkout({ variables: { workoutId, input: { name, notes, adminNotes, exercises: updatedExercises } } });
@@ -59,25 +60,25 @@ const EditWorkout = () => {
       console.error(err);
     }
   };
-  
+
 
   const handleRemoveExercise = async (exerciseIdToRemove, index = null) => {
     let updatedExercises;
-  
+
     if (exerciseIdToRemove) {
       updatedExercises = allExercises.filter(ex => ex.exercise._id !== exerciseIdToRemove);
     } else if (index !== null) {
       updatedExercises = [...allExercises];
       updatedExercises.splice(index, 1);
     }
-  
+
     // Prepare the exercises array for the mutation
     const preparedExercises = updatedExercises.map(ex => ({
       exercise: ex.exercise._id, // Only include the ID
       sets: ex.sets,
       targetReps: ex.targetReps,
     }));
-  
+
     try {
       await updateWorkout({ variables: { workoutId, input: { exercises: preparedExercises } } });
       setAllExercises(updatedExercises); // Update the state after successful mutation
@@ -86,8 +87,8 @@ const EditWorkout = () => {
       console.error(err);
     }
   };
-  
-  
+
+
 
   const removeTypeName = (obj) => {
     if (Array.isArray(obj)) {
@@ -101,20 +102,20 @@ const EditWorkout = () => {
     }
     return obj;
   };
-  
-  
+
+
   const moveExerciseUp = async (index) => {
     if (index > 0) {
       const newExercises = swapArrayElements([...allExercises], index, index - 1);
       setAllExercises(newExercises);
-  
+
       const cleanedExercises = removeTypeName(newExercises).map(exercise => {
         return {
           ...exercise,
           exercise: exercise.exercise._id // Assuming '_id' is the field containing the ID
         };
       });
-  
+
       try {
         await updateWorkout({ variables: { workoutId, input: { exercises: cleanedExercises } } });
       } catch (error) {
@@ -122,19 +123,19 @@ const EditWorkout = () => {
       }
     }
   };
-  
+
   const moveExerciseDown = async (index) => {
     if (index < allExercises.length - 1) {
       const newExercises = swapArrayElements([...allExercises], index, index + 1);
       setAllExercises(newExercises);
-  
+
       const cleanedExercises = removeTypeName(newExercises).map(exercise => {
         return {
           ...exercise,
           exercise: exercise.exercise._id // Assuming '_id' is the field containing the ID
         };
       });
-  
+
       try {
         await updateWorkout({ variables: { workoutId, input: { exercises: cleanedExercises } } });
       } catch (error) {
@@ -142,73 +143,78 @@ const EditWorkout = () => {
       }
     }
   };
-  
-  
-  
-  
-  
+
+
+
+
+
 
   console.log(data)
 
   return (
-    <div className='form-container'>
+    <div className='edit-form-container'>
       <h1 className="form-title">Edit Workout</h1>
-      <h2>{data.workout.name}</h2>
-      <label>
-        Name:
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+      <h2 className='element-name'>{data.workout.name}</h2>
+      <form id="workout-edit-form">
+        <label className="form-label">
+          Name:
+          <input className="form-input" type="text" value={name} onChange={(e) => setName(e.target.value)} />
 
-      </label>
-      <label>
-        User Notes:
-        <input type="text" value={notes} onChange={(e) => setNotes(e.target.value)} />
+        </label>
+        <label className="form-label">
+          User Notes:
+          <input className="form-input" type="text" value={notes} onChange={(e) => setNotes(e.target.value)} />
 
-      </label>
-      <label>
-        Admin Notes:
-        <input type="text" value={adminNotes} onChange={(e) => setAdminNotes(e.target.value)} />
+        </label>
+        <label className="form-label">
+          Admin Notes:
+          <input className="form-input" type="text" value={adminNotes} onChange={(e) => setAdminNotes(e.target.value)} />
 
-      </label>
-      <label>
-        Current Exercises:
-        <ul>
-  {data.workout.exercises.map((exercise, index) => (
-    exercise.exercise ? (
-      <li key={exercise.exercise._id}>
-        {exercise.exercise.name}: {exercise.sets} sets of {exercise.targetReps} reps  
-        <button onClick={() => handleRemoveExercise(exercise.exercise._id)}>Remove</button>
-        <button onClick={() => moveExerciseUp(index)}>Move Up</button>
-        <button onClick={() => moveExerciseDown(index)}>Move Down</button>
-      </li>
-    ) : (
-      <li key={index}>Exercise data missing
-        <button onClick={() => handleRemoveExercise(null, index)}>Remove</button>
-      </li>
-    )
-  ))}
-</ul>
+        </label>
+        <label className="form-label">
+          Current Exercises:
+          <ul className='workout-exercises-list'>
+            {data.workout.exercises.map((exercise, index) => (
+              exercise.exercise ? (
+                <li key={exercise.exercise._id}>
+                  {exercise.exercise.name}: {exercise.sets} sets of {exercise.targetReps} reps
+                  <div className='inner-form-buttons'>
+                  <button onClick={() => moveExerciseUp(index)}>Move Up</button>
+                  <button onClick={() => moveExerciseDown(index)}>Move Down</button>
+                  <button onClick={() => handleRemoveExercise(exercise.exercise._id)}>Remove</button>
+                  
+                  </div>
+                </li>
+              ) : (
+                <li key={index}>Exercise data missing
+                  <button onClick={() => handleRemoveExercise(null, index)}>Remove</button>
+                </li>
+              )
+            ))}
+          </ul>
 
-      </label>
-      <label>
-        Assign Exercise:
-        <select value={selectedExercise} onChange={(e) => setSelectedExercise(e.target.value)}>
-          <option value="" disabled>Select an exercise</option>
-          {dataExercises.exercises.map((exercise) => (
-            <option key={exercise._id} value={exercise._id}>
-              {exercise.name}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label>
-        Sets:
-        <input type="number" value={sets} onChange={(e) => setSets(parseInt(e.target.value, 10))} />
-      </label>
-      <label>
-        Target Reps:
-        <input type="text" value={targetReps} onChange={(e) => setTargetReps(e.target.value)} />
-      </label>
-      <button onClick={handleUpdateWorkout}>Update Workout </button>
+        </label>
+        <label className="form-label">
+          Assign Exercise:
+          <select className="form-input" value={selectedExercise} onChange={(e) => setSelectedExercise(e.target.value)}>
+            <option value="" disabled>Select an exercise</option>
+            {dataExercises.exercises.map((exercise) => (
+              <option key={exercise._id} value={exercise._id}>
+                {exercise.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="form-label">
+          Sets:
+          <input className="form-input" type="number" value={sets} onChange={(e) => setSets(parseInt(e.target.value, 10))} />
+        </label>
+        <label className="form-label">
+          Target Reps:
+          <input className="form-input" type="text" value={targetReps} onChange={(e) => setTargetReps(e.target.value)} />
+        </label>
+        <button className="form-button" onClick={handleUpdateWorkout}>Update Workout </button>
+      </form>
     </div>
   );
 };
