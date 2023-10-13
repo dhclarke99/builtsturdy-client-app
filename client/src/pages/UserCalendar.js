@@ -234,7 +234,7 @@ return (
     {selectedEvent && (
     
       <div ref={videoRef} className="workout-details">
-        <h2 className="workout-title">Workout Details for {selectedEvent.title}</h2>
+        <h2 className="workout-title">{selectedEvent.title} Workout</h2>
         {currentVideoUrl && (
           <div className="video-section">
             <h3>Walkthrough Video:</h3>
@@ -249,7 +249,7 @@ return (
         
         {selectedWorkout && (
           <div ref={workoutRef} className="exercise-list">
-            <h3>Exercises:</h3>
+            
             <ol>
               {selectedWorkout.exercises.map((exercise, index) => (
                 <div key={exercise.exercise._id} className="exercise-item">

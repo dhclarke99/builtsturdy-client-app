@@ -1,9 +1,19 @@
-h2 {
-color: white;
+.secondary-header {
+  display: flex;
+  background-color: #c6a10d;
 }
 
-p {
-  color: white;
+.details {
+  margin-left: 10px;
+}
+.details h2 {
+  font-family: Brush Script MT;
+  margin-left: 0px;
+color: #333; 
+}
+
+.details p {
+  color: #333; 
 }
 
 .profile-container {

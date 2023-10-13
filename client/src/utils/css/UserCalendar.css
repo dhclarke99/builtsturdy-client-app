@@ -1,16 +1,17 @@
 .calendar-container {
-    background-color: rgb(35, 33, 33);
+  margin-top: 10px;
+    background-color: #333; 
     color: #c6a10d;
     font-family: Arial, sans-serif;
   }
 
   .calendar-page {
-    background-color: rgb(35, 33, 33);
+    background-color: #333; 
     color: #c6a10d;
     font-family: Arial, sans-serif;
   }
   .user-calendar .rbc-off-range-bg {
-    background-color: rgb(35, 33, 33);
+    background-color: #333; 
   }
 
   .calendar-container h1,
@@ -35,7 +36,10 @@
   }
   
   .workout-details {
+    display: flex;
     margin-top: 20px;
+    flex-direction: column;
+    align-items: center;
   }
   
   .workout-title {
@@ -49,7 +53,7 @@
   
   .close-video-btn {
     background-color: #c6a10d;
-    color: rgb(35, 33, 33);
+    color: #333; 
     border: none;
     padding: 10px;
     cursor: pointer;
@@ -59,10 +63,14 @@
     margin-top: 20px;
   }
   
+  .exercise-list ol {
+    width: 100%
+  }
+
   .exercise-item {
     border: 2px solid #c6a10d;
     padding: 10px;
-    margin: 10px 0;
+    margin: 10px;
   }
 
   .exercise-item h2 {

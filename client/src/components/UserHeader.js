@@ -26,7 +26,7 @@ const UserHeader = () => {
     const initials = `${firstname[0]}${lastname[0]}`;
 
     return (
-      <header>
+      <header className='secondary-header'>
         {/* User-specific header content */}
         
         <div className="profile-container">
@@ -38,7 +38,7 @@ const UserHeader = () => {
         </div>
         <div className='details'>
         <h2>{firstname} {lastname}</h2>
-        <p>{data.user.mainPhysiqueGoal}</p>
+        <p>Goal: {data.user.mainPhysiqueGoal}</p>
         </div>
         {/* ... */}
       </header>
