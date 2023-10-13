@@ -120,7 +120,14 @@ const AdminDashboard = () => {
       {activeTab === 'schedules' && (
         <div>
           <h2>All Schedules</h2>
+          <div className='search-section'>
           <input type="text" placeholder="Search Schedules" value={scheduleSearch} onChange={(e) => setScheduleSearch(e.target.value)} />
+          <button>
+            <Link to={`/admin/create-schedule`}>
+              Create New Schedule
+              </Link>
+              </button>
+          </div>
           <div className="row">
             {sortedSchedules.filter(schedule => schedule.name.toLowerCase().includes(scheduleSearch.toLowerCase())).map((schedule, index) => (
               <div className="col-md-6" key={schedule._id + index}>
@@ -173,7 +180,14 @@ const AdminDashboard = () => {
       {activeTab === 'workouts' && (
         <div>
           <h2>All Workouts</h2>
+          <div className='search-section'>
           <input type="text" placeholder="Search Workouts" value={workoutSearch} onChange={(e) => setWorkoutSearch(e.target.value)} />
+          <button>
+            <Link to={`/admin/create-workout`}>
+              Create New Workout
+              </Link>
+              </button>
+          </div>
           {/* Your Workouts code here */}
           <div className='row'>
             {dataWorkouts.workouts.filter(workout => workout.name.toLowerCase().includes(workoutSearch.toLowerCase())).map((workout) => (
@@ -215,8 +229,14 @@ const AdminDashboard = () => {
       {activeTab === 'users' && (
         <div>
           <h2>All Users</h2>
-
+          <div className='search-section'>
           <input type="text" placeholder="Search Users" value={userSearch} onChange={(e) => setUserSearch(e.target.value)} />
+          <button>
+            <Link to={`/admin/create-user`}>
+              Create New User
+              </Link>
+              </button>
+          </div>
           <div className="row">
             {/* Filter by name search */}
             {dataUsers.users.filter(user => user.firstname.toLowerCase().includes(userSearch.toLowerCase()) || user.lastname.toLowerCase().includes(userSearch.toLowerCase())).map((user) => (
@@ -247,7 +267,15 @@ const AdminDashboard = () => {
       {activeTab === 'exercises' && (
         <div>
           <h2>All Exercises</h2>
+          
+          <div className='search-section'>
           <input type="text" placeholder="Search Exercises" value={exerciseSearch} onChange={(e) => setExerciseSearch(e.target.value)} />
+            <button>
+            <Link to={`/admin/create-exercise`}>
+              Create New exercise
+              </Link>
+              </button>
+          </div>
           <div className="row">
             {dataExercises.exercises.filter(exercise => exercise.name.toLowerCase().includes(exerciseSearch.toLowerCase())).map((exercise) => (
               <div className="col-md-3" key={exercise._id}>
@@ -271,11 +299,9 @@ const AdminDashboard = () => {
               </div>
             ))}
           </div>
-          {/* Your Workouts code here */}
+          
 
-          <Link to={`/admin/create-exercise`}>
-            <button>Create Exercise</button>
-          </Link>
+          
 
         </div>
       )}

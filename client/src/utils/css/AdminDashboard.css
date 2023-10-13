@@ -9,3 +9,30 @@
 div h2 {
     color: white;
 }
+
+.search-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.search-section button {
+    color: black;
+    border-style: none;
+    background-color: white;
+}
+
+.search-section button a {
+    text-decoration: none;
+    color: black;
+    background-color: white;
+}
+
+.search-section button:hover, .search-section button:hover a {
+    background-color: #c6a10d;
+    text-decoration: none;
+    color: black;
+}
