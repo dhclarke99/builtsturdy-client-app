@@ -288,7 +288,7 @@ const UniqueUser = () => {
     try {
 
       const cleanedDailyTracking = formData.dailyTracking.map(({ __typename, ...rest }) => rest);
-      const { __typename, _id, completedDays, ...cleanedFormData } = {...formData, dailyTracking: cleanedDailyTracking}; // Remove __typename
+      const { __typename, _id, completedDays, emailVerificationToken, ...cleanedFormData } = {...formData, dailyTracking: cleanedDailyTracking}; // Remove __typename
   
       console.log(cleanedFormData)
       const formattedData = {

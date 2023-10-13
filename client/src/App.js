@@ -67,7 +67,7 @@ const App = () => {
       <Router>
         <Header />
         <Routes>
-          <Route path="/" element={<Exercise />} />
+          <Route path="/" element={<UserCalendar />} />
           <Route path="/account" element={<Account />} />
           <Route path="/admin/admindashboard" element={<AdminDashboard />} />
           <Route path="/exercise" element={<Exercise />} />
