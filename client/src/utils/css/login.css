@@ -55,6 +55,7 @@ h2 {
     flex-direction: column;
     margin-bottom: 15px;
     width: 80%;
+    align-items: center;
   }
   
   .form-label {

@@ -3,11 +3,12 @@ import { useMutation, useQuery } from '@apollo/client';
 import { QUERY_USER_by_id } from '../utils/queries';
 import Auth from '../utils/auth';
 import { CHANGE_PASSWORD } from '../utils/mutations';
+import '../utils/css/account.css'
 
 const Account = () => {
-    const { loading, error, data } = useQuery(QUERY_USER_by_id, {
-        variables: { userId: Auth.getProfile().data._id },
-      });
+  const { loading, error, data } = useQuery(QUERY_USER_by_id, {
+    variables: { userId: Auth.getProfile().data._id },
+  });
 
   const [formData, setFormData] = useState({
     currentPassword: '',
@@ -53,7 +54,7 @@ const Account = () => {
   };
 
   const unixToString = (startDate) => {
-  
+
     const convertedStartDate = new Date(parseInt(startDate))
     return `${convertedStartDate.getMonth() + 1}/${convertedStartDate.getDate()}/${convertedStartDate.getFullYear()}`;
 
@@ -64,7 +65,7 @@ const Account = () => {
 
   return (
     <div>
-    <div>
+      <div className='account-settings'>
         <h1>{data.user.firstname}'s Account Settings</h1>
         <h2>Your Information</h2>
         <li>First Name: {data.user.firstname}</li>
@@ -81,43 +82,48 @@ const Account = () => {
         <li>Program Length: {data.user.weeks} weeks</li>
         <li>Current Schedule: {data.user.schedule.name} weeks</li>
       </div>
-      <div>
+      <div className='form-div'>
         <h3>Update Password</h3>
-    <form onSubmit={handleSubmit}>
-        <label>Enter Current Password
-        <input
-        type="password"
-        name="currentPassword"
-        placeholder="Current Password"
-        value={formData.currentPassword}
-        onChange={handleChange}
-      />
-        </label>
-      <label>Enter New Password
-        <input
-        type="password"
-        name="newPassword"
-        placeholder="New Password"
-        value={formData.newPassword}
-        onChange={handleChange}
-      />
-      </label>
-      
-      <label>Confirm New Password
-      <input
-        type="password"
-        name="confirmPassword"
-        placeholder="New Password"
-        value={formData.confirmPassword}
-        onChange={handleChange}
-      />
-      </label>
-      
-      <button type="submit" disabled={formData.newPassword !== formData.confirmPassword}>
-        Change Password
-      </button>
-    </form>
-    </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="form-label">Enter Current Password
+              <input
+                type="password"
+                name="currentPassword"
+                placeholder="Current Password"
+                value={formData.currentPassword}
+                onChange={handleChange}
+              />
+
+            </label >
+          </div>
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">Enter New Password
+              <input
+                type="password"
+                name="newPassword"
+                placeholder="New Password"
+                value={formData.newPassword}
+                onChange={handleChange}
+              />
+            </label>
+          </div>
+
+          <label>Confirm New Password
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="New Password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+            />
+          </label>
+
+          <button type="submit" disabled={formData.newPassword !== formData.confirmPassword}>
+            Change Password
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

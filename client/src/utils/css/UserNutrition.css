@@ -20,6 +20,10 @@ cursor: pointer;
 margin-top: 10px;
 }
 
+.track-nutrition-header h2 {
+  color: black
+}
+
 .nutrition-container {
   font-family: Arial, sans-serif;
   margin: 0 auto;
@@ -72,8 +76,9 @@ margin-top: 10px;
 }
 
 /* Meal Plan Styles */
-.generated-meal-plan {
-  margin-top: 20px;
+
+.generated-meal-plan div {
+  max-width: 50%;
 }
 
 .generated-meal-plan table {
@@ -90,6 +95,7 @@ margin-top: 10px;
   overflow: hidden; /* New */
   text-overflow: ellipsis; /* New */
   white-space: nowrap; /* New */
+  
 }
 
 .generated-meal-plan img {
@@ -141,8 +147,9 @@ margin-top: 10px;
 }
 
 .recipe-image {
-  max-width: 100%;
-  height: auto;
+  max-width: 75%;
+  max-height: 50%;
+  
   border-radius: 10px;
 }
 
@@ -190,6 +197,15 @@ margin-top: 10px;
   margin-bottom: 5px;
 }
 
+.track-nutrition-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#previous {
+  margin-left: 150px;
+}
 
 
 /* Additional styles for aesthetics */
@@ -277,3 +293,4 @@ margin-top: 10px;
     margin-right: 300px;
   }
 }
+

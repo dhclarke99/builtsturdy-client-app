@@ -589,12 +589,14 @@ const Nutrition = () => {
 
       {showTab === 'tracking' && (
         <div ref={trackerRef} className='table-wrapper'>
-          <div>
-          <h2>Daily Tracking</h2>
+          <div >
+            <div className='track-nutrition-header'>
+          <h2>Track Nutrition</h2>
           <div className='toggle-weeks'>
 
-            <button onClick={() => setCurrentStartWeek(Math.max(1, currentStartWeek - 4))}>Previous 4 Weeks</button>
-            <button onClick={() => setCurrentStartWeek(currentStartWeek + 4)}>Next 4 Weeks</button>
+            <button id='next' onClick={() => setCurrentStartWeek(Math.max(1, currentStartWeek - 4))}>Previous 4 Weeks</button>
+            <button id='previous' onClick={() => setCurrentStartWeek(currentStartWeek + 4)}>Next 4 Weeks</button>
+            </div>
             </div>
           <div className='daily-tracking'>
             

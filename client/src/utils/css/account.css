@@ -1,0 +1,56 @@
+li {
+    color: white;
+    list-style: none;
+    margin-left: 10px
+}
+
+h2 {
+    color: white;
+}
+
+.account-settings {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.account-settings h2 {
+    color: white;
+}
+
+.form-div h3 {
+    margin-top: 20px;
+    color: white;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    width: 80%;
+  }
+
+.form-label {
+    margin-bottom: 5px;
+    color: white;
+  }
+
+.form-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+form {
+    display: flex;
+}
+
+label {
+    color: white;
+}
+
+.form-div button {
+    margin-top: 10px;
+    border-style: none;
+    background-color: white;
+}
