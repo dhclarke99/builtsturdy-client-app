@@ -21,7 +21,7 @@ margin-top: 10px;
 }
 
 .track-nutrition-header h2 {
-  color: black
+  color: #fff;
 }
 
 .nutrition-container {
@@ -29,7 +29,7 @@ margin-top: 10px;
   margin: 0 auto;
   max-width: 800px;
   padding: 20px;
-  background-color: #f4f4f4;
+  background-color: #333;
 }
 
 .header-section {
@@ -95,6 +95,7 @@ margin-top: 10px;
   overflow: hidden; /* New */
   text-overflow: ellipsis; /* New */
   white-space: nowrap; /* New */
+  background-color: #f4f4f4;
   
 }
 
@@ -195,6 +196,7 @@ margin-top: 10px;
 .ingredient-item,
 .instruction-item {
   margin-bottom: 5px;
+  color:#333
 }
 
 .track-nutrition-header {

@@ -461,14 +461,7 @@ const Nutrition = () => {
     <div className="nutrition-container">
       <div className="header-section">
         <h1>{data.user.firstname}'s Nutrition Calculator</h1>
-        <h2>Your Personal Stats</h2>
-        <li>Age: {data.user.age}</li>
-        <li>Gender: {data.user.gender}</li>
-        <li>Height: {data.user.height}</li>
-        <li>Weight: {data.user.currentWeight}</li>
-        <li>Body Fat: {data.user.estimatedBodyFat}</li>
-        <li>Experience: {data.user.trainingExperience}</li>
-        <li>Goal: {data.user.mainPhysiqueGoal}</li>
+        
 
         <p>Based on your stats, your daily calorie target is: {data.user.caloricTarget} calories</p>
         <p>You should eat {data.user.proteinTarget} grams of protein per day.</p>
@@ -571,8 +564,8 @@ const Nutrition = () => {
                       const { totalCalories, totalProtein } = calculateDailyTotals(day, preprocessedMealPlanData);
                       return (
                         <td key={day}>
-                          <p>{totalCalories} total calories</p>
-                          <p>{totalProtein} total protein</p>
+                          <p>{totalCalories} calories</p>
+                          <p>{totalProtein} protein</p>
                         </td>
                       );
                     })}
@@ -604,15 +597,15 @@ const Nutrition = () => {
             <table>
               <thead>
                 <tr>
-                  <th>Week</th>
-                  <th>Metric</th>
-                  <th>Monday</th>
-                  <th>Tuesday</th>
-                  <th>Wednesday</th>
-                  <th>Thursday</th>
-                  <th>Friday</th>
-                  <th>Saturday</th>
-                  <th>Sunday</th>
+                  <th className='table-header'>Week</th>
+                  <th className='table-header'>Metric</th>
+                  <th className='table-header'>Monday</th>
+                  <th className='table-header'>Tuesday</th>
+                  <th className='table-header'>Wednesday</th>
+                  <th className='table-header'>Thursday</th>
+                  <th className='table-header'>Friday</th>
+                  <th className='table-header'>Saturday</th>
+                  <th className='table-header'>Sunday</th>
                 </tr>
               </thead>
               <tbody>
@@ -620,8 +613,8 @@ const Nutrition = () => {
                   <React.Fragment key={weekNumber}>
                     {['Weight', 'Calories', 'Protein'].map((type, index) => (
                       <tr key={type} className={`week-${weekNumber}`}>
-                        {index === 0 && <td rowSpan="3">Week {weekNumber} ({calculateWeekStartDate(parseInt(data.user.startDate), weekNumber)})</td>}
-                        <td>{type}</td>
+                        {index === 0 && <td className='table-header' rowSpan="3">Week {weekNumber} ({calculateWeekStartDate(parseInt(data.user.startDate), weekNumber)})</td>}
+                        <td className='table-header'>{type}</td>
                         {Object.keys(weeks[weekNumber]).map((dateUnix) => (
                           <td key={dateUnix}>
                             <input
