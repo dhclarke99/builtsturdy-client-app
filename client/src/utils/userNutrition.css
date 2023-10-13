@@ -224,11 +224,20 @@ margin-top: 10px;
 .save-viewtrends {
   display: flex;
   flex-direction: column;
+  Margin-top: 20px;
+  margin-left: 100px;
+  margin-right: 100px;
 }
 
 .save-viewtrends a {
   text-decoration: none;
   color: black;
+}
+
+#save-button {
+  background-color: #c6a10d;
+  color: white;
+  margin: 20px;
 }
 
 /* Media Queries for Desktop */
@@ -258,5 +267,13 @@ margin-top: 10px;
 
   .recipe-details img {
     max-width: 40%;
+  }
+
+  .save-viewtrends {
+    display: flex;
+    flex-direction: column;
+    Margin-top: 20px;
+    margin-left: 300px;
+    margin-right: 300px;
   }
 }
