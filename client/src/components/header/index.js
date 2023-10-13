@@ -8,10 +8,10 @@ const Header = () => {
   const isAdmin = Auth.isLoggedInAndAdmin();
 
   return (
-    <header>
+    <header className='nav-header'>
       <h1>Built Sturdy Blueprint</h1>
       <nav>
-        <ul>
+        <ul className='nav-ul'>
           <li>
             <Link to="/">Home</Link>
           </li>
