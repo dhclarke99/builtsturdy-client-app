@@ -5,3 +5,54 @@
 .container.mt-5 h2 {
     color: white;
 }
+
+/* Container for the form */
+.form-container {
+    width: 60%;
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+  }
+  
+  /* Title for the Edit User section */
+  #edit-user-title {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Labels in the form */
+  #edit-user-form .form-label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Input fields in the form */
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Update button */
+  #update-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #c6a10d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #update-button:hover {
+    background-color: #977b0e;
+  }
+  

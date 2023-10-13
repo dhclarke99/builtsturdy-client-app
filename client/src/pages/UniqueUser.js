@@ -6,9 +6,9 @@ import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID, FETCH_SCHEDULES } from '../utils
 import { UPDATE_USER, DELETE_USER } from '../utils/mutations';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../utils/css/UserCalendar.css';
 import '../utils/css/UniqueUser.css';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 
 
@@ -576,13 +576,14 @@ const UniqueUser = () => {
         </div>
       )}
       {activeTab === 'edit' && (
-        <div>
+        <div className='form-container'>
 
-          <h1>Edit User</h1>
-          <form onSubmit={handleSubmit}>
+          <h1 id='edit-user-title'>Edit User</h1>
+          <form onSubmit={handleSubmit} id='edit-user-form'>
             {/* Add form fields here based on your schema. For example: */}
-            <label> First Name:
+            <label className='form-label'> First Name:
               <input
+              className='form-input'
                 type="text"
                 name="firstname"
                 placeholder="First Name"
@@ -590,8 +591,9 @@ const UniqueUser = () => {
                 onChange={handleChange}
               />
             </label>
-            <label> Last Name:
+            <label className='form-label'> Last Name:
               <input
+              className='form-input'
                 type="text"
                 name="lastname"
                 placeholder="Last Name"
@@ -599,8 +601,9 @@ const UniqueUser = () => {
                 onChange={handleChange}
               />
             </label>
-            <label> Username:
+            <label className='form-label'> Username:
               <input
+              className='form-input'
                 type="text"
                 name="username"
                 placeholder="Username"
@@ -608,8 +611,9 @@ const UniqueUser = () => {
                 onChange={handleChange}
               />
             </label>
-            <label> Email:
+            <label className='form-label'> Email:
               <input
+              className='form-input'
                 type="text"
                 name="email"
                 placeholder="Email"
@@ -617,7 +621,7 @@ const UniqueUser = () => {
                 onChange={handleChange}
               />
             </label>
-            <label> Role:
+            <label className='form-label'> Role:
               <select type="text"
                 name="role"
                 placeholder="Role"
@@ -629,8 +633,9 @@ const UniqueUser = () => {
               </select>
 
             </label>
-            <label> Age:
+            <label className='form-label'> Age:
               <input
+              className='form-input'
                 type="text"
                 name="age"
                 placeholder="Age"
@@ -638,7 +643,7 @@ const UniqueUser = () => {
                 onChange={handleChange}
               />
             </label>
-            <label> Gender:
+            <label className='form-label'> Gender:
               <select type="text"
                 name="gender"
                 placeholder="Gender"
@@ -649,8 +654,9 @@ const UniqueUser = () => {
               </select>
 
             </label>
-            <label> Height (inches):
+            <label className='form-label'> Height (inches):
               <input
+              className='form-input'
                 type="text"
                 name="height"
                 placeholder="Height"
@@ -658,8 +664,9 @@ const UniqueUser = () => {
                 onChange={handleChange}
               />
             </label>
-            <label> Weight (lbs):
+            <label className='form-label'> Weight (lbs):
               <input
+              className='form-input'
                 type="text"
                 name="currentWeight"
                 placeholder="Current Weight"
@@ -667,8 +674,9 @@ const UniqueUser = () => {
                 onChange={handleChange}
               />
             </label>
-            <label> Body Fat (%):
+            <label className='form-label'> Body Fat (%):
               <input
+              className='form-input'
                 type="text"
                 name="estimatedBodyFat"
                 placeholder="Body Fat %"
@@ -676,7 +684,7 @@ const UniqueUser = () => {
                 onChange={handleChange}
               />
             </label>
-            <label> Training Experience:
+            <label className='form-label'> Training Experience:
               <select type="text"
                 name="trainingExperience"
                 placeholder="Training Experience"
@@ -688,7 +696,7 @@ const UniqueUser = () => {
               </select>
 
             </label>
-            <label> Phsyique Goal:
+            <label className='form-label'> Phsyique Goal:
               <select type="text"
                 name="mainPhysiqueGoal"
                 placeholder="Physique Goal"
@@ -701,8 +709,9 @@ const UniqueUser = () => {
 
               </select>
             </label>
-            <label> Caloric Target:
+            <label className='form-label'> Caloric Target:
               <input
+              className='form-input'
                 type="text"
                 name="caloricTarget"
                 placeholder="Caloric Target"
@@ -710,8 +719,9 @@ const UniqueUser = () => {
                 onChange={handleChange}
               />
             </label>
-            <label> Protein Target:
+            <label className='form-label'> Protein Target:
               <input
+              className='form-input'
                 type="text"
                 name="proteinTarget"
                 placeholder="Protein Target"
@@ -719,8 +729,9 @@ const UniqueUser = () => {
                 onChange={handleChange}
               />
             </label>
-            <label> Carbohydrate Target:
+            <label className='form-label'> Carbohydrate Target:
               <input
+              className='form-input'
                 type="text"
                 name="carbohydrateTarget"
                 placeholder="Carb Target"
@@ -728,8 +739,9 @@ const UniqueUser = () => {
                 onChange={handleChange}
               />
             </label>
-            <label> Fat Target:
+            <label className='form-label'> Fat Target:
               <input
+              className='form-input'
                 type="text"
                 name="fatTarget"
                 placeholder="Fat Target"
@@ -738,7 +750,7 @@ const UniqueUser = () => {
               />
             </label>
             
-            <label> Schedule:
+            <label className='form-label'> Schedule:
               <select name="schedule" placeholder="Physique Goal"
                 value={formData.schedule || ''} onChange={handleChange}>
                 <option value='' disabled>Select One</option>
@@ -747,8 +759,9 @@ const UniqueUser = () => {
                 ))}
               </select>
             </label>
-            <label> Start Date:
+            <label className='form-label'> Start Date:
               <input
+              className='form-input'
                 type="text"
                 name="startDate"
                 placeholder="Start Date"
@@ -756,8 +769,9 @@ const UniqueUser = () => {
                 onChange={handleChange}
               />
             </label>
-            <label> Weeks:
+            <label className='form-label'> Weeks:
               <input
+              className='form-input'
                 type="text"
                 name="weeks"
                 placeholder="Weeks"
@@ -765,8 +779,9 @@ const UniqueUser = () => {
                 onChange={handleChange}
               />
             </label>
-            <label> Meal Plan Template:
+            <label className='form-label'> Meal Plan Template:
               <input
+              className='form-input'
                 type="text"
                 name="mealPlanTemplate"
                 placeholder="Meal Plan Template"
@@ -774,7 +789,7 @@ const UniqueUser = () => {
                 readOnly
               />
             </label>
-            <button type="submit">Update User</button>
+            <button type="submit" id='update-button'>Update User</button>
           </form>
         </div>
       )}
