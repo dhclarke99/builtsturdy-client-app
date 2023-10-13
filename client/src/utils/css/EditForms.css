@@ -1,0 +1,61 @@
+/* Main container for all forms */
+.form-container {
+    width: 60%;
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Form titles */
+  .form-title {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .element-name {
+    color: black;
+  }
+  
+  /* Form labels */
+  .form-label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Form input fields */
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Form buttons */
+  .form-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #c6a10d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .form-button:hover {
+    background-color: #a0850b;
+  }
+  
+  /* Form select dropdown */
+  .form-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  

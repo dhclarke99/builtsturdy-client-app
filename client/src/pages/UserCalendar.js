@@ -109,8 +109,8 @@ const UserCalendar = () => {
               calendarEvents.push({
                 workoutId: workout,
                 id: index,
-                title: workout.name,
-                notes: workout.notes,
+                title: workout?.name,
+                notes: workout?.notes,
                 start: workoutDate.toDate(),
                 end: workoutDate.toDate(),
                 allDay: true,
@@ -193,7 +193,7 @@ if (completedDays.length > 0) {
     console.log(selectedEvent)
     const { data } = await client.query({
       query: FETCH_WORKOUT_BY_ID,
-      variables: { workoutId: event.workoutId._id },
+      variables: { workoutId: event?.workoutId?._id },
     });
     setSelectedWorkout(data.workout);
     console.log(data.workout)

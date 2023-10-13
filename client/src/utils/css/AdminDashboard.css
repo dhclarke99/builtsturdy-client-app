@@ -42,11 +42,11 @@ div h2 {
     justify-content: center;
 }
 
-#exercise-delete-btn {
+.delete-btn {
     margin-right: 15px;
     background-color: rgb(204, 27, 27);
 }
 
-#exercise-edit-btn {
+.edit-btn {
     margin-left: 15px;
 }

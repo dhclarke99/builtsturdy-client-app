@@ -3,6 +3,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import { FIND_EXERCISE_BY_ID } from '../utils/queries';
 import { UPDATE_EXERCISE } from '../utils/mutations';
+import '../utils/css/EditForms.css'
 
 const EditExercise = () => {
   const { id: exerciseId } = useParams();
@@ -74,30 +75,31 @@ console.log(formData)
 
 
   return (
-    <div>
-      <h1>Edit Exercise</h1>
-      <h2>{data.exercise.name}</h2>
-      <label>
+    <div className='form-container'>
+      <h1 className="form-title">Edit Exercise</h1>
+      <h2 className='element-name'>{data.exercise.name}</h2>
+      <form id="exercise-edit-form">
+      <label className="form-label">
         Name:
-        <input type="text" name="name" value={formData.name || ''} onChange={handleChange} />
+        <input className="form-input" type="text" name="name" value={formData.name || ''} onChange={handleChange} />
         
       </label>
-      <label>
+      <label className="form-label">
         Notes:
-        <input type="text"  name="notes" value={formData.notes || ''} onChange={handleChange} />
+        <input className="form-input" type="text"  name="notes" value={formData.notes || ''} onChange={handleChange} />
         
       </label>
-      <label>
+      <label className="form-label">
         Admin Notes:
-        <input type="text"  name="adminNotes" value={formData.adminNotes || ''} onChange={handleChange} />
+        <input className="form-input" type="text"  name="adminNotes" value={formData.adminNotes || ''} onChange={handleChange} />
         
       </label>
-      <label>
+      <label className="form-label">
         Video:
-        <input type="text"  name="videoUrl" value={formData.videoUrl || ''} onChange={handleChange} />
+        <input className="form-input" type="text"  name="videoUrl" value={formData.videoUrl || ''} onChange={handleChange} />
         
       </label>
-      <label>
+      <label className="form-label">
         Tag:
         <select type="text"
                 name="tag"
@@ -112,7 +114,8 @@ console.log(formData)
               </select>
         
       </label>
-      <button onClick={handleUpdate}>Update Exercise</button>
+      <button className="form-button" onClick={handleUpdate}>Update Exercise</button>
+      </form>
     </div>
   );
 };

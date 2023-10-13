@@ -23,7 +23,7 @@ const CreateWorkout = () => {
   };
 
   return (
-    <div>
+    <div >
       <h1>Create Workout</h1>
       <form onSubmit={handleSubmit}>
         <label>

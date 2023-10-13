@@ -151,8 +151,8 @@ const EditWorkout = () => {
   console.log(data)
 
   return (
-    <div>
-      <h1>Edit Workout</h1>
+    <div className='form-container'>
+      <h1 className="form-title">Edit Workout</h1>
       <h2>{data.workout.name}</h2>
       <label>
         Name:

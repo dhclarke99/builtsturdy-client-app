@@ -147,18 +147,19 @@ console.log(sortedWorkouts)
   
 console.log(dataSchedule)
   return (
-    <div>
-      <h1>Edit Schedule</h1>
-      <h2>{dataSchedule.schedule.name}</h2>
-      <label>
+    <div className='form-container'>
+      <h1 className='form-title'>Edit Schedule</h1>
+      <h2 className='element-name'>{dataSchedule.schedule.name}</h2>
+      <form id="schedule-edit-form">
+      <label className="form-label">
         Name:
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+        <input className="form-input" type="text" value={name} onChange={(e) => setName(e.target.value)} />
       </label>
-      <label>
+      <label className="form-label">
         Notes:
-        <input type="text" value={notes} onChange={(e) => setNotes(e.target.value)} />
+        <input className="form-input" type="text" value={notes} onChange={(e) => setNotes(e.target.value)} />
       </label>
-      <label>
+      <label className="form-label">
         Current Workouts:
         <ul>
         {sortedWorkouts.map((workout, index) => {
@@ -168,14 +169,14 @@ console.log(dataSchedule)
                   
                   return (
                     <li className="list-group-item" key={index}>
-                      <strong>Day:</strong> {workout.day}, <strong>Workout ID:</strong> {workout.workoutId}
+                      <strong>Day:</strong> {workout.day}
                       {relevantWorkoutDetail && (
                         <ul className="list-group list-group-flush mt-2">
                           <li className="list-group-item">Name: {relevantWorkoutDetail.workout.name}</li>
                           <li className="list-group-item">Notes: {relevantWorkoutDetail.workout.notes}</li>
                         </ul>
                       )}
-                      <button onClick={() => handleEditWorkout(workout.workoutId)}>Edit</button>
+                      
                       <button onClick={() => handleRemoveWorkout(workout.workoutId)}>Remove</button>
                     
                     </li>
@@ -184,7 +185,7 @@ console.log(dataSchedule)
                 })} 
         </ul>
       </label>
-      <label>
+      <label className="form-label">
         Assign Workout:
         <select value={selectedWorkout} onChange={(e) => setSelectedWorkout(e.target.value)}>
           <option value="" disabled>Select a workout</option>
@@ -194,7 +195,7 @@ console.log(dataSchedule)
             </option>
           ))}
         </select>
-        <label> Select Day:
+        <label className="form-label"> Select Day:
         <select value={selectedWorkoutDay} onChange={(e) => setSelectedWorkoutDay(e.target.value)}>
             <option value="" disabled>Select a day</option>
             <option value="Monday">Monday</option>
@@ -208,7 +209,8 @@ console.log(dataSchedule)
         </label>
         
       </label>
-      <button onClick={handleUpdateWorkout}>Update Schedule</button>
+      <button className="form-button" onClick={handleUpdateWorkout}>Update Schedule</button>
+      </form>
     </div>
   );
 };

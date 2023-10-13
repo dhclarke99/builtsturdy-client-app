@@ -74,29 +74,39 @@ const AdminDashboard = () => {
   }, [dataSchedules]);
 
   const handleDeleteWorkout = async (workoutId) => {
-    try {
-      await deleteWorkout({ variables: { workoutId } });
-    } catch (err) {
-      console.error(err);
+    const isConfirmed = window.confirm("Are you sure you want to delete this workout?");
+    if (isConfirmed) {
+      try {
+        await deleteWorkout({ variables: { workoutId } });
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
-
+  
   const handleDeleteSchedule = async (scheduleId) => {
-    try {
-      await deleteSchedule({ variables: { scheduleId } });
-    } catch (err) {
-      console.error(err);
+    const isConfirmed = window.confirm("Are you sure you want to delete this schedule?");
+    if (isConfirmed) {
+      try {
+        await deleteSchedule({ variables: { scheduleId } });
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
-
+  
   const handleDeleteExercise = async (exerciseId) => {
-    try {
-      await deleteExercise({ variables: { exerciseId } });
-      window.location.href = "/admin/admindashboard"
-    } catch (err) {
-      console.error(err);
+    const isConfirmed = window.confirm("Are you sure you want to delete this exercise?");
+    if (isConfirmed) {
+      try {
+        await deleteExercise({ variables: { exerciseId } });
+        window.location.href = "/admin/admindashboard";
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
+  
 
   console.log(dataSchedules)
   console.log(dataUsers)
@@ -166,8 +176,11 @@ const AdminDashboard = () => {
                       })}
                     </ul>
                   </div>
-                  <button onClick={() => window.location.href = `/admin/edit-schedule/${schedule._id}`}>Edit</button>
-                  <button onClick={() => handleDeleteSchedule(schedule._id)}>Delete</button>
+                  <div className='card-footer'>
+                  <button className='delete-btn'
+                  onClick={() => handleDeleteSchedule(schedule._id)}>Delete</button>
+                  <button className='edit-btn' onClick={() => window.location.href = `/admin/edit-schedule/${schedule._id}`}>Edit</button>
+                </div>
                 </div>
                 
               </div>
@@ -212,8 +225,10 @@ const AdminDashboard = () => {
                       )) : <li>No Exercises assigned</li>}
                     </ol>
 
-                    <button onClick={() => handleDeleteWorkout(workout._id)}>Delete</button>
-                    <button onClick={() => window.location.href = `/admin/edit-workout/${workout._id}`}>Edit</button>
+                    <div className='card-footer'>
+                    <button className='delete-btn' onClick={() => handleDeleteWorkout(workout._id)}>Delete</button>
+                    <button className='edit-btn' onClick={() => window.location.href = `/admin/edit-workout/${workout._id}`}>Edit</button>
+                  </div>
                   </div>
 
                 </div>
@@ -286,8 +301,8 @@ const AdminDashboard = () => {
 
                   </div>
                   <div className='card-footer'>
-                  <button id='exercise-delete-btn' onClick={() => handleDeleteExercise(exercise._id)}>Delete</button>
-                    <button id='exercise-edit-btn' onClick={() => window.location.href = `/admin/edit-exercise/${exercise._id}`}>Edit</button>
+                  <button className='delete-btn' onClick={() => handleDeleteExercise(exercise._id)}>Delete</button>
+                    <button className='edit-btn' onClick={() => window.location.href = `/admin/edit-exercise/${exercise._id}`}>Edit</button>
                   </div>
 
                 </div>
