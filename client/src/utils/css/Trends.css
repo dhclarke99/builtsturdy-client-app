@@ -1,0 +1,17 @@
+.chart-header {
+    color: white;
+}
+
+.line {
+    color: white;
+}
+
+.chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-style: solid;
+    border-color: #c6a10d;
+    margin: 30px;
+    border-width: 2px;
+}

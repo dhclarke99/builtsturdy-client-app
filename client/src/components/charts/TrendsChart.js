@@ -1,5 +1,6 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
+import '../../utils/css/Trends.css'
 
 const TrendsChart = ({ weeklyAverages, currentWeight }) => {
   // Prepare data for the charts
@@ -37,34 +38,92 @@ const TrendsChart = ({ weeklyAverages, currentWeight }) => {
         min: currentWeight - 50, // minimum value
         max: currentWeight + 50, // maximum value
         ticks: {
-          stepSize: 10, // difference between each tick
+          stepSize: 10,
+          color: 'white' // difference between each tick
         },
+        grid: {
+          color: 'white' // Color for inner chart lines
+        }
       },
+      x: {
+        ticks: {
+          color: 'white' // Color for x-axis labels
+        },
+        grid: {
+          color: 'white' // Color for inner chart lines
+        }
+      }
     },
+    plugins: {
+      legend: {
+        labels: {
+          color: 'white' // Color for legend text
+        }
+      }
+    }
+    
   };
 
   const caloriesOptions = {
     scales: {
       y: {
-        min: 1000,
-        max: 4000,
+        min: currentWeight - 50, // minimum value
+        max: currentWeight + 50, // maximum value
         ticks: {
-          stepSize: 100,
+          stepSize: 10,
+          color: 'white' // difference between each tick
         },
+        grid: {
+          color: 'white' // Color for inner chart lines
+        }
       },
+      x: {
+        ticks: {
+          color: 'white' // Color for x-axis labels
+        },
+        grid: {
+          color: 'white' // Color for inner chart lines
+        }
+      }
     },
+    plugins: {
+      legend: {
+        labels: {
+          color: 'white' // Color for legend text
+        }
+      }
+    }
   };
 
   const proteinOptions = {
     scales: {
       y: {
-        min: 50,
-        max: 250,
+        min: currentWeight - 50, // minimum value
+        max: currentWeight + 50, // maximum value
         ticks: {
           stepSize: 10,
+          color: 'white' // difference between each tick
         },
+        grid: {
+          color: 'white' // Color for inner chart lines
+        }
       },
+      x: {
+        ticks: {
+          color: 'white' // Color for x-axis labels
+        },
+        grid: {
+          color: 'white' // Color for inner chart lines
+        }
+      }
     },
+    plugins: {
+      legend: {
+        labels: {
+          color: 'white' // Color for legend text
+        }
+      }
+    }
   };
 
   const proteinConfig = {
@@ -83,16 +142,16 @@ const TrendsChart = ({ weeklyAverages, currentWeight }) => {
   return (
     <div>
     
-      <div>
-        <h2>Average Weight</h2>
+      <div className='chart'>
+        <h2 className='chart-header'>Average Weight</h2>
         <Line data={weightConfig} options={weightOptions} />
       </div>
-      <div>
-        <h2>Average Calories</h2>
+      <div className='chart'>
+        <h2 className='chart-header'>Average Calories</h2>
         <Line data={caloriesConfig} options={caloriesOptions} />
       </div>
-      <div>
-        <h2>Average Protein</h2>
+      <div className='chart'>
+        <h2 className='chart-header'>Average Protein</h2>
         <Line data={proteinConfig}  options={proteinOptions}/>
       </div>
     </div>

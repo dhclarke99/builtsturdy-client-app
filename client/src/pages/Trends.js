@@ -4,6 +4,7 @@ import { useQuery, gql } from '@apollo/client';
 import { QUERY_USER_by_id } from '../utils/queries';
 import Auth from '../utils/auth';
 import TrendsChart from '../components/charts/TrendsChart';
+import '../utils/css/Trends.css'
 
 const Trends = () => {
 const { loading, error, data } = useQuery(QUERY_USER_by_id, {
@@ -67,7 +68,7 @@ const { loading, error, data } = useQuery(QUERY_USER_by_id, {
 
   return (
     <div>
-      <h1>{data.user.firstname}'s Trends</h1>
+      <h1>{data.user.firstname}'s Weekly Trends</h1>
       <TrendsChart weeklyAverages={weeklyAverages} currentWeight={data.user.currentWeight}/>
     </div>
   );
