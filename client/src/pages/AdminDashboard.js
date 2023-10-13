@@ -135,8 +135,7 @@ const AdminDashboard = () => {
                   <div className="card-header">
                     {schedule.name}: {schedule.notes}
                   </div>
-                  <button onClick={() => window.location.href = `/admin/edit-schedule/${schedule._id}`}>Edit</button>
-                  <button onClick={() => handleDeleteSchedule(schedule._id)}>Delete</button>
+                  
                   <div className="card-body">
                     <ul className="list-group list-group-flush">
                       {schedule.workouts.map((workout, index) => {
@@ -167,13 +166,14 @@ const AdminDashboard = () => {
                       })}
                     </ul>
                   </div>
+                  <button onClick={() => window.location.href = `/admin/edit-schedule/${schedule._id}`}>Edit</button>
+                  <button onClick={() => handleDeleteSchedule(schedule._id)}>Delete</button>
                 </div>
+                
               </div>
             ))}
           </div>
-          <Link to={`/admin/create-schedule`}>
-            <button>Create Schedule</button>
-          </Link>
+       
         </div>
       )}
 
@@ -220,9 +220,6 @@ const AdminDashboard = () => {
               </div>
             ))}
           </div>
-          <Link to={`/admin/create-workout`}>
-            <button>Create Workout</button>
-          </Link>
         </div>
       )}
 
@@ -256,11 +253,6 @@ const AdminDashboard = () => {
 
             ))}
           </div>
-          {/* Your Users code here */}
-
-          <Link to={`/admin/create-user`}>
-            <button>Create User</button>
-          </Link>
         </div>
       )}
 
@@ -282,17 +274,20 @@ const AdminDashboard = () => {
                 <div className="card mb-3">
                   <div className="card-header">
                     <h5 className="card-title">{exercise.name}</h5>
-                    <p className="card-text">Notes: {exercise.notes}</p>
-                    <p className="card-text">Admin Notes: {exercise.adminNotes}</p>
+                    <p className="card-subtitle">Notes: {exercise.notes}</p>
+                    <p className="card-subtitle mb-2 text-muted">Admin Notes: {exercise.adminNotes}</p>
                   </div>
                   <div className="card-body">
 
                     <p>Video: {exercise.videoUrl} </p>
                     <p>Tag: {exercise.tag}</p>
 
-                    <button onClick={() => handleDeleteExercise(exercise._id)}>Delete</button>
-                    <button onClick={() => window.location.href = `/admin/edit-exercise/${exercise._id}`}>Edit</button>
+                    
 
+                  </div>
+                  <div className='card-footer'>
+                  <button id='exercise-delete-btn' onClick={() => handleDeleteExercise(exercise._id)}>Delete</button>
+                    <button id='exercise-edit-btn' onClick={() => window.location.href = `/admin/edit-exercise/${exercise._id}`}>Edit</button>
                   </div>
 
                 </div>

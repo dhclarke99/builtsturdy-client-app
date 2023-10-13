@@ -36,3 +36,17 @@ div h2 {
     text-decoration: none;
     color: black;
 }
+
+.card-footer {
+    display: flex;
+    justify-content: center;
+}
+
+#exercise-delete-btn {
+    margin-right: 15px;
+    background-color: rgb(204, 27, 27);
+}
+
+#exercise-edit-btn {
+    margin-left: 15px;
+}
