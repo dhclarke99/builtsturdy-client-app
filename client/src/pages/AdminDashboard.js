@@ -4,7 +4,7 @@ import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { FETCH_ALL_WORKOUTS, FETCH_ALL_USERS, QUERY_EXERCISES, FETCH_SCHEDULES, FETCH_WORKOUT_BY_ID } from '../utils/queries';
 import { DELETE_WORKOUT, DELETE_EXERCISE, DELETE_SCHEDULE } from '../utils/mutations';
 import { Link } from 'react-router-dom';
-import '../utils/AdminDashboard.css'
+import '../utils/css/AdminDashboard.css'
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('users');

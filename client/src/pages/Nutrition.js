@@ -5,7 +5,7 @@ import { QUERY_USER_by_id } from '../utils/queries';
 import { ADD_DAILY_TRACKING, UPDATE_USER_MEAL_PLAN_TEMPLATE } from '../utils/mutations';
 import Auth from '../utils/auth';
 import { Link } from 'react-router-dom';
-import '../utils/userNutrition.css';
+import '../utils/css/UserNutrition.css';
 
 
 

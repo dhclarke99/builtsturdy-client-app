@@ -1,8 +1,8 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import { QUERY_USER_by_id } from '../utils/queries';
-import Auth from '../utils/auth'
-
+import Auth from '../utils/auth';
+import '../utils/css/UserHeader.css'; // Import your CSS
 
 const UserHeader = () => {
   
@@ -22,10 +22,24 @@ const UserHeader = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   if (data && data.user) {
+    const { firstname, lastname, profileImage } = data.user;
+    const initials = `${firstname[0]}${lastname[0]}`;
+
     return (
       <header>
         {/* User-specific header content */}
-        <h1>{data.user.firstname} {data.user.lastname}</h1>
+        
+        <div className="profile-container">
+          {profileImage ? (
+            <img src={profileImage} alt="Profile" className="profile-image" />
+          ) : (
+            <div className="profile-initials">{initials}</div>
+          )}
+        </div>
+        <div className='details'>
+        <h2>{firstname} {lastname}</h2>
+        <p>{data.user.mainPhysiqueGoal}</p>
+        </div>
         {/* ... */}
       </header>
     );
@@ -33,4 +47,5 @@ const UserHeader = () => {
 
   return null;
 };
- export default UserHeader;
+
+export default UserHeader;

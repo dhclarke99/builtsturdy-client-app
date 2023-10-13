@@ -7,7 +7,7 @@ import { useQuery, useApolloClient, useMutation } from '@apollo/client';
 import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID } from '../utils/queries';
 import {UPDATE_USER_COMPLETION, LOG_COMPLETED_WORKOUT} from '../utils/mutations'
 import placeholderImage from '../assets/images/placeholderImage.png';
-import '../utils/userCalendar.css';
+import '../utils/css/UserCalendar.css';
 import ProgressBar from 'react-bootstrap/ProgressBar'; 
 import LogWorkoutForm from '../utils/LogWorkoutForm';
 

@@ -6,7 +6,7 @@ import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID, FETCH_SCHEDULES } from '../utils
 import { UPDATE_USER, DELETE_USER } from '../utils/mutations';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import '../utils/userCalendar.css';
+import '../utils/css/UserCalendar.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 
