@@ -10,6 +10,7 @@ const Verification = () => {
   const [oldPassword, setOldPassword] = useState('');
   const [userId, setUserId] = useState(null); // New state variable to hold userId
   const [changePassword] = useMutation(CHANGE_PASSWORD);
+  const [confirmNewPassword, setConfirmNewPassword] = useState(''); // New state variable for confirmation password
 
   useEffect(() => {
     const verifyEmail = async () => {
@@ -53,6 +54,8 @@ const Verification = () => {
     }
   };
 
+  const passwordsMatch = newPassword === confirmNewPassword && newPassword !== ''; // New variable to check if passwords match
+
   return (
     <div>
       {status === 'verifying' && <p>Verifying your email...</p>}
@@ -74,7 +77,15 @@ const Verification = () => {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
           />
-          <button onClick={handlePasswordChange}>Change Password</button>
+          <p>Please confirm your new password:</p>
+          <input
+            type="password"
+            placeholder="confirm Password"
+            value={confirmNewPassword}
+            onChange={(e) => setConfirmNewPassword(e.target.value)}
+          />
+          <button onClick={handlePasswordChange} disabled={!passwordsMatch}>Change Password</button>
+          {!passwordsMatch && <p>Passwords do not match!</p>}
         </div>
       )}
 

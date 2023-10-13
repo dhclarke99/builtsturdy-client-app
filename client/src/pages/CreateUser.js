@@ -35,20 +35,28 @@ const AdminCreateUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formattedData = {
-        ...formData,
-        height: parseFloat(formData.height),
-        currentWeight: parseFloat(formData.currentWeight),
-        estimatedBodyFat: parseFloat(formData.estimatedBodyFat),
-        age: parseInt(formData.age, 10),
-        weeks: parseFloat(formData.weeks),
-      };
+      ...formData,
+      height: parseFloat(formData.height),
+      currentWeight: parseFloat(formData.currentWeight),
+      estimatedBodyFat: parseFloat(formData.estimatedBodyFat),
+      age: parseInt(formData.age, 10),
+      weeks: parseFloat(formData.weeks),
+    };
+
+    const tempPassword = 'password123'; // This should be generated securely
 
     try {
       const { data } = await createUser({
-        variables: { input: formattedData },
+        variables: { input: { ...formattedData, password: tempPassword } }, // Use tempPassword here
       });
+
       console.log('User created:', data);
-      await sendVerificationEmail(data.createUser.user.email, data.createUser.user.emailVerificationToken, data.createUser.user.firstname)
+      await sendVerificationEmail(
+        data.createUser.user.email,
+        data.createUser.user.emailVerificationToken,
+        data.createUser.user.firstname,
+        tempPassword
+      );
 
       window.location.href = '/admin/admindashboard';
     } catch (err) {
@@ -87,13 +95,7 @@ const AdminCreateUser = () => {
         value={formData.email}
         onChange={handleChange}
       />
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={handleChange}
-      />
+     
       <select name="role" value={formData.role} onChange={handleChange}>
       <option value="" disabled>Choose a role</option>
         <option value="User">User</option>

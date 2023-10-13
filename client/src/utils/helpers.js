@@ -11,12 +11,12 @@ export const swapArrayElements = (arr, index1, index2) => {
 
 
 
-  export const sendVerificationEmail = (email, token, name) => {
+  export const sendVerificationEmail = (email, token, name, tempPassword) => {
     return new Promise((resolve, reject) => {
       const templateParams = {
         to_email: email,
         to_name: name,
-        message: 'Your password is password123. Please change this after verifying your account',
+        message: `Your current password is ${tempPassword}. Please change this after verifying your account.`,
         from_email: 'david@builtsturdyblueprint.com',
         verification_link: `http://localhost:3000/verify-email/${token}`
       };
