@@ -37,13 +37,14 @@ const Verification = () => {
       const { data } = await changePassword({
         variables: {
           userId: userId, // Use userId from state
-          oldPassword: '', // Assuming oldPassword is not needed after email verification
+          oldPassword: oldPassword, // Assuming oldPassword is not needed after email verification
           newPassword: newPassword,
         },
       });
 
       if (data.changePassword) {
         console.log('Password changed successfully');
+        window.location.href = '/login';
       } else {
         console.log('Failed to change password');
       }

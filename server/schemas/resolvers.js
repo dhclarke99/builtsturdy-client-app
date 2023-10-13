@@ -429,6 +429,9 @@ const resolvers = {
       }
     },
     changePassword: async (_, { userId, oldPassword, newPassword }) => {
+      console.log("old password: ", oldPassword)
+      console.log("new password: ", newPassword)
+      console.log("userId: ", userId)
       const user = await User.findById(userId);
       if (!user) {
         throw new Error('User not found');

@@ -50,7 +50,7 @@ const AdminCreateUser = () => {
       console.log('User created:', data);
       await sendVerificationEmail(data.createUser.user.email, data.createUser.user.emailVerificationToken, data.createUser.user.firstname)
 
-      // window.location.href = '/admin/admindashboard';
+      window.location.href = '/admin/admindashboard';
     } catch (err) {
       console.error('Error creating user:', err);
     }
