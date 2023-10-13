@@ -12,12 +12,11 @@ const resolvers = {
       return await User.find().populate('schedule');
     },
     user: async (_parent, { id }) => {
-      console.log(id)
+     
       return await User.findOne({ _id:  id }).populate('schedule');
     },
     workouts: async (_parent, _args, context) => {
-      console.log("workouts resolver starting")
-      console.log("context user role: ", context.user.role)
+    
       if (context.user.role !== 'Admin') {
         throw new AuthenticationError('You are not authorized to access this resource.');
       }
@@ -52,7 +51,7 @@ const resolvers = {
         throw new AuthenticationError('un Authenticated');
       }
         try {
-          console.log(context.user._id)
+          
         return await User.findOne({ _id: context.user._id });
         
         
@@ -84,8 +83,17 @@ const resolvers = {
           startDate,
           weeks
         });
+        await user.save(); 
+        // user = await User.findById(user._id).select('+emailVerificationToken')
         const token = signToken(user);
-        return { token, user };
+        console.log(token, user)
+        return {
+          token,
+          user: {
+            ...user._doc,
+            emailVerificationToken: user.emailVerificationToken
+          }
+        }
       } catch (err) {
         console.log(err);
         throw new Error('Failed to create user');

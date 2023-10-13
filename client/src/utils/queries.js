@@ -49,6 +49,7 @@ query findUserById($userId: String!) {
     fatTarget
     startDate
     mealPlanTemplate
+    emailVerificationToken
     schedule {
       _id
       name

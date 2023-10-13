@@ -25,6 +25,7 @@ type User {
   startDate: String
   weeks: Int
   mealPlanTemplate: String
+  emailVerificationToken: String
   dailyTracking: [DailyTracking]
   completedDays: [CompletedDays]
 }

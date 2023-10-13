@@ -18,17 +18,7 @@ mutation logout {
 }
 `;
 
-export const ADD_USER = gql`
-mutation CreateUser($username: String!, $firstname: String!, 
-  $lastname: String!, $email: String!, $password: String!) {
-  createUser(username: $username, firstname: $firstname, lastname: $lastname, email: $email, password: $password) {
-    token
-    user {
-      _id
-    }
-  }
-}
-`;
+
 
 export const CREATE_USER = gql`
 mutation createUser($input: CreateUserInput!) {
@@ -57,6 +47,7 @@ mutation createUser($input: CreateUserInput!) {
       }
       trainingExperience
       username
+      emailVerificationToken
       dailyTracking {
         calorieIntake
         date
@@ -306,5 +297,11 @@ mutation updateUserMealPlanTemplate($userId: ID!, $mealPlanTemplate: String!) {
     lastname
     mealPlanTemplate
   }
+}
+`;
+
+export const CHANGE_PASSWORD = gql`
+mutation ChangePassword($userId: ID!, $oldPassword: String!, $newPassword: String!) {
+  changePassword(userId: $userId, oldPassword: $oldPassword, newPassword: $newPassword)
 }
 `;

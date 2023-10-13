@@ -6,7 +6,6 @@ import Header from './components/header';  // This will automatically import fro
 import Exercise from './pages/Exercise';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
-import Signup from './pages/Signup';
 import AdminDashboard from './pages/AdminDashboard';
 import CreateExercise from './pages/CreateExercise';
 import CreateWorkout from './pages/CreateWorkout';
@@ -70,7 +69,6 @@ const App = () => {
           <Route path="/" element={<Exercise />} />
           <Route path="/admin/admindashboard" element={<AdminDashboard />} />
           <Route path="/exercise" element={<Exercise />} />
-          <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/admin/create-exercise" element={<CreateExercise />} />

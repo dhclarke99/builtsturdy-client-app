@@ -31,12 +31,13 @@ app.get('/', (req, res) => {
 });
 
 app.get('/verify-email/:token', async (req, res) => {
-  const { token } = req.query;
-
+  const { token } = req.params; // Changed from req.query to req.params to match your route
+  console.log("Received token:", req.params.token); // Debugging line
   try {
     const user = await User.findOne({ emailVerificationToken: token });
 
     if (!user) {
+      console.log("User not found");
       return res.status(400).json({ message: 'Invalid token.' });
     }
 
@@ -44,12 +45,14 @@ app.get('/verify-email/:token', async (req, res) => {
     user.emailVerificationToken = undefined;
     await user.save();
 
-    res.json({ message: 'Email verified successfully.' });
+    // Include userId in the response
+    res.json({ message: 'Email verified successfully.', userId: user._id });
   } catch (error) {
     console.error('Verification failed:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
 
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
