@@ -19,7 +19,8 @@ import UserCalendar from './pages/UserCalendar';
 import Nutrition from './pages/Nutrition';
 import Trends from './pages/Trends';
 import AdminTrends from './pages/AdminTrends.js';
-import Verification from './pages/Verification'
+import Verification from './pages/Verification';
+import Account from './pages/Account'
 
 
 // Construct our main GraphQL API endpoint
@@ -67,6 +68,7 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Exercise />} />
+          <Route path="/account" element={<Account />} />
           <Route path="/admin/admindashboard" element={<AdminDashboard />} />
           <Route path="/exercise" element={<Exercise />} />
           <Route path="/login" element={<Login />} />

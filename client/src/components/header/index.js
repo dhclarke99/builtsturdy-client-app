@@ -15,11 +15,17 @@ const Header = () => {
           <li>
             <Link to="/">Home</Link>
           </li>
+          {isLoggedIn && (
+            <li>
+              <Link to="/account">Account</Link>
+            </li>
+          )}
           {isAdmin && (
             <li>
               <Link to="/admin/admindashboard">Admin Dashboard</Link>
             </li>
           )}
+          
            {isLoggedIn && (
             <li>
               <Link to="/calendar">Calendar</Link>
