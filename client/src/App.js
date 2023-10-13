@@ -1,7 +1,8 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, {useEffect} from 'react';
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import { setContext } from '@apollo/client/link/context';
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink, ApolloLink } from '@apollo/client';
+import Auth from './utils/auth'
 import Header from './components/header';  // This will automatically import from Header/index.js
 import Exercise from './pages/Exercise';
 import Login from './pages/Login';
@@ -61,16 +62,17 @@ const client = new ApolloClient({
 
 
 
+
+
 const App = () => {
   return (
     <ApolloProvider client={client}>
       <Router>
         <Header />
         <Routes>
-          <Route path="/" element={<UserCalendar />} />
+        <Route path="/" element={<HomeRedirect />} />
           <Route path="/account" element={<Account />} />
           <Route path="/admin/admindashboard" element={<AdminDashboard />} />
-          <Route path="/exercise" element={<Exercise />} />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/admin/create-exercise" element={<CreateExercise />} />
@@ -91,6 +93,21 @@ const App = () => {
       </Router>
     </ApolloProvider>
   );
+};
+
+const HomeRedirect = () => {
+  const navigate = useNavigate();
+  const isLoggedIn = Auth.loggedIn();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/calendar');
+    } else {
+      navigate('/login');
+    }
+  }, [isLoggedIn, navigate]);
+
+  return null;
 };
 
 export default App;

@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../utils/mutations';
-
 import Auth from '../utils/auth';
-
+import '../utils/login.css'
 const Login = (props) => {
   const [formState, setFormState] = useState({ email: '', password: '' });
   const [login, { error, data }] = useMutation(LOGIN_USER);
@@ -42,9 +41,9 @@ const Login = (props) => {
 
   return (
     <main>
-      <div>
-        <div>
-          <h4 id="logIn">Login</h4>
+     
+        <div className='login'>
+          <h4>User Login</h4>
           <div>
             {data ? (
               <p>
@@ -85,7 +84,7 @@ const Login = (props) => {
               </div>
             )}
           </div>
-        </div>
+       
       </div>
     </main>
   );

@@ -1,0 +1,18 @@
+h4 {
+    color: white
+}
+
+main {
+    display: flex;
+}
+
+.login {
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
