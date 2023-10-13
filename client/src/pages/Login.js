@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
+import Logo from '../assets/images/Built_Sturdy_Logo_white.png'
 import '../utils/login.css'
 const Login = (props) => {
   const [formState, setFormState] = useState({ email: '', password: '' });
@@ -40,19 +41,25 @@ const Login = (props) => {
   };
 
   return (
-    <main>
-     
-        <div className='login'>
-          <h4>User Login</h4>
-          <div>
-            {data ? (
-              <p>
-                Success! You may now head{' '}
-                <Link to="/">back to the homepage.</Link>
-              </p>
-            ) : (
-              <form onSubmit={handleFormSubmit}>
+    <main id="login-main">
+      <div id="login-header">
+        <img src={Logo} alt="Logo" id="logo-image" />
+      </div>
+
+      <div className='login-form-container'>
+        <h2>User Login</h2>
+        <div>
+          {data ? (
+            <p>
+              Success! You may now head{' '}
+              <Link to="/">back to the homepage.</Link>
+            </p>
+          ) : (
+            <form onSubmit={handleFormSubmit}>
+              <div className="form-group">
+                <label htmlFor="email" className="form-label">Email</label>
                 <input
+                  id="email"
                   className="form-input"
                   placeholder="Your email"
                   name="email"
@@ -60,7 +67,12 @@ const Login = (props) => {
                   value={formState.email}
                   onChange={handleChange}
                 />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="password" className="form-label">Password</label>
                 <input
+                  id="password"
                   className="form-input"
                   placeholder="******"
                   name="password"
@@ -68,23 +80,26 @@ const Login = (props) => {
                   value={formState.password}
                   onChange={handleChange}
                 />
-                <button
-                  className="btn btn-block btn-primary"
-                  style={{ cursor: 'pointer' }}
-                  type="submit"
-                >
-                  Submit
-                </button>
-              </form>
-            )}
-
-            {error && (
-              <div className="my-3 p-3 bg-danger text-white">
-                {error.message}
               </div>
-            )}
-          </div>
-       
+
+              <button
+                className="btn"
+                style={{ cursor: 'pointer' }}
+                type="submit"
+              >
+                Submit
+              </button>
+            </form>
+
+          )}
+
+          {error && (
+            <div className="my-3 p-3 bg-danger text-white">
+              {error.message}
+            </div>
+          )}
+        </div>
+
       </div>
     </main>
   );
