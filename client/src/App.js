@@ -4,7 +4,7 @@ import { setContext } from '@apollo/client/link/context';
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink, ApolloLink } from '@apollo/client';
 import Auth from './utils/auth'
 import Header from './components/header';  // This will automatically import from Header/index.js
-import Exercise from './pages/Exercise';
+import UserHeader from './components/UserHeader';  // This will automatically import from Header/index.js
 import Login from './pages/Login';
 import Logout from './pages/Logout';
 import AdminDashboard from './pages/AdminDashboard';
@@ -60,15 +60,16 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+const isAdmin = Auth.isLoggedInAndAdmin();
 
-
-
+const isLoggedIn = Auth.loggedIn();
 
 const App = () => {
   return (
     <ApolloProvider client={client}>
       <Router>
         <Header />
+        {isLoggedIn && <UserHeader />}
         <Routes>
         <Route path="/" element={<HomeRedirect />} />
           <Route path="/account" element={<Account />} />
