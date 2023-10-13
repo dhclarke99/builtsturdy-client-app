@@ -7,6 +7,7 @@ import { UPDATE_USER, DELETE_USER } from '../utils/mutations';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import '../utils/css/UserCalendar.css';
+import '../utils/css/UniqueUser.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 
@@ -520,15 +521,15 @@ const UniqueUser = () => {
       <table>
         <thead>
           <tr>
-            <th>Week</th>
-            <th>Metric</th>
-            <th>Monday</th>
-            <th>Tuesday</th>
-            <th>Wednesday</th>
-            <th>Thursday</th>
-            <th>Friday</th>
-            <th>Saturday</th>
-            <th>Sunday</th>
+            <th className='table-header'>Week</th>
+            <th className='table-header'>Metric</th>
+            <th className='table-header'>Monday</th>
+            <th className='table-header'>Tuesday</th>
+            <th className='table-header'>Wednesday</th>
+            <th className='table-header'>Thursday</th>
+            <th className='table-header'>Friday</th>
+            <th className='table-header'>Saturday</th>
+            <th className='table-header'>Sunday</th>
           </tr>
         </thead>
         <tbody>
@@ -536,8 +537,8 @@ const UniqueUser = () => {
             <React.Fragment key={weekNumber}>
               {['Weight', 'Calories', 'Protein'].map((type, index) => (
                 <tr key={type}>
-                  {index === 0 && <td rowSpan="3">Week {weekNumber} ({calculateWeekStartDate(parseInt(dataUser.user.startDate), weekNumber)})</td>}
-                  <td>{type}</td>
+                  {index === 0 && <td className='table-header' rowSpan="3">Week {weekNumber} ({calculateWeekStartDate(parseInt(dataUser.user.startDate), weekNumber)})</td>}
+                  <td className='table-header'>{type}</td>
                   {Object.keys(weeks[weekNumber]).map((dateUnix) => (
                     <td key={dateUnix}>
                       <input
