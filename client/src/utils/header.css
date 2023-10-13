@@ -1,22 +1,51 @@
 h1 {
     color: white;
-}
+  }
 
-.nav-header {
+nav {
+    display: flex;
+}  
+  .nav-header {
     display: flex;
     margin-left: 20px;
     margin-right: 20px;
     justify-content: space-between;
     margin-top: 15px;
-}
-
-.nav-ul {
+  }
+  
+  .nav-ul {
     display: flex;
     list-style: none;
-}
-
-.nav-ul li {
-    margin: 10px
-    
-}
-
+  }
+  
+  .nav-ul li {
+    margin: 10px;
+  }
+  
+  /* Hide the button by default */
+  .nav-button {
+    display: none;
+  }
+  
+  /* Mobile view */
+  @media screen and (max-width: 768px) {
+    /* Show the button */
+    .nav-button {
+      display: block;
+      max-height: 40px;
+    }
+  
+    /* Initially hide the nav items */
+    .nav-ul {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      text-align: center;
+    }
+  
+    /* Style for showing the nav items */
+    .nav-ul.show {
+      display: flex;
+    }
+  }
+  

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Auth from '../../utils/auth';
 import '../../utils/header.css'
@@ -6,55 +6,60 @@ import '../../utils/header.css'
 const Header = () => {
   const isLoggedIn = Auth.loggedIn();
   const isAdmin = Auth.isLoggedInAndAdmin();
+  const [showNav, setShowNav] = useState(false);
+
+  const toggleNav = () => {
+    setShowNav(!showNav); // Toggle the state
+  };
+  
 
   return (
     <header className='nav-header'>
       <h1>Built Sturdy Blueprint</h1>
       <nav>
-        <ul className='nav-ul'>
+      
+      <ul className={`nav-ul ${showNav ? 'show' : ''}`} id='nav-ul'>
+          
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/" onClick={toggleNav}>Home</Link>
           </li>
           {isLoggedIn && (
             <li>
-              <Link to="/account">Account</Link>
+              <Link to="/account" onClick={toggleNav}>Account</Link>
             </li>
           )}
           {isAdmin && (
             <li>
-              <Link to="/admin/admindashboard">Admin Dashboard</Link>
+              <Link to="/admin/admindashboard" onClick={toggleNav}>Admin Dashboard</Link>
             </li>
           )}
           
            {isLoggedIn && (
             <li>
-              <Link to="/calendar">Calendar</Link>
+              <Link to="/calendar" onClick={toggleNav}>Calendar</Link>
             </li>
           )}
           {isLoggedIn && (
             <li>
-              <Link to="/nutrition">Nutrition</Link>
+              <Link to="/nutrition" onClick={toggleNav}>Nutrition</Link>
             </li>
           )}
           <li>
-            <Link to="/exercise">Exercise</Link>
+            <Link to="/exercise" onClick={toggleNav}>Exercise</Link>
           </li>
           {!isLoggedIn && (
             <li>
-              <Link to="/login">Login</Link>
+              <Link to="/login" onClick={toggleNav}>Login</Link>
             </li>
           )}
           {isLoggedIn && (
             <li>
-              <Link to="/logout">Logout</Link>
+              <Link to="/logout" onClick={toggleNav}>Logout</Link>
             </li>
           )}
-          {!isLoggedIn && (
-            <li>
-              <Link to="/signup">Signup</Link>
-            </li>
-          )}
+          
         </ul>
+        <button className="nav-button" id="nav-button" onClick={toggleNav}>☰</button> 
       </nav>
     </header>
   );
