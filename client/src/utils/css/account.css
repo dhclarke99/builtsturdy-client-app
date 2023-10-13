@@ -19,38 +19,55 @@ h2 {
     color: white;
 }
 
-.form-div h3 {
-    margin-top: 20px;
-    color: white;
-}
+/* Container for the password form */
+.password-form-container {
 
-.form-group {
-    display: flex;
-    flex-direction: column;
+    width: 60%;
+    margin: auto;
+    margin-top: 50px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+  }
+  
+  /* Title for the Update Password section */
+  #update-password-title {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Labels in the password form */
+  .password-form-label {
+    display: block;  /* This makes the label appear above the input */
     margin-bottom: 15px;
-    width: 80%;
+    font-weight: bold;
+    color: #555;
   }
-
-.form-label {
-    margin-bottom: 5px;
-    color: white;
+  
+  /* Input fields in the password form */
+  .password-form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
   }
-
-.form-div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-form {
-    display: flex;
-}
-
-label {
+  
+  /* Change Password button */
+  #change-password-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #c6a10d;
     color: white;
-}
-
-.form-div button {
-    margin-top: 10px;
-    border-style: none;
-    background-color: white;
-}
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #change-password-button:hover {
+    background-color: #977b0e;
+  }
+  

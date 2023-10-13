@@ -82,12 +82,13 @@ const Account = () => {
         <li>Program Length: {data.user.weeks} weeks</li>
         <li>Current Schedule: {data.user.schedule.name} weeks</li>
       </div>
-      <div className='form-div'>
-        <h3>Update Password</h3>
-        <form onSubmit={handleSubmit}>
+      <div className='password-form-container'>
+        <h3 id='update-password-title'>Update Password</h3>
+        <form onSubmit={handleSubmit} id='password-form'>
           <div className="form-group">
-            <label className="form-label">Enter Current Password
+            <label className="password-form-label">Enter Current Password
               <input
+              className='password-form-input'
                 type="password"
                 name="currentPassword"
                 placeholder="Current Password"
@@ -98,8 +99,9 @@ const Account = () => {
             </label >
           </div>
           <div className="form-group">
-            <label htmlFor="password" className="form-label">Enter New Password
+            <label className="password-form-label">Enter New Password
               <input
+              className='password-form-input'
                 type="password"
                 name="newPassword"
                 placeholder="New Password"
@@ -109,8 +111,9 @@ const Account = () => {
             </label>
           </div>
 
-          <label>Confirm New Password
+          <label className="password-form-label">Confirm New Password
             <input
+            className='password-form-input'
               type="password"
               name="confirmPassword"
               placeholder="New Password"
@@ -119,7 +122,7 @@ const Account = () => {
             />
           </label>
 
-          <button type="submit" disabled={formData.newPassword !== formData.confirmPassword}>
+          <button type="submit" id='change-password-button' disabled={formData.newPassword !== formData.confirmPassword}>
             Change Password
           </button>
         </form>
