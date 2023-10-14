@@ -248,11 +248,10 @@ const Nutrition = () => {
         }
       `;
 
-      const response = await fetch(url, {
+      const response = await fetch('/api/suggesticQuery', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`
         },
         body: JSON.stringify({ query: createTemplateMutation })
       });
@@ -343,12 +342,10 @@ const Nutrition = () => {
       }
     }`
 
-    fetch(url, {
+    fetch('/api/suggesticQuery', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`,
-        'sg-user': '1f1a1f0f-0fc4-4c20-98eb-ee601ebf2863'
       },
       body: JSON.stringify({ query: generateMeals })
     })
@@ -374,15 +371,13 @@ const Nutrition = () => {
         }
       }`;
 
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`,
-        'sg-user': '1f1a1f0f-0fc4-4c20-98eb-ee601ebf2863'
-      },
-      body: JSON.stringify({ query: programQuery })
-    })
+      fetch('/api/suggesticQuery', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: programQuery })
+      })
       .then(response => response.json())
       .then(programData => {
         console.log(programData)
@@ -557,7 +552,7 @@ const Nutrition = () => {
                     ))}
 
 
-                  </tbody>
+                  
                   <tr>
                     <td>Totals</td>
                     {Array.from({ length: 7 }, (_, i) => i + 1).map((day) => {
@@ -570,7 +565,7 @@ const Nutrition = () => {
                       );
                     })}
                   </tr>
-
+                  </tbody>
                 </table>
               </div>
             </div>

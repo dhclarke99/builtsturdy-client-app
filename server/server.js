@@ -13,6 +13,33 @@ const db = require('./config/connection');
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+app.post('/api/suggesticQuery', async (req, res) => {
+  const { query }= req.body;
+  const url = 'https://production.suggestic.com/graphql';
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${process.env.SUGGESTIC_API_TOKEN}`,
+        'sg-user': process.env.SUGGESTIC_SG_USER
+      },
+      body: JSON.stringify({ query })
+    });
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
+
 app.get('/api/searchIngredient/:query', async (req, res) => {
   try {
     const query = req.params.query;
@@ -31,8 +58,6 @@ const server = new ApolloServer({
   context: authMiddleware,
 });
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
 
 app.use('/images', express.static(path.join(__dirname, '../client/images')));
 
