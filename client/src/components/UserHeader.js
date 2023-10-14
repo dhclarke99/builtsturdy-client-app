@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { QUERY_USER_by_id } from '../utils/queries';
 import Auth from '../utils/auth';
+import Logo from '../assets/images/Built_Sturdy_Logo_black.png'
 import '../utils/css/UserHeader.css'; // Import your CSS
 
 const UserHeader = () => {
@@ -22,16 +23,17 @@ const UserHeader = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   if (data && data.user) {
-    const { firstname, lastname, profileImage } = data.user;
+    const { firstname, lastname } = data.user;
     const initials = `${firstname[0]}${lastname[0]}`;
+    const logo = Logo
 
     return (
       <header className='secondary-header'>
         {/* User-specific header content */}
         
         <div className="profile-container">
-          {profileImage ? (
-            <img src={profileImage} alt="Profile" className="profile-image" />
+          {logo ? (
+            <img src={Logo} alt="Logo" className="profile-image" />
           ) : (
             <div className="profile-initials">{initials}</div>
           )}
