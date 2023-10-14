@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { CREATE_WORKOUT } from '../utils/mutations';
+import '../utils/css/EditForms.css'
 
 const CreateWorkout = () => {
   const [workoutData, setWorkoutData] = useState({ name: '' });
@@ -23,14 +24,14 @@ const CreateWorkout = () => {
   };
 
   return (
-    <div >
-      <h1>Create Workout</h1>
+    <div className='edit-form-container'>
+      <h1 className="form-title">Create Workout</h1>
       <form onSubmit={handleSubmit}>
-        <label>
+        <label className="form-label">
           Workout Name:
-          <input type="text" name="name" value={workoutData.name} onChange={handleInputChange} />
+          <input className="form-input" type="text" name="name" value={workoutData.name} onChange={handleInputChange} />
         </label>
-        <button type="submit">Create Workout</button>
+        <button className="form-button" type="submit">Create Workout</button>
       </form>
     </div>
   );

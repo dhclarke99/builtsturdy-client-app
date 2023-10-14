@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { CREATE_SCHEDULE } from '../utils/mutations';
+import '../utils/css/EditForms.css'
 
 const CreateSchedule = () => {
   const [scheduleData, setScheduleData] = useState({ name: '' });
@@ -23,14 +24,14 @@ const CreateSchedule = () => {
   };
 
   return (
-    <div>
-      <h1>Create Schedule</h1>
+    <div className='edit-form-container'>
+      <h1 className="form-title">Create Schedule</h1>
       <form onSubmit={handleSubmit}>
-        <label>
+        <label className="form-label">
           Schedule Name:
-          <input type="text" name="name" value={scheduleData.name} onChange={handleInputChange} />
+          <input className="form-input" type="text" name="name" value={scheduleData.name} onChange={handleInputChange} />
         </label>
-        <button type="submit">Create Schedule</button>
+        <button className="form-button" type="submit">Create Schedule</button>
       </form>
     </div>
   );

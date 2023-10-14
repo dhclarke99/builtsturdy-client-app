@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { CREATE_EXERCISE } from '../utils/mutations';  // You'll need to define this mutation
+import '../utils/css/EditForms.css'
 
 const CreateExercise = () => {
   const [exerciseData, setExerciseData] = useState({ name: '', notes: '', adminNotes: '', videoUrl: '', tag: '' });
@@ -32,28 +33,28 @@ const CreateExercise = () => {
   
 
   return (
-    <div>
-      <h1>Create Exercise</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
+    <div className='edit-form-container'>
+      <h1 className="form-title">Create Exercise</h1>
+      <form id="exercise-edit-form" onSubmit={handleSubmit}>
+        <label className="form-label">
           Exercise Name:
-          <input type="text" name="name" value={exerciseData.name} onChange={handleInputChange} />
+          <input className="form-input" type="text" name="name" value={exerciseData.name} onChange={handleInputChange} />
         </label>
-        <label>
+        <label className="form-label">
           Notes:
-          <input type="text" name="notes" value={exerciseData.notes} onChange={handleInputChange} />
+          <input className="form-input" type="text" name="notes" value={exerciseData.notes} onChange={handleInputChange} />
         </label>
-        <label>
+        <label className="form-label">
           Admin Notes:
-          <input type="text" name="adminNotes" value={exerciseData.adminNotes} onChange={handleInputChange} />
+          <input className="form-input" type="text" name="adminNotes" value={exerciseData.adminNotes} onChange={handleInputChange} />
         </label>
-        <label>
+        <label className="form-label">
           Video URL:
-          <input type="text" name="videoUrl" value={exerciseData.videoUrl} onChange={handleInputChange} />
+          <input className="form-input" type="text" name="videoUrl" value={exerciseData.videoUrl} onChange={handleInputChange} />
         </label>
-        <label>
+        <label className="form-label">
         Tag:
-        <select type="text"
+        <select className="form-input" type="text"
                 name="tag"
                 placeholder="Tag"
                 value={exerciseData.tag || ''}
@@ -67,7 +68,7 @@ const CreateExercise = () => {
         
       </label>
         
-        <button type="submit">Create Exercise</button>
+        <button className="form-button" type="submit">Create Exercise</button>
       </form>
     </div>
   );

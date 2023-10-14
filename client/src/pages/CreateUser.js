@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { CREATE_USER } from '../utils/mutations';
 import { sendVerificationEmail } from '../utils/helpers';
+import '../utils/css/EditForms.css'
 
 const AdminCreateUser = () => {
   const [formData, setFormData] = useState({
@@ -65,9 +66,12 @@ const AdminCreateUser = () => {
   };
 
   return (
+    <div className='edit-form-container'>
+      <h1 className="form-title">Create User</h1>
     <form onSubmit={handleSubmit}>
       {/* Existing Fields */}
       <input
+      className="form-input"
         type="text"
         name="firstname"
         placeholder="First Name"
@@ -75,6 +79,7 @@ const AdminCreateUser = () => {
         onChange={handleChange}
       />
       <input
+      className="form-input"
         type="text"
         name="lastname"
         placeholder="Last Name"
@@ -82,6 +87,7 @@ const AdminCreateUser = () => {
         onChange={handleChange}
       />
       <input
+      className="form-input"
         type="text"
         name="username"
         placeholder="Username"
@@ -89,6 +95,7 @@ const AdminCreateUser = () => {
         onChange={handleChange}
       />
       <input
+      className="form-input"
         type="email"
         name="email"
         placeholder="Email"
@@ -96,14 +103,17 @@ const AdminCreateUser = () => {
         onChange={handleChange}
       />
      
+     <label className="form-label"> Role:
       <select name="role" value={formData.role} onChange={handleChange}>
-      <option value="" disabled>Choose a role</option>
+      <option className="form-input" value="" disabled>Choose a role</option>
         <option value="User">User</option>
         <option value="Admin">Admin</option>
       </select>
+      </label>
 
       {/* New Fields */}
       <input
+      className="form-input"
         type="text"
         name="gender"
         placeholder="Gender"
@@ -111,6 +121,7 @@ const AdminCreateUser = () => {
         onChange={handleChange}
       />
       <input
+      className="form-input"
         type="number"
         name="height"
         placeholder="Height (inches)"
@@ -118,6 +129,7 @@ const AdminCreateUser = () => {
         onChange={handleChange}
       />
       <input
+      className="form-input"
         type="number"
         name="currentWeight"
         placeholder="Current Weight (lbs)"
@@ -125,6 +137,7 @@ const AdminCreateUser = () => {
         onChange={handleChange}
       />
       <input
+      className="form-input"
         type="number"
         name="estimatedBodyFat"
         placeholder="Estimated Body Fat (%)"
@@ -132,24 +145,26 @@ const AdminCreateUser = () => {
         onChange={handleChange}
       />
       <input
+      className="form-input"
         type="number"
         name="age"
         placeholder="Age"
         value={formData.age}
         onChange={handleChange}
       />
-      <select name="trainingExperience" value={formData.trainingExperience} onChange={handleChange}>
+      <select className="form-input" name="trainingExperience" value={formData.trainingExperience} onChange={handleChange}>
         <option value="">Select Training Experience</option>
         <option value="Beginner">Beginner</option>
         <option value="Intermediate">Intermediate</option>
       </select>
-      <select name="mainPhysiqueGoal" value={formData.mainPhysiqueGoal} onChange={handleChange}>
+      <select className="form-input" name="mainPhysiqueGoal" value={formData.mainPhysiqueGoal} onChange={handleChange}>
         <option value="">Select Main Physique Goal</option>
         <option value="Burn Fat">Burn Fat</option>
         <option value="Build Muscle">Build Muscle</option>
         <option value="Recomp">Recomp</option>
       </select>
       <input
+      className="form-input"
         type="text"
         name="startDate"
         placeholder="Start Date (MM/DD/YYYY)"
@@ -157,6 +172,7 @@ const AdminCreateUser = () => {
         onChange={handleChange}
       />
       <input
+      className="form-input"
         type="number"
         name="weeks"
         placeholder="weeks"
@@ -164,8 +180,9 @@ const AdminCreateUser = () => {
         onChange={handleChange}
       />
 
-      <button type="submit">Create User</button>
+      <button className="form-button" type="submit">Create User</button>
     </form>
+    </div>
   );
 };
 
