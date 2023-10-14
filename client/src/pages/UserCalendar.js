@@ -265,7 +265,7 @@ return (
                     onClick={() => handleImageClick(exercise.exercise.videoUrl)}
                   />
                   </div>
-                  <button onClick={() => handleTrackClick(exercise)}>Track</button>
+                  <button className='track-button' onClick={() => handleTrackClick(exercise)}>Track</button>
                   {showForm && selectedExercise.exercise._id === exercise.exercise._id &&(
         <LogWorkoutForm
           exercise={selectedExercise}

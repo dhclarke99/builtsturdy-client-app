@@ -64,9 +64,13 @@ const Account = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div>
-      <div className='account-settings'>
-        <h1>{data.user.firstname}'s Account Settings</h1>
+    <div className='account-settings'>
+      <header className='account-header'>
+      <h1>{data.user.firstname}'s Account Settings</h1>
+      </header>
+      
+      <div className='information'>
+        
         <h2>Your Information</h2>
         <li>First Name: {data.user.firstname}</li>
         <li>Last Name: {data.user.lastname}</li>

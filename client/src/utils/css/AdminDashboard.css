@@ -1,3 +1,19 @@
+.admin-dashboard {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-dashboard header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-nav .admin-ul button {
+    background-color: white;
+    margin: 5px;
+}
+
 .card-body li {
     color: black;
 }
@@ -49,4 +65,26 @@ div h2 {
 
 .edit-btn {
     margin-left: 15px;
+}
+
+@media (min-width: 768px) {
+    .search-section {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-right: 100px;
+        margin-left: 100px;
+        margin-bottom: 10px;
+    }
+
+    .admin-nav .admin-ul button {
+        background-color: white;
+        margin: 10px
+    }
+
+    .search-section input {
+    
+    }
+
+  
 }

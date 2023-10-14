@@ -115,17 +115,20 @@ const AdminDashboard = () => {
   if (errorWorkouts || errorUsers || errorExercises || errorSchedules) return <p>Error: {errorWorkouts?.message || errorUsers?.message || errorExercises?.message || errorSchedules?.message}</p>;
 
   return (
-    <div>
+    <div className='admin-dashboard'>
+      <header>
       <h1>Admin Dashboard</h1>
-      <nav>
-        <ul>
-          <button onClick={() => setActiveTab('users')}>Users</button>
+      <nav className='admin-nav'>
+        <ul className='admin-ul'>
+          <button  onClick={() => setActiveTab('users')}>Users</button>
           <button onClick={() => setActiveTab('schedules')}>Schedules</button>
           <button onClick={() => setActiveTab('workouts')}>Workouts</button>
-          <button onClick={() => setActiveTab('exercises')}>Exercises</button>
+          <button  onClick={() => setActiveTab('exercises')}>Exercises</button>
 
         </ul>
       </nav>
+      </header>
+     
 
       {activeTab === 'schedules' && (
         <div>
