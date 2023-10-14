@@ -135,11 +135,13 @@ const AdminDashboard = () => {
           <h2>All Schedules</h2>
           <div className='search-section'>
           <input type="text" placeholder="Search Schedules" value={scheduleSearch} onChange={(e) => setScheduleSearch(e.target.value)} />
-          <button>
+          
             <Link to={`/admin/create-schedule`}>
+            <button>
               Create New Schedule
-              </Link>
               </button>
+              </Link>
+             
           </div>
           <div className="row">
             {sortedSchedules.filter(schedule => schedule.name.toLowerCase().includes(scheduleSearch.toLowerCase())).map((schedule, index) => (
@@ -198,11 +200,11 @@ const AdminDashboard = () => {
           <h2>All Workouts</h2>
           <div className='search-section'>
           <input type="text" placeholder="Search Workouts" value={workoutSearch} onChange={(e) => setWorkoutSearch(e.target.value)} />
+          <Link to={`/admin/create-workout`}>
           <button>
-            <Link to={`/admin/create-workout`}>
               Create New Workout
-              </Link>
               </button>
+              </Link>
           </div>
           {/* Your Workouts code here */}
           <div className='row'>
@@ -246,11 +248,11 @@ const AdminDashboard = () => {
           <h2>All Users</h2>
           <div className='search-section'>
           <input type="text" placeholder="Search Users" value={userSearch} onChange={(e) => setUserSearch(e.target.value)} />
-          <button>
-            <Link to={`/admin/create-user`}>
+          <Link to={`/admin/create-user`}>
+            <button>
               Create New User
-              </Link>
               </button>
+              </Link>
           </div>
           <div className="row">
             {/* Filter by name search */}
@@ -280,11 +282,11 @@ const AdminDashboard = () => {
           
           <div className='search-section'>
           <input type="text" placeholder="Search Exercises" value={exerciseSearch} onChange={(e) => setExerciseSearch(e.target.value)} />
+          <Link to={`/admin/create-exercise`}>
             <button>
-            <Link to={`/admin/create-exercise`}>
-              Create New exercise
-              </Link>
+              Create New exercise  
               </button>
+              </Link>
           </div>
           <div className="row">
             {dataExercises.exercises.filter(exercise => exercise.name.toLowerCase().includes(exerciseSearch.toLowerCase())).map((exercise) => (

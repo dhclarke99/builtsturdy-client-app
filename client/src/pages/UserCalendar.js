@@ -257,14 +257,18 @@ return (
                   <p className="exercise-info">Sets: {exercise.sets}, Reps: {exercise.targetReps}</p>
                   <p className="exercise-notes">Notes: {exercise.exercise.notes}</p>
                   <div className="exercise-video-container">
-                    <img 
-                    src={placeholderImage} 
-                    width="250"
-                    alt="Walkthrough Video" 
-                    className="exercise-video-placeholder"
-                    onClick={() => handleImageClick(exercise.exercise.videoUrl)}
-                  />
-                  </div>
+  {exercise.exercise.videoUrl ? (
+    <img 
+      src={placeholderImage} 
+      width="250"
+      alt="Walkthrough Video" 
+      className="exercise-video-placeholder"
+      onClick={() => handleImageClick(exercise.exercise.videoUrl)}
+    />
+  ) : (
+    <p>Video coming soon</p>
+  )}
+</div>
                   <button className='track-button' onClick={() => handleTrackClick(exercise)}>Track</button>
                   {showForm && selectedExercise.exercise._id === exercise.exercise._id &&(
         <LogWorkoutForm

@@ -642,11 +642,13 @@ const Nutrition = () => {
             
           </div>
           <div className='save-viewtrends'>
-          <button id='trends-button'>
+          
               <Link to={`/trends`}>
+              <button id='trends-button'>
                 View Trends
-                </Link>
                 </button>
+                </Link>
+               
             <button id='save-button' onClick={handleSave}>Save</button>
             
             </div>
