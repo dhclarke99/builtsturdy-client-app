@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Workout, Exercise, Schedule} = require('../models');
+const { User, Workout, Exercise, Schedule, Recipe} = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -45,6 +45,9 @@ const resolvers = {
     },
     schedule: async (_, { scheduleId }) => {
       return await Schedule.findById(scheduleId);
+    },
+    recipes: async () => {
+      return await Recipe.find();
     },
     me: async (_parent, _args, context) => {
       if (!context.user) {
@@ -446,6 +449,18 @@ const resolvers = {
       await user.save();
   
       return true;
+    },
+    createRecipe: async (_, { input }, context) => {
+      if (context.user.role !== 'Admin') {
+        throw new AuthenticationError('You are not authorized to access this resource.');
+      }
+      const { name, ingredients, instructions } = input;
+      return await Recipe.create({
+        name,
+        ingredients,
+        instructions,
+        adminId: context.user._id
+      });
     },
   },
 };

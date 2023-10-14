@@ -74,6 +74,32 @@ input UpdateUserInput {
 
 }
 
+type Recipe {
+  _id: ID
+  name: String
+  ingredients: [Ingredient]
+  instructions: String
+  adminId: ID
+}
+
+type Ingredient {
+  name: String
+  quantity: Float
+  unit: String
+}
+
+input CreateRecipeInput {
+  name: String!
+  ingredients: [IngredientInput]!
+  instructions: String!
+}
+
+input IngredientInput {
+  name: String!
+  quantity: Float!
+  unit: String!
+}
+
   type Option {
     optionText: String
   }
@@ -213,6 +239,7 @@ input UpdateUserInput {
     exercise(exerciseId: ID!): Exercise
     schedules: [Schedule]
     schedule(scheduleId: ID!): Schedule
+    recipes(recipeId: ID!): Recipe
     me: User
   }
 
@@ -225,6 +252,7 @@ input UpdateUserInput {
     deleteUser(userId: ID!): User
     login(email: String!, password: String!): Auth
     logout: Boolean
+    createRecipe(input: CreateRecipeInput!): Recipe
     createExercise(name: String!, notes: String, adminNotes: String, videoUrl: String, tag: String): Exercise
     updateExercise(exerciseId: ID!, input: updateExerciseInput!): Exercise
     createWorkout(name: String!): Workout

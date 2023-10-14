@@ -124,6 +124,7 @@ const AdminDashboard = () => {
           <button onClick={() => setActiveTab('schedules')}>Schedules</button>
           <button onClick={() => setActiveTab('workouts')}>Workouts</button>
           <button  onClick={() => setActiveTab('exercises')}>Exercises</button>
+          <button  onClick={() => setActiveTab('recipes')}>Recipes</button>
 
         </ul>
       </nav>
@@ -318,6 +319,15 @@ const AdminDashboard = () => {
 
           
 
+        </div>
+      )}
+      {activeTab === 'recipes' && (
+        <div>
+          <Link to={`/admin/create-recipe`}>
+            <button>
+              Create New Recipe  
+              </button>
+              </Link>
         </div>
       )}
     </div>

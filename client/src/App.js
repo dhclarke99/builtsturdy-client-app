@@ -22,6 +22,7 @@ import Trends from './pages/Trends';
 import AdminTrends from './pages/AdminTrends.js';
 import Verification from './pages/Verification';
 import Account from './pages/Account'
+import CreateRecipe from './pages/CreateRecipe'
 
 
 // Construct our main GraphQL API endpoint
@@ -79,6 +80,7 @@ const App = () => {
           <Route path="/admin/create-exercise" element={<CreateExercise />} />
           <Route path="/admin/create-workout" element={<CreateWorkout />} />
           <Route path="/admin/create-user" element={<CreateUser />} />
+          <Route path="/admin/create-recipe" element={<CreateRecipe />} />
           <Route path="/admin/edit-workout/:id" element={<EditWorkout />} />
           <Route path="/admin/edit-exercise/:id" element={<EditExercise />} />
           <Route path="/admin/edit-schedule/:id" element={<EditSchedule />} />
