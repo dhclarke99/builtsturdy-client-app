@@ -1,6 +1,7 @@
 // LogWorkoutForm.jsx
 import React, { useEffect, useState, useRef } from 'react';
 import './css/LogWorkoutForm.css'
+
 const LogWorkoutForm = (props) => {
     console.log("LogWorkoutForm rendered"); // Debugging line
     console.log(props)

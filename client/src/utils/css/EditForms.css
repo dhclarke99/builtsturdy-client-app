@@ -18,11 +18,12 @@
   }
 
   .element-name {
+    text-align: center;
     color: black;
   }
   
   /* Form labels */
-  .form-label {
+  .edit-form-container .form-label {
     display: block;
     margin-bottom: 15px;
     font-weight: bold;
