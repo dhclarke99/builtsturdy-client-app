@@ -26,9 +26,6 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
 }
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build/index.html'));
-});
 
 app.get('/verify-email/:token', async (req, res) => {
   const { token } = req.params; // Changed from req.query to req.params to match your route
@@ -52,6 +49,11 @@ app.get('/verify-email/:token', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
+
 
 
 const startApolloServer = async (typeDefs, resolvers) => {
