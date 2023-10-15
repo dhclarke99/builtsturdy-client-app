@@ -63,45 +63,50 @@ const Verification = () => {
 
   return (
     <div>
-      {status === 'verifying' && <p>Verifying your email...</p>}
-
-      {status === 'success' && (
-        <div>
-          <p>Email verified successfully!</p>
-          <p>Enter your old password:</p>
-          <input
-            type="password"
-            placeholder="Old Password"
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-          />
-          <p>Please set your new password:</p>
-          <input
-            type="password"
-            placeholder="New Password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-          <p>Please confirm your new password:</p>
-          <input
-            type="password"
-            placeholder="confirm Password"
-            value={confirmNewPassword}
-            onChange={(e) => setConfirmNewPassword(e.target.value)}
-          />
-          <button onClick={handlePasswordChange} disabled={!passwordsMatch}>Change Password</button>
-          {!passwordsMatch && <p>Passwords do not match!</p>}
-        </div>
-      )}
-
-      {status === 'failed' && (
-        <div>
-          <p>Verification failed. Please try again.</p>
-          <Link to="/resend-verification">Resend Verification Email</Link>
-        </div>
-      )}
+      <h1>Verification Page</h1>
     </div>
   );
+  // return (
+  //   <div>
+  //     {status === 'verifying' && <p>Verifying your email...</p>}
+
+  //     {status === 'success' && (
+  //       <div>
+  //         <p>Email verified successfully!</p>
+  //         <p>Enter your old password:</p>
+  //         <input
+  //           type="password"
+  //           placeholder="Old Password"
+  //           value={oldPassword}
+  //           onChange={(e) => setOldPassword(e.target.value)}
+  //         />
+  //         <p>Please set your new password:</p>
+  //         <input
+  //           type="password"
+  //           placeholder="New Password"
+  //           value={newPassword}
+  //           onChange={(e) => setNewPassword(e.target.value)}
+  //         />
+  //         <p>Please confirm your new password:</p>
+  //         <input
+  //           type="password"
+  //           placeholder="confirm Password"
+  //           value={confirmNewPassword}
+  //           onChange={(e) => setConfirmNewPassword(e.target.value)}
+  //         />
+  //         <button onClick={handlePasswordChange} disabled={!passwordsMatch}>Change Password</button>
+  //         {!passwordsMatch && <p>Passwords do not match!</p>}
+  //       </div>
+  //     )}
+
+  //     {status === 'failed' && (
+  //       <div>
+  //         <p>Verification failed. Please try again.</p>
+  //         <Link to="/resend-verification">Resend Verification Email</Link>
+  //       </div>
+  //     )}
+  //   </div>
+  // );
 };
 
 export default Verification;
