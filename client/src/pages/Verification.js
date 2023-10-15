@@ -17,7 +17,7 @@ const Verification = () => {
 
     const verifyEmail = async () => {
       try {
-        const response = await fetch(`/verify-email/${token}`);
+        const response = await fetch(`https://builtsturdy-client-portal-d821101d3b6d.herokuapp.com/verify-email/${token}`);
         const data = await response.json();
 
         if (response.ok && data.success) { // Check for a success flag in response
