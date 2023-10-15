@@ -4,7 +4,8 @@ import { useMutation, useQuery } from '@apollo/client';
 import { CHANGE_PASSWORD } from '../utils/mutations';
 
 const Verification = () => {
-  const { token } = useParams();
+  console.log("Verification component mounted");  
+  const { token } = useParams()
   const [status, setStatus] = useState('verifying'); // 'verifying', 'success', 'failed'
   const [newPassword, setNewPassword] = useState('');
   const [oldPassword, setOldPassword] = useState('');
@@ -19,6 +20,7 @@ const Verification = () => {
       try {
         const response = await fetch(`https://builtsturdy-client-portal-d821101d3b6d.herokuapp.com/verify-email/${token}`);
         const data = await response.json();
+        console.log(data);
 
         if (response.ok && data.success) { // Check for a success flag in response
           console.log("Verification successful, received data:", data); // Added log
