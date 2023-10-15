@@ -13,14 +13,19 @@ const Verification = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState(''); // New state variable for confirmation password
 
   useEffect(() => {
+    console.log("Verifying email with token:", token); // Added log
+
     const verifyEmail = async () => {
       try {
         const response = await fetch(`/verify-email/${token}`);
-        const data = await response.json(); // Assuming server returns JSON with userId
-        if (response.ok) {
+        const data = await response.json();
+
+        if (response.ok && data.success) { // Check for a success flag in response
+          console.log("Verification successful, received data:", data); // Added log
           setStatus('success');
-          setUserId(data.userId); // Store userId in state
+          setUserId(data.userId);
         } else {
+          console.log("Verification failed, received data:", data); // Added log
           setStatus('failed');
         }
       } catch (error) {
