@@ -70,6 +70,26 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
 }
 
+app.get('/api/verify-email/:token', async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    const user = await User.findOne({ emailVerificationToken: token });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid token.' });
+    }
+
+    user.isEmailVerified = true;
+    await user.updateOne({ $unset: { emailVerificationToken: 1 } });
+
+    return res.status(200).json({ message: 'Email verified successfully.' });
+  } catch (error) {
+    console.error('Verification failed:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 
 // app.get('/verify-email/:token', async (req, res) => {
 //   const { token } = req.params;
