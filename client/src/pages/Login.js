@@ -47,7 +47,7 @@ const Login = (props) => {
       </div>
 
       <div className='login-form-container'>
-        <h2>User Login</h2>
+        <h2>Big User Login</h2>
         <div>
           {data ? (
             <p>
