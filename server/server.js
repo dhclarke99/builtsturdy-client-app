@@ -81,6 +81,7 @@ app.get('/verify-email/:token', async (req, res) => {
 
     if (!user) {
       console.log("User not found for token:", token); // New Debugging line
+      console.log(res.status)
       return res.status(400).json({ message: 'Invalid token.' });
     }
 
@@ -89,6 +90,7 @@ app.get('/verify-email/:token', async (req, res) => {
     await user.updateOne({ $unset: { emailVerificationToken: 1 } });
 
     console.log("Email verified successfully for user:", user._id); // New Debugging line
+    console.log(res.status)
     res.json({ message: 'Email verified successfully.', userId: user._id });
   } catch (error) {
     console.error('Verification failed:', error);
