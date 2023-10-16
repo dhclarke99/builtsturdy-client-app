@@ -83,7 +83,7 @@ app.get('/api/verify-email/:token', async (req, res) => {
     user.isEmailVerified = true;
     await user.updateOne({ $unset: { emailVerificationToken: 1 } });
 
-    return res.status(200).json({ message: 'Email verified successfully.' });
+    return res.status(200).json({ message: 'Email verified successfully.', userId: user._id });
   } catch (error) {
     console.error('Verification failed:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
