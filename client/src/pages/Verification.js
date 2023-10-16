@@ -106,9 +106,9 @@ const Verification = () => {
   // );
 
   return (
-    <div>
+    <h1>
       Hello
-    </div>
+    </h1>
   )
 };
 
