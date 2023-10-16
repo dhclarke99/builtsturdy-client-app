@@ -11,6 +11,8 @@ const CreateRecipe = () => {
   const [totalFat, setTotalFat] = useState(0);
   const [instructions, setInstructions] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [selectedIngredient, setSelectedIngredient] = useState(null);
+  const [servingSize, setServingSize] = useState('');
 
   const updateTotals = (newRecipeData) => {
     let newTotalCalories = 0;
@@ -87,13 +89,25 @@ const CreateRecipe = () => {
     setSearchResults([...data.common, ...data.branded]);
   };
 
-  const handleSelectIngredient = async (selectedIngredient) => {
-    const response = await fetch(`/api/searchIngredient/${encodeURIComponent(selectedIngredient)}`);
+  const handleSelectIngredient = (ingredient) => {
+    setSelectedIngredient(ingredient);
+  };
+
+  const handleServingSizeChange = (e) => {
+    setServingSize(e.target.value);
+  };
+
+  const handleAddIngredient = async () => {
+    const response = await fetch(`/api/searchIngredient/${encodeURIComponent(selectedIngredient)}?servingSize=${servingSize}`);
     const data = await response.json();
     const food = data.foods[0];
     setRecipeData(oldData => [...oldData, food]);
     updateTotals([...recipeData, food]);
+    setSelectedIngredient(null);
+    setServingSize('');
   };
+
+  
 
   return (
     <div className="recipe-container">
@@ -116,13 +130,26 @@ const CreateRecipe = () => {
 
       <button className="recipe-button" onClick={handleSearch}>Search Ingredients</button>
 
-<ul>
-  {searchResults.map((result, index) => (
-    <h5 key={index} onClick={() => handleSelectIngredient(result.food_name)}>
-      {result.food_name}
-    </h5>
-  ))}
-</ul>
+      <ul>
+        {searchResults.map((result, index) => (
+          <h5 key={index} onClick={() => handleSelectIngredient(result.food_name)}>
+            {result.food_name}
+          </h5>
+        ))}
+      </ul>
+
+      {selectedIngredient && (
+        <div>
+          <h5>Selected: {selectedIngredient}</h5>
+          <input
+            type="text"
+            placeholder="Enter serving size"
+            value={servingSize}
+            onChange={handleServingSizeChange}
+          />
+          <button onClick={handleAddIngredient}>Add with Serving Size</button>
+        </div>
+      )}
 
       <label>Instructions</label>
       <textarea
