@@ -18,7 +18,7 @@ export const swapArrayElements = (arr, index1, index2) => {
         to_name: name,
         message: `Your current password is ${tempPassword}. Please change this after verifying your account.`,
         from_email: 'david@builtsturdyblueprint.com',
-        verification_link: `https://builtsturdy-client-portal-d821101d3b6d.herokuapp.com/verify-email/${token}`
+        verification_link: `http://localhost:3000/verify-email/${token}`
       };
   
       emailjs.send('service_bg8lqmf', 'template_nbn67je', templateParams, '3Mc2Gyl0Fense4EqS')
