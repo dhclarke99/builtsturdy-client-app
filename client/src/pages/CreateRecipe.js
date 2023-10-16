@@ -10,6 +10,7 @@ const CreateRecipe = () => {
   const [totalCarbs, setTotalCarbs] = useState(0);
   const [totalFat, setTotalFat] = useState(0);
   const [instructions, setInstructions] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   const updateTotals = (newRecipeData) => {
     let newTotalCalories = 0;
@@ -45,18 +46,25 @@ const CreateRecipe = () => {
   const handleSubmit = async () => {
     const ingredients = query.split('\n');
     const newRecipeData = [];
-
+  
+    const fetchInstantData = async (ingredient) => {
+      const instantResponse = await fetch(`/api/searchInstant/${encodeURIComponent(ingredient)}`);
+      const instantData = await instantResponse.json();
+      return instantData.branded[0] ? instantData.branded[0].food_name : ingredient;
+    };
+  
     const fetchIngredientData = async (ingredient) => {
       const response = await fetch(`/api/searchIngredient/${encodeURIComponent(ingredient)}`);
       const data = await response.json();
       const food = data.foods[0];
       newRecipeData.push(food);
     };
-
+  
     for (const ingredient of ingredients) {
-      await fetchIngredientData(ingredient).catch(error => console.error('Error:', error));
+      const brandedName = await fetchInstantData(ingredient).catch(error => console.error('Instant Error:', error));
+      await fetchIngredientData(brandedName).catch(error => console.error('Ingredient Error:', error));
     }
-
+  
     setRecipeData(oldData => [...oldData, ...newRecipeData]);
     updateTotals([...recipeData, ...newRecipeData]);
     setQuery('');
@@ -71,6 +79,20 @@ const CreateRecipe = () => {
     const newRecipeData = recipeData.filter((_, index) => index !== indexToRemove);
     setRecipeData(newRecipeData);
     updateTotals(newRecipeData);
+  };
+
+  const handleSearch = async () => {
+    const response = await fetch(`/api/searchInstant/${encodeURIComponent(query)}`);
+    const data = await response.json();
+    setSearchResults([...data.common, ...data.branded]);
+  };
+
+  const handleSelectIngredient = async (selectedIngredient) => {
+    const response = await fetch(`/api/searchIngredient/${encodeURIComponent(selectedIngredient)}`);
+    const data = await response.json();
+    const food = data.foods[0];
+    setRecipeData(oldData => [...oldData, food]);
+    updateTotals([...recipeData, food]);
   };
 
   return (
@@ -91,6 +113,16 @@ const CreateRecipe = () => {
         placeholder="Enter ingredients, separated by line breaks">
       </textarea>
       <button className="recipe-button" onClick={handleSubmit}>Add Ingredients</button>
+
+      <button className="recipe-button" onClick={handleSearch}>Search Ingredients</button>
+
+<ul>
+  {searchResults.map((result, index) => (
+    <h5 key={index} onClick={() => handleSelectIngredient(result.food_name)}>
+      {result.food_name}
+    </h5>
+  ))}
+</ul>
 
       <label>Instructions</label>
       <textarea

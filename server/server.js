@@ -4,7 +4,7 @@ const User = require('./models/user');
 const path = require('path');
 const { authMiddleware } = require('./utils/auth');
 const cors = require('cors');
-const { searchIngredient } = require('./utils/nutritionApi');
+const { searchIngredient, searchInstant } = require('./utils/nutritionApi');
 require('dotenv').config();
 
 const { typeDefs, resolvers } = require('./schemas');
@@ -49,6 +49,17 @@ app.get('/api/searchIngredient/:query', async (req, res) => {
   try {
     const query = req.params.query;
     const data = await searchIngredient(query);
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
+
+app.get('/api/searchInstant/:query', async (req, res) => {
+  try {
+    const query = req.params.query;
+    const data = await searchInstant(query);
     res.json(data);
   } catch (error) {
     console.error(error);
