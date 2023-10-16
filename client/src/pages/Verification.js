@@ -18,11 +18,11 @@ const Verification = () => {
 
     const verifyEmail = async () => {
       try {
-        const response = await fetch(`https://builtsturdy-client-portal-d821101d3b6d.herokuapp.com/verify-email/${token}`);
+        const response = await fetch(`/verify-email/${token}`);
         const data = await response.json();
         console.log(data);
 
-        if (response.ok && data.success) { // Check for a success flag in response
+        if (response.ok && data.message === 'Email verified successfully.') { // Check for a success flag in response
           console.log("Verification successful, received data:", data); // Added log
           setStatus('success');
           setUserId(data.userId);
