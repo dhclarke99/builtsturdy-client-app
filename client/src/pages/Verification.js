@@ -57,28 +57,40 @@ const Verification = () => {
   const passwordsMatch = newPassword === confirmNewPassword && newPassword !== '';
 
   return (
-    <div>
-      <h1>{status}</h1>
+    <div className='edit-form-container'>
+      <h1 className="form-title">{status}</h1>
       {status === 'Email verified successfully!' && userId && (
         <div>
+          <label className="form-label"> Old Password
           <input
+          className="form-input"
             type="password"
             placeholder="Old Password"
             value={oldPassword}
             onChange={(e) => setOldPassword(e.target.value)}
           />
+
+          </label>
+          <label className="form-label"> New Password
           <input
+          className="form-input"
             type="password"
             placeholder="New Password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
           />
-          <input
+          </label>
+          
+          <label className="form-label">Confirm New Password
+            <input
+          className="form-input"
             type="password"
             placeholder="Confirm New Password"
             value={confirmNewPassword}
             onChange={(e) => setConfirmNewPassword(e.target.value)}
           />
+          </label>
+          
           <button onClick={handlePasswordChange} disabled={!passwordsMatch}>
             Change Password
           </button>

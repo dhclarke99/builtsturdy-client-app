@@ -214,7 +214,7 @@ console.log(userData.user)
 return (
   <div className='calendar-page'>
   <div className="calendar-container">
-    <h1 id="user-name">{userData.user.firstname}'s Calendar</h1>
+    <h1 id="user-name">{userData?.user?.firstname}'s Calendar</h1>
     <h2>Program Progress</h2>
     <ProgressBar now={completedPercentage} label={`${completedPercentage}%`} />
       <div id="calendar-box" ref={calendarRef}>
