@@ -1,70 +1,64 @@
-# Getting Started with Create React App
+# BuiltSturdy-Client-Portal
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+## Introduction
+Features
+Tech Stack
+Installation
+Usage
+Demo
+Sample User Login
+Contributors
+Contact
 
-### `npm start`
+## Features
+### For Personal Trainers
+Client Management: Easily add, remove, or update client profiles.
+Custom Workout Planning: Create and assign custom workout plans for each client.
+Meal Planning: Develop custom meal plans with real-time nutritional analysis.
+Accountability Tracking: Monitor client check-ins, completed workouts, and dietary adherence.
+Progress Tracking: Track key performance indicators like weight, body measurements, and fitness milestones.
+Communication: In-app messaging for quick and easy communication with clients.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### For Clients
+Personal Dashboard: View assigned workout plans, meal plans, and track your progress.
+Check-ins: Mark workouts as complete and log dietary adherence.
+Support: Access to 1-on-1 support via in-app messaging.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Tech Stack
+Frontend: React.js, CSS
+Backend: Node.js, Express
+Database: MongoDB
+Authentication: JWT, OAuth
+APIs: Custom Nutrition and Exercise APIs
+Other Tools: High Level for marketing automation
 
-### `npm test`
+## Installation
+Clone the GitHub repository: git clone https://github.com/yourusername/builtsturdy-client-portal.git
+Navigate to the project directory: cd builtsturdy-client-portal
+Install dependencies: npm install
+Start the development server: npm start
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Usage
+Personal Trainers: Sign up to create an account and start adding clients.
+Clients: After your personal trainer adds you, log in to access your dashboard.
 
-### `npm run build`
+## Demo
+A demo video from the admin perspective will be available soon.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Sample User Login
+We provide a sample user login for the public to test the application as a user. The credentials are:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+email: stephensample@gmail.com
+Password: password123
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Contributors
+David Clarke
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Contact
+For more information, feel free to contact me at dhclarke99@gmail.com
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

@@ -343,7 +343,7 @@ const UniqueUser = () => {
     });
     console.log(formattedData)
       console.log("data User: ", dataUser)
-      // window.location.reload()
+      window.location.reload()
 
     } catch (err) {
       console.error('Failed to update user:', err);

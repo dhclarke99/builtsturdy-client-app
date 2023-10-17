@@ -135,11 +135,15 @@ const UserCalendar = () => {
 
 
   const markDayAsCompleted = async () => {
+    console.log(selectedEvent)
     const selectedDate = new Date(selectedEvent.start);
     const selectedDateUnix = selectedDate.getTime().toString();
   
     const dayToCompleteIndex = completedDays.findIndex(day => day.date === selectedDateUnix);
-  
+    console.log(selectedDate)
+    console.log(completedDays)
+    console.log(selectedDateUnix)
+  console.log(dayToCompleteIndex)
     if (dayToCompleteIndex !== -1) {
       const { workout, ...dayToComplete } = { ...completedDays[dayToCompleteIndex] };
       dayToComplete.completed = !dayToComplete.completed; // Toggle the completion status

@@ -77,7 +77,7 @@ console.log(id)
   return (
     <div>
       <h1>{data.user.firstname}'s Weekly Trends</h1>
-      <TrendsChart weeklyAverages={weeklyAverages} currentWeight={data.user.currentWeight}/>
+      <TrendsChart weeklyAverages={weeklyAverages} currentWeight={data.user.currentWeight} caloricTarget={data.user.caloricTarget}/>
     </div>
   );
 

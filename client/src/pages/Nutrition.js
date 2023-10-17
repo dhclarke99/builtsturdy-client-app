@@ -210,8 +210,9 @@ const Nutrition = () => {
     console.log(userId)
 
     try {
-      await updateMealPlan({ variables: { userId: userId, mealPlanTemplate: id } });
+      const updatedUserData = await updateMealPlan({ variables: { userId: userId, mealPlanTemplate: id } });
       console.log("success!")
+      window.location.reload()
     } catch (error) {
       console.error("Failed to update meal plan:", error);
     }
@@ -248,7 +249,7 @@ const Nutrition = () => {
         }
       `;
 
-      const response = await fetch('/api/suggesticQuery', {
+      const response = await fetch('/api/suggesticMutation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -263,7 +264,7 @@ const Nutrition = () => {
       const returnData = await response.json();
       console.log(returnData);
 
-      const templateResponse = await fetch('/api/suggesticQuery', {
+      const templateResponse = await fetch('/api/suggesticMutation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
