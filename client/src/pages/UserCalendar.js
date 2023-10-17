@@ -135,15 +135,18 @@ const UserCalendar = () => {
 
 
   const markDayAsCompleted = async () => {
-    console.log(selectedEvent)
+    console.log(selectedEvent);
     const selectedDate = new Date(selectedEvent.start);
-    const selectedDateUnix = selectedDate.getTime().toString();
+const selectedDateUtc = new Date(Date.UTC(selectedDate.getUTCFullYear(), selectedDate.getUTCMonth(), selectedDate.getUTCDate()));
+const selectedDateUnix = selectedDateUtc.getTime().toString();
   
     const dayToCompleteIndex = completedDays.findIndex(day => day.date === selectedDateUnix);
-    console.log(selectedDate)
-    console.log(completedDays)
-    console.log(selectedDateUnix)
-  console.log(dayToCompleteIndex)
+    console.log(selectedDate);
+    console.log(completedDays);
+    console.log(selectedDateUnix);
+    console.log(completedDays[0].date)
+    console.log(dayToCompleteIndex);
+  
     if (dayToCompleteIndex !== -1) {
       const { workout, ...dayToComplete } = { ...completedDays[dayToCompleteIndex] };
       dayToComplete.completed = !dayToComplete.completed; // Toggle the completion status
@@ -160,8 +163,9 @@ const UserCalendar = () => {
       updatedCompletedDays[dayToCompleteIndex] = cleanedDayToComplete;
       setCompletedDays(updatedCompletedDays);
       setIsWorkoutCompleted(dayToComplete.completed);
+      console.log(isWorkoutCompleted)
+      console.log(dayToComplete)
   
-      
       // Scroll back to the calendar
       if (calendarRef.current) {
         calendarRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -172,9 +176,29 @@ const UserCalendar = () => {
   };
   
   
+  
+  
+  
+  
+  
+  
+  
 
   const eventStyleGetter = (event) => {
-    const isCompleted = completedDays.some(day => day.date === event.start.getTime().toString() && day.completed);
+    const selectedDate = new Date(event.start);
+    const selectedDateUtc = new Date(
+      Date.UTC(
+        selectedDate.getUTCFullYear(),
+        selectedDate.getUTCMonth(),
+        selectedDate.getUTCDate()
+      )
+    );
+    const selectedDateUnix = selectedDateUtc.getTime().toString();
+  
+    const isCompleted = completedDays.some(
+      (day) => day.date === selectedDateUnix && day.completed
+    );
+  
     return {
       className: isCompleted ? 'completed-event' : '',
     };
@@ -187,23 +211,30 @@ if (completedDays.length > 0) {
 
   
 
-  const handleEventClick = async (event) => {
-    await setCurrentVideoUrl(null);
-    setShowForm(false)
-    setSelectedEvent(event);
-    const selectedDateUnix = event.start.getTime().toString();
-  const dayToComplete = completedDays.find(day => day.date === selectedDateUnix);
-  setIsWorkoutCompleted(dayToComplete ? dayToComplete.completed : false);
-    console.log(selectedEvent)
-    const { data } = await client.query({
-      query: FETCH_WORKOUT_BY_ID,
-      variables: { workoutId: event?.workoutId?._id },
-    });
-    setSelectedWorkout(data.workout);
-    console.log(data.workout)
-    workoutRef.current.scrollIntoView({behavior: 'smooth'});
-  };
+const handleEventClick = async (event) => {
+  await setCurrentVideoUrl(null);
+  setShowForm(false);
+  setSelectedEvent(event);
 
+  // Find the completion status of the clicked event in the completedDays array
+  const selectedDateUnix = event.start.getTime().toString();
+  const dayToComplete = completedDays.find((day) => day.date === selectedDateUnix);
+
+  // Set the isWorkoutCompleted state based on the found day
+  if (dayToComplete) {
+    setIsWorkoutCompleted(dayToComplete.completed);
+  } else {
+    setIsWorkoutCompleted(false);
+  }
+  console.log(selectedEvent);
+  const { data } = await client.query({
+    query: FETCH_WORKOUT_BY_ID,
+    variables: { workoutId: event?.workoutId?._id },
+  });
+  setSelectedWorkout(data.workout);
+  console.log(data.workout);
+  workoutRef.current.scrollIntoView({ behavior: 'smooth' });
+};
   const handleImageClick = async (videoUrl) => {
     await setCurrentVideoUrl(null);
     setCurrentVideoUrl(videoUrl);
@@ -290,7 +321,10 @@ return (
         )}
         {selectedEvent && (
   <button onClick={markDayAsCompleted}>
-  {isWorkoutCompleted ? "Mark Workout Incomplete" : "Mark Workout Complete"}
+  {selectedEvent && isWorkoutCompleted
+    ? "Mark Workout Incomplete"
+    : "Mark Workout Complete"
+  }
 </button>
 
 )}

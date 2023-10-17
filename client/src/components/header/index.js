@@ -20,11 +20,7 @@ const Header = () => {
       
       <ul className={`nav-ul ${showNav ? 'show' : ''}`} id='nav-ul'>
           
-          {isLoggedIn && (
-            <li>
-              <Link to="/account" onClick={toggleNav}>Account</Link>
-            </li>
-          )}
+          
           {isAdmin && (
             <li>
               <Link to="/admin/admindashboard" onClick={toggleNav}>Admin Dashboard</Link>
@@ -44,6 +40,11 @@ const Header = () => {
           {!isLoggedIn && (
             <li>
               <Link to="/login" onClick={toggleNav}>Login</Link>
+            </li>
+          )}
+          {isLoggedIn && (
+            <li>
+              <Link to="/account" onClick={toggleNav}>Profile</Link>
             </li>
           )}
           {isLoggedIn && (
