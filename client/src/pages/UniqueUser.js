@@ -95,8 +95,7 @@ const UniqueUser = () => {
         console.log("Start Date:", startDate);
         console.log("Weeks:", weeks);
         setCompletedDays(dataUser.user.completedDays)
-
-        if (dataUser && dataUser.user && dataUser.user.schedule && dataUser.user.schedule.workouts) {
+  
         const workoutIds = dataUser.user.schedule.workouts.map(w => w.workoutId);
   
         const workouts = await Promise.all(workoutIds.map(async id => {
@@ -111,27 +110,31 @@ const UniqueUser = () => {
   
         for (let i = 0; i < weeks; i++) {
           workouts.forEach((workout, index) => {
-            const workoutDate = moment(startDate).add(i, 'weeks').day(dataUser.user.schedule.workouts[index].day);
-            calendarEvents.push({
-              workoutId: workout,
-              id: index,
-              title: workout.name,
-              notes: workout.notes,
-              start: workoutDate.toDate(),
-              end: workoutDate.toDate(),
-              allDay: true,
-            });
+            let workoutDate = moment(startDate).add(i, 'weeks').day(dataUser.user.schedule.workouts[index].day);
+        
+            // Only add the workout to the calendar if it's on or after the startDate
+            if (workoutDate.isSameOrAfter(startDate, 'day')) {
+              calendarEvents.push({
+                workoutId: workout,
+                id: index,
+                title: workout?.name,
+                notes: workout?.notes,
+                start: workoutDate.toDate(),
+                end: workoutDate.toDate(),
+                allDay: true,
+              });
+            }
           });
         }
+        
   
         console.log("Calendar Events:", calendarEvents);
         setEvents(calendarEvents);
       }
-      }
     };
 
     fetchWorkouts();
-  }, [dataUser]);
+  }, [dataUser, client]);
 
   useEffect(() => {
     if (dataUser && dataUser.user && dataUser.user.schedule && dataUser.user.schedule.workouts) {
