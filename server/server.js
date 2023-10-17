@@ -22,6 +22,29 @@ app.use(cors({
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+app.post('/api/suggesticMutation', async (req, res) => {
+  const { query }= req.body;
+  const url = 'https://production.suggestic.com/graphql';
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${process.env.SUGGESTIC_API_TOKEN}`
+        
+      },
+      body: JSON.stringify({ query })
+    });
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
+
 app.post('/api/suggesticQuery', async (req, res) => {
   const { query }= req.body;
   const url = 'https://production.suggestic.com/graphql';

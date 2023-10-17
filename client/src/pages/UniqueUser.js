@@ -168,7 +168,7 @@ const UniqueUser = () => {
               carbsPerc: ${carbsPerc},
               proteinPerc: ${proteinPerc},
               fatPerc: ${fatPerc},
-              program: "UHJvZ3JhbTpiMDlmOWE2MC0yOWIyLTQ4MmMtOWI0Ni00NmQyMGJkNWU5Y2U="
+              program: "UHJvZ3JhbTo2ZmI3ZDFlMy1lODYwLTRmNjItODAzOS0zYWRkZWM2YWU4MDE="
             },
             name: "${firstname} ${lastname}'s Meal Plan Template"
           ) {
@@ -178,11 +178,11 @@ const UniqueUser = () => {
         }
       `;
   
-      const response = await fetch(url, {
+      const response = await fetch('/api/suggesticMutation', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`
+          'Content-Type': 'application/json'
+          
         },
         body: JSON.stringify({ query: createTemplateMutation })
       });
@@ -194,11 +194,11 @@ const UniqueUser = () => {
       const data = await response.json();
       console.log(data);
   
-      const templateResponse = await fetch(url, {
+      const templateResponse = await fetch('/api/suggesticMutation', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`
+          'Content-Type': 'application/json'
+         
         },
         body: JSON.stringify({ query: existingMealTemplateQuery })
       });
@@ -343,7 +343,7 @@ const UniqueUser = () => {
     });
     console.log(formattedData)
       console.log("data User: ", dataUser)
-      window.location.reload()
+      // window.location.reload()
 
     } catch (err) {
       console.error('Failed to update user:', err);

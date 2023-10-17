@@ -238,7 +238,7 @@ const Nutrition = () => {
               carbsPerc: ${carbsPerc},
               proteinPerc: ${proteinPerc},
               fatPerc: ${fatPerc},
-              program: "UHJvZ3JhbTpiMDlmOWE2MC0yOWIyLTQ4MmMtOWI0Ni00NmQyMGJkNWU5Y2U="
+              program: "UHJvZ3JhbTo2ZmI3ZDFlMy1lODYwLTRmNjItODAzOS0zYWRkZWM2YWU4MDE="
             },
             name: "${firstname} ${lastname}'s Meal Plan Template"
           ) {
@@ -263,11 +263,11 @@ const Nutrition = () => {
       const returnData = await response.json();
       console.log(returnData);
 
-      const templateResponse = await fetch(url, {
+      const templateResponse = await fetch('/api/suggesticQuery', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Token b51a14125d03fa5491b5ed14c9d7a3e1a7c3854d`
+         
         },
         body: JSON.stringify({ query: existingMealTemplateQuery })
       });
