@@ -9,6 +9,11 @@
   .recipe-container h2 {
     color: black;
   }
+
+  .recipe-container li {
+    border-style: solid;
+    color: black;
+  }
   
   .recipe-button {
     padding: 10px 20px;

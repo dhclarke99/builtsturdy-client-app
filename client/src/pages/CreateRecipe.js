@@ -45,6 +45,17 @@ const CreateRecipe = () => {
     setInstructions(e.target.value);
   };
 
+  const renderSearchResults = () => {
+    return searchResults.map((result, index) => (
+      <div key={index} onClick={() => handleSelectIngredient(result.food_name)}>
+        <h4>{result.food_name}</h4>
+        <p>Serving Unit: {result.serving_unit}</p>
+        {result.brand_name && <p>Brand: {result.brand_name}</p>}
+        <img src={result.photo.thumb} alt={result.food_name} />
+      </div>
+    ));
+  };
+
   const handleSubmit = async () => {
     const ingredients = query.split('\n');
     const newRecipeData = [];
@@ -86,11 +97,13 @@ const CreateRecipe = () => {
   const handleSearch = async () => {
     const response = await fetch(`/api/searchInstant/${encodeURIComponent(query)}`);
     const data = await response.json();
-    setSearchResults([...data.common, ...data.branded]);
+    const commonWithFlag = data.common.map(item => ({ ...item, isBranded: false }));
+    const brandedWithFlag = data.branded.map(item => ({ ...item, isBranded: true }));
+    setSearchResults([...commonWithFlag, ...brandedWithFlag]);
   };
 
-  const handleSelectIngredient = (ingredient) => {
-    setSelectedIngredient(ingredient);
+  const handleSelectIngredient = (selectedObject) => {
+    setSelectedIngredient(selectedObject);
   };
 
   const handleServingSizeChange = (e) => {
@@ -98,14 +111,42 @@ const CreateRecipe = () => {
   };
 
   const handleAddIngredient = async () => {
-    const response = await fetch(`/api/searchIngredient/${encodeURIComponent(selectedIngredient)}?servingSize=${servingSize}`);
-    const data = await response.json();
-    const food = data.foods[0];
-    setRecipeData(oldData => [...oldData, food]);
-    updateTotals([...recipeData, food]);
-    setSelectedIngredient(null);
-    setServingSize('');
+    console.log("Selected Ingredient:", selectedIngredient);  // Debugging line
+    console.log("Serving Size:", servingSize);  // Debugging line
+  
+    if (!selectedIngredient || !servingSize) {
+      console.error("Either selected ingredient or serving size is missing.");
+      return;
+    }
+  
+    const selectedIngredientName = encodeURIComponent(selectedIngredient.food_name);
+    const selectedIngredientBrand = selectedIngredient.isBranded ? encodeURIComponent(selectedIngredient.brand_name) : '';
+    const selectedIngredientServingSize = encodeURIComponent(servingSize);
+  
+    const queryString = `${selectedIngredientBrand} ${selectedIngredientName}, ${selectedIngredientServingSize}`;
+    console.log(queryString)
+    try {
+      const response = await fetch(`/api/searchIngredient/${queryString}`);
+      if (response.status !== 200) {
+        console.error("Server returned an error:", response.status);
+        return;
+      }
+      const data = await response.json();
+      const food = data.foods[0];
+      if (!food) {
+        console.error("No food data returned from API.");
+        return;
+      }
+      
+      setRecipeData(oldData => [...oldData, food]);
+      updateTotals([...recipeData, food]);
+      setSelectedIngredient(null);
+      setServingSize('');
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
   };
+  
 
   
 
@@ -131,16 +172,18 @@ const CreateRecipe = () => {
       <button className="recipe-button" onClick={handleSearch}>Search Ingredients</button>
 
       <ul>
-        {searchResults.map((result, index) => (
-          <h5 key={index} onClick={() => handleSelectIngredient(result.food_name)}>
-            {result.food_name}
-          </h5>
-        ))}
-      </ul>
+      {searchResults.map((result, index) => (
+  <li key={index} onClick={() => handleSelectIngredient(result)}>
+    <h5>{result.food_name}</h5>
+    <p>Serving Unit: {result.serving_unit}</p>
+    {result.isBranded && <p>Brand: {result.brand_name}</p>}
+  </li>
+))}
+</ul>
 
       {selectedIngredient && (
         <div>
-          <h5>Selected: {selectedIngredient}</h5>
+          <h5>Selected: {selectedIngredient.food_name}</h5>
           <input
             type="text"
             placeholder="Enter serving size"
