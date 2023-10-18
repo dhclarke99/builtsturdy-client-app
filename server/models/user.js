@@ -97,17 +97,27 @@ const userSchema = new Schema({
     ],
     completedDays: [
         {
-            date: Date,
+            date: {
+                type: Date,
+                default: function () {
+                    // Initialize the date with timestamp at 4 am
+                    const currentDate = new Date();
+                    currentDate.setHours(4, 0, 0, 0);
+                    return currentDate;
+                },
+            },
             completed: Boolean,
             workout: [
                 {
                     exerciseName: String,
-                    sets: [{
-                        actualReps: Number,  // Actual reps set by user
-                        weight: Number
-                    }]
-                }
-            ]
+                    sets: [
+                        {
+                            actualReps: Number,
+                            weight: Number,
+                        },
+                    ],
+                },
+            ],
         },
     ],
     isEmailVerified: {
@@ -124,11 +134,10 @@ const userSchema = new Schema({
 
 userSchema.pre('save', function (next) {
     if (this.isModified('startDate') || this.isModified('weeks')) {
-        // Logic for dailyTracking
         const startDate = new Date(this.startDate);
         const programLength = this.weeks;
         const dailyTracking = [];
-        const completedDays = []; // Initialize completedDays array
+        const completedDays = [];
         for (let i = 0; i < programLength * 7; i++) {
             const date = new Date(startDate);
             date.setDate(startDate.getDate() + i);
@@ -139,12 +148,12 @@ userSchema.pre('save', function (next) {
                 proteinIntake: null,
             });
             completedDays.push({
-                date,
-                completed: false, // Initialize as not completed
+                date, // No need to set the timestamp here
+                completed: false,
             });
         }
         this.dailyTracking = dailyTracking;
-        this.completedDays = completedDays; // Update completedDays field
+        this.completedDays = completedDays;
     }
     next();
 });

@@ -87,7 +87,7 @@ const UserCalendar = () => {
         console.log("Start Date:", startDate);
         console.log("Weeks:", weeks);
         setCompletedDays(userData.user.completedDays)
-  
+  console.log("completed Days: ", completedDays)
         const workoutIds = userData.user.schedule.workouts.map(w => w.workoutId);
   
         const workouts = await Promise.all(workoutIds.map(async id => {
@@ -192,7 +192,10 @@ const UserCalendar = () => {
   const eventStyleGetter = (event) => {
     const selectedDateUnix = event.start.getTime().toString();
     const dayToComplete = completedDays.find((day) => day.date === selectedDateUnix);
-  
+  console.log("Completed DAys: ", completedDays)
+    console.log("selectedDateUnix:", selectedDateUnix);
+  console.log("dayToComplete:", dayToComplete);
+
     // Check if the day is completed and apply different styling
     if (dayToComplete && dayToComplete.completed) {
       return {

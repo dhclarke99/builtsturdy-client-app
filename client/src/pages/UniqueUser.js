@@ -404,10 +404,17 @@ const UniqueUser = () => {
   };
 
   const eventStyleGetter = (event) => {
-    const isCompleted = completedDays.some(day => day.date === event.start.getTime().toString() && day.completed);
-    return {
-      className: isCompleted ? 'completed-event' : '',
-    };
+    const selectedDateUnix = event.start.getTime().toString();
+    const dayToComplete = completedDays.find((day) => day.date === selectedDateUnix);
+  
+    // Check if the day is completed and apply different styling
+    if (dayToComplete && dayToComplete.completed) {
+      return {
+        className: 'completed-event', // Apply the completed-event class for completed days
+      };
+    }
+  
+    return {}; // Return an empty object for default styling (blue)
   };
 
   if (loadingUser || loadingSchedules) return <p>Loading...</p>;
