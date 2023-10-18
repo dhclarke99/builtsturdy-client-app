@@ -190,23 +190,17 @@ const UserCalendar = () => {
   
 
   const eventStyleGetter = (event) => {
-    const selectedDate = new Date(event.start);
-    const selectedDateUtc = new Date(
-      Date.UTC(
-        selectedDate.getUTCFullYear(),
-        selectedDate.getUTCMonth(),
-        selectedDate.getUTCDate()
-      )
-    );
-    const selectedDateUnix = selectedDateUtc.getTime().toString();
+    const selectedDateUnix = event.start.getTime().toString();
+    const dayToComplete = completedDays.find((day) => day.date === selectedDateUnix);
   
-    const isCompleted = completedDays.some(
-      (day) => day.date === selectedDateUnix && day.completed
-    );
+    // Check if the day is completed and apply different styling
+    if (dayToComplete && dayToComplete.completed) {
+      return {
+        className: 'completed-event', // Apply the completed-event class for completed days
+      };
+    }
   
-    return {
-      className: isCompleted ? 'completed-event' : '',
-    };
+    return {}; // Return an empty object for default styling (blue)
   };
 
   let completedPercentage;
