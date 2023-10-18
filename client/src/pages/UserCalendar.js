@@ -137,10 +137,15 @@ const UserCalendar = () => {
   const markDayAsCompleted = async () => {
     console.log(selectedEvent);
     const selectedDate = new Date(selectedEvent.start);
-const selectedDateUtc = new Date(Date.UTC(selectedDate.getUTCFullYear(), selectedDate.getUTCMonth(), selectedDate.getUTCDate()));
-const selectedDateUnix = selectedDateUtc.getTime().toString();
-  
-    const dayToCompleteIndex = completedDays.findIndex(day => day.date === selectedDateUnix);
+    const selectedDateUnix = selectedDate.setUTCHours(0, 0, 0, 0); // Set time to midnight
+    
+    const dayToCompleteIndex = completedDays.findIndex((day) => {
+      // Convert the date from completedDays to midnight as well
+      const completedDate = new Date(parseInt(day.date));
+      completedDate.setUTCHours(0, 0, 0, 0);
+      
+      return completedDate.getTime() === selectedDateUnix;
+    });
     console.log(selectedDate);
     console.log(completedDays);
     console.log(selectedDateUnix);
