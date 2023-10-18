@@ -2,6 +2,10 @@
     color: white;
 }
 
+.trends-header {
+    margin-left: 50px;
+}
+
 .line {
     color: white;
 }
@@ -14,4 +18,12 @@
     border-color: #c6a10d;
     margin: 30px;
     border-width: 2px;
+}
+
+.toggle-view {
+    text-align: center;
+}
+
+.toggle-view label {
+    color: white
 }

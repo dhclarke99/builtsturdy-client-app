@@ -4,7 +4,7 @@ import { useQuery, gql } from '@apollo/client';
 import { QUERY_USER_by_id } from '../utils/queries';
 import { useParams } from 'react-router-dom';
 import Auth from '../utils/auth';
-import TrendsChart from '../components/charts/TrendsChart';
+import TrendsChart from '../components/charts/WeeklyTrendsChart';
 
 const Trends = () => {
     const { id } = useParams();

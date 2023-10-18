@@ -2,7 +2,7 @@ import React from 'react';
 import { Line } from 'react-chartjs-2';
 import '../../utils/css/Trends.css'
 
-const TrendsChart = ({ weeklyAverages, currentWeight, caloricTarget }) => {
+const WeeklyTrendsChart = ({ weeklyAverages, currentWeight, caloricTarget }) => {
   // Prepare data for the charts
   const labels = Object.keys(weeklyAverages);
   const avgWeightData = labels.map((week) => weeklyAverages[week].averageWeight);
@@ -159,4 +159,4 @@ const TrendsChart = ({ weeklyAverages, currentWeight, caloricTarget }) => {
   
 };
 
-export default TrendsChart;
+export default WeeklyTrendsChart;

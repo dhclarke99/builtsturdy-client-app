@@ -418,7 +418,7 @@ const UniqueUser = () => {
   };
 
   if (loadingUser || loadingSchedules) return <p>Loading...</p>;
-  if (errorUser || errorSchedules) return <p>Error: {errorUser.message}</p>;
+  if (errorUser || errorSchedules) return <p>Hold On One Second</p>;
 
   const user = dataUser.user;
   const unixToString = (startDate) => {

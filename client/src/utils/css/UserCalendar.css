@@ -36,6 +36,7 @@
   }
   
   .workout-details {
+    margin-bottom: 30px;
     display: flex;
     margin-top: 20px;
     flex-direction: column;
