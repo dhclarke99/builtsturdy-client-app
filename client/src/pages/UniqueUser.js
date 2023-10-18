@@ -525,7 +525,7 @@ const UniqueUser = () => {
           <h2>Daily Tracking</h2>
       <button onClick={() => setCurrentStartWeek(Math.max(1, currentStartWeek - 4))}>Previous 4 Weeks</button>
       <button onClick={() => setCurrentStartWeek(currentStartWeek + 4)}>Next 4 Weeks</button>
-      <Link to={`/admin/user/${user._id}/trends`}>
+      <Link to={`/admin/user/${user._id}/nutrition-trends`}>
         <button>View Trends</button>
         </Link>
       <table>

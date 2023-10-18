@@ -639,7 +639,7 @@ const Nutrition = () => {
           </div>
           <div className='save-viewtrends'>
           
-              <Link to={`/trends`}>
+              <Link to={`/nutrition-trends`}>
               <button id='trends-button'>
                 View Trends
                 </button>

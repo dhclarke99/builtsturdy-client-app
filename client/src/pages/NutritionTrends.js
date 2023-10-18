@@ -7,7 +7,7 @@ import WeeklyTrendsChart from '../components/charts/WeeklyTrendsChart';
 import DailyTrendsChart from '../components/charts/DailyTrendsChart'; // Import the DailyTrendsChart component
 import '../utils/css/Trends.css';
 
-const Trends = () => {
+const NutritionTrends = () => {
   const [viewMode, setViewMode] = useState('weekly'); 
   const { loading, error, data } = useQuery(QUERY_USER_by_id, {
     variables: { userId: Auth.getProfile().data._id },
@@ -113,7 +113,7 @@ const Trends = () => {
 
   return (
     <div>
-      <h1 className='trends-header'>{data.user.firstname}'s Trends</h1>
+      <h1 className='trends-header'>{data.user.firstname}'s Nutrition Trends</h1>
       <div className="toggle-view">
         <label htmlFor="viewMode">Select View: </label>
         <select id="viewMode" onChange={handleViewModeChange} value={viewMode}>
@@ -131,4 +131,4 @@ const Trends = () => {
   );
 };
 
-export default Trends;
+export default NutritionTrends;

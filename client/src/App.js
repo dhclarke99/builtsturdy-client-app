@@ -18,11 +18,12 @@ import EditSchedule from './pages/EditSchedule';
 import CreateUser from './pages/CreateUser';
 import UserCalendar from './pages/UserCalendar';
 import Nutrition from './pages/Nutrition';
-import Trends from './pages/Trends';
-import AdminTrends from './pages/AdminTrends.js';
+import NutritionTrends from './pages/NutritionTrends';
+import WorkoutTrends from './pages/WorkoutTrends';
+import AdminNutritionTrends from './pages/AdminNutritionTrends.js';
 import Verification from './pages/Verification';
 import Account from './pages/Account'
-import CreateRecipe from './pages/CreateRecipe'
+import CreateRecipe from './pages/CreateRecipe';
 
 
 // Construct our main GraphQL API endpoint
@@ -88,8 +89,9 @@ const App = () => {
           <Route path="/admin/create-schedule" element={<CreateSchedule />} />
           <Route path="/calendar" element={<UserCalendar />} />
           <Route path="/nutrition" element={<Nutrition />} />
-          <Route path="/trends" element={<Trends />}/>
-          <Route path="/admin/user/:id/trends" element={<AdminTrends />}/>
+          <Route path="/nutrition-trends" element={<NutritionTrends />}/>
+          <Route path="/workout-trends" element={<WorkoutTrends />}/>
+          <Route path="/admin/user/:id/nutrition-trends" element={<AdminNutritionTrends />}/>
           <Route path="/verify-email/:token" element={<Verification />}/>
 
         </Routes>

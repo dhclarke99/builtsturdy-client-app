@@ -3,6 +3,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Auth from '../utils/auth';
+import { Link } from 'react-router-dom';
 import { useQuery, useApolloClient, useMutation } from '@apollo/client';
 import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID } from '../utils/queries';
 import {UPDATE_USER_COMPLETION, LOG_COMPLETED_WORKOUT} from '../utils/mutations'
@@ -254,6 +255,10 @@ return (
     <h1 id="user-name">{userData?.user?.firstname}'s Calendar</h1>
     <h2>Program Progress</h2>
     <ProgressBar now={completedPercentage} label={`${completedPercentage}%`} />
+    <Link>
+    <button to={'/workout-trends'}>View Trends
+      </button>
+      </Link>
       <div id="calendar-box" ref={calendarRef}>
         <Calendar
           localizer={localizer}
