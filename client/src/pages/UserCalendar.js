@@ -6,10 +6,10 @@ import Auth from '../utils/auth';
 import { Link } from 'react-router-dom';
 import { useQuery, useApolloClient, useMutation } from '@apollo/client';
 import { QUERY_USER_by_id, FETCH_WORKOUT_BY_ID } from '../utils/queries';
-import {UPDATE_USER_COMPLETION, LOG_COMPLETED_WORKOUT} from '../utils/mutations'
+import { UPDATE_USER_COMPLETION, LOG_COMPLETED_WORKOUT } from '../utils/mutations'
 import placeholderImage from '../assets/images/placeholderImage.png';
 import '../utils/css/UserCalendar.css';
-import ProgressBar from 'react-bootstrap/ProgressBar'; 
+import ProgressBar from 'react-bootstrap/ProgressBar';
 import LogWorkoutForm from '../utils/LogWorkoutForm';
 
 const localizer = momentLocalizer(moment);
@@ -39,10 +39,10 @@ const UserCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [logCompletedWorkout, { data, loading, error }] = useMutation(LOG_COMPLETED_WORKOUT);
-  
 
 
-  
+
+
   const handleTrackClick = (exercise) => {
     console.log("Track button clicked"); // Add this line
     setSelectedExercise(exercise);
@@ -55,13 +55,13 @@ const UserCalendar = () => {
   };
 
   console.log(showForm, selectedExercise); // Debugging line
-  
+
 
   const handleSubmit = async (userId, date, workoutData) => {
     console.log("userId: ", userId);
     console.log("date: ", date);
     console.log("workoutData: ", workoutData);
-    
+
     try {
       const { data } = await logCompletedWorkout({
         variables: {
@@ -76,8 +76,8 @@ const UserCalendar = () => {
       console.error("An error occurred: ", err);
     }
   };
-  
-  
+
+
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -88,9 +88,9 @@ const UserCalendar = () => {
         console.log("Start Date:", startDate);
         console.log("Weeks:", weeks);
         setCompletedDays(userData.user.completedDays)
-  console.log("completed Days: ", completedDays)
+        console.log("completed Days: ", completedDays)
         const workoutIds = userData.user.schedule.workouts.map(w => w.workoutId);
-  
+
         const workouts = await Promise.all(workoutIds.map(async id => {
           const { data } = await client.query({
             query: FETCH_WORKOUT_BY_ID,
@@ -98,13 +98,13 @@ const UserCalendar = () => {
           });
           return data.workout;
         }));
-  
+
         const calendarEvents = [];
-  
+
         for (let i = 0; i < weeks; i++) {
           workouts.forEach((workout, index) => {
             let workoutDate = moment(startDate).add(i, 'weeks').day(userData.user.schedule.workouts[index].day);
-        
+
             // Only add the workout to the calendar if it's on or after the startDate
             if (workoutDate.isSameOrAfter(startDate, 'day')) {
               calendarEvents.push({
@@ -119,8 +119,8 @@ const UserCalendar = () => {
             }
           });
         }
-        
-  
+
+
         console.log("Calendar Events:", calendarEvents);
         setEvents(calendarEvents);
       }
@@ -131,20 +131,20 @@ const UserCalendar = () => {
 
   console.log(events)
 
- 
-  
+
+
 
 
   const markDayAsCompleted = async () => {
     console.log(selectedEvent);
     const selectedDate = new Date(selectedEvent.start);
     const selectedDateUnix = selectedDate.setUTCHours(0, 0, 0, 0); // Set time to midnight
-    
+
     const dayToCompleteIndex = completedDays.findIndex((day) => {
       // Convert the date from completedDays to midnight as well
       const completedDate = new Date(parseInt(day.date));
       completedDate.setUTCHours(0, 0, 0, 0);
-      
+
       return completedDate.getTime() === selectedDateUnix;
     });
     console.log(selectedDate);
@@ -152,18 +152,18 @@ const UserCalendar = () => {
     console.log(selectedDateUnix);
     console.log(completedDays[0].date)
     console.log(dayToCompleteIndex);
-  
+
     if (dayToCompleteIndex !== -1) {
       const { workout, ...dayToComplete } = { ...completedDays[dayToCompleteIndex] };
       dayToComplete.completed = !dayToComplete.completed; // Toggle the completion status
-  
+
       const { __typename, ...cleanedDayToComplete } = dayToComplete;
-  
+
       // Make a GraphQL mutation call
       await updateUserCompletion({
         variables: { userId: Auth.getProfile().data._id, input: cleanedDayToComplete },
       });
-  
+
       // Update the local state
       const updatedCompletedDays = [...completedDays];
       updatedCompletedDays[dayToCompleteIndex] = cleanedDayToComplete;
@@ -171,7 +171,7 @@ const UserCalendar = () => {
       setIsWorkoutCompleted(dayToComplete.completed);
       console.log(isWorkoutCompleted)
       console.log(dayToComplete)
-  
+
       // Scroll back to the calendar
       if (calendarRef.current) {
         calendarRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -180,22 +180,13 @@ const UserCalendar = () => {
       console.log("Day not found in completedDays array");
     }
   };
-  
-  
-  
-  
-  
-  
-  
-  
-  
 
   const eventStyleGetter = (event) => {
     const selectedDateUnix = event.start.getTime().toString();
     const dayToComplete = completedDays.find((day) => day.date === selectedDateUnix);
-  console.log("Completed DAys: ", completedDays)
+    console.log("Completed DAys: ", completedDays)
     console.log("selectedDateUnix:", selectedDateUnix);
-  console.log("dayToComplete:", dayToComplete);
+    console.log("dayToComplete:", dayToComplete);
 
     // Check if the day is completed and apply different styling
     if (dayToComplete && dayToComplete.completed) {
@@ -203,142 +194,145 @@ const UserCalendar = () => {
         className: 'completed-event', // Apply the completed-event class for completed days
       };
     }
-  
+
     return {}; // Return an empty object for default styling (blue)
   };
 
   let completedPercentage;
-if (completedDays.length > 0) {
-  completedPercentage = Math.floor((completedDays.filter(day => day.completed).length / completedDays.length) * 100);
-}
-
-  
-
-const handleEventClick = async (event) => {
-  await setCurrentVideoUrl(null);
-  setShowForm(false);
-  setSelectedEvent(event);
-
-  // Find the completion status of the clicked event in the completedDays array
-  const selectedDateUnix = event.start.getTime().toString();
-  const dayToComplete = completedDays.find((day) => day.date === selectedDateUnix);
-
-  // Set the isWorkoutCompleted state based on the found day
-  if (dayToComplete) {
-    setIsWorkoutCompleted(dayToComplete.completed);
-  } else {
-    setIsWorkoutCompleted(false);
+  if (completedDays.length > 0) {
+    completedPercentage = Math.floor((completedDays.filter(day => day.completed).length / completedDays.length) * 100);
   }
-  console.log(selectedEvent);
-  const { data } = await client.query({
-    query: FETCH_WORKOUT_BY_ID,
-    variables: { workoutId: event?.workoutId?._id },
-  });
-  setSelectedWorkout(data.workout);
-  console.log(data.workout);
-  workoutRef.current.scrollIntoView({ behavior: 'smooth' });
-};
+
+
+
+  const handleEventClick = async (event) => {
+    await setCurrentVideoUrl(null);
+    setShowForm(false);
+    setSelectedEvent(event);
+
+    // Find the completion status of the clicked event in the completedDays array
+    const selectedDateUnix = event.start.getTime().toString();
+    const dayToComplete = completedDays.find((day) => day.date === selectedDateUnix);
+
+    // Set the isWorkoutCompleted state based on the found day
+    if (dayToComplete) {
+      setIsWorkoutCompleted(dayToComplete.completed);
+    } else {
+      setIsWorkoutCompleted(false);
+    }
+    console.log(selectedEvent);
+    const { data } = await client.query({
+      query: FETCH_WORKOUT_BY_ID,
+      variables: { workoutId: event?.workoutId?._id },
+    });
+    setSelectedWorkout(data.workout);
+    console.log(data.workout);
+    workoutRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
   const handleImageClick = async (videoUrl) => {
     await setCurrentVideoUrl(null);
     setCurrentVideoUrl(videoUrl);
     videoRef.current.scrollIntoView({ behavior: 'smooth' }); // Scroll to the video section
   };
-  
-  
+
+
 
   if (userLoading) return <p>Loading...</p>;
   if (userError) return <p>Error: {userError.message}</p>;
-console.log(userData.user)
-return (
-  <div className='calendar-page'>
-  <div className="calendar-container">
-    <h1 id="user-name">{userData?.user?.firstname}'s Calendar</h1>
-    <h2>Program Progress</h2>
-    <ProgressBar now={completedPercentage} label={`${completedPercentage}%`} />
-    <Link>
-    <button to={'/workout-trends'}>View Trends
-      </button>
-      </Link>
-      <div id="calendar-box" ref={calendarRef}>
-        <Calendar
-          localizer={localizer}
-          events={events}
-          startAccessor="start"
-          endAccessor="end"
-          onSelectEvent={handleEventClick}
-          onSelectSlot={markDayAsCompleted}
-          eventPropGetter={eventStyleGetter}
-          className="user-calendar"
-        />
-      </div>
-      </div>
-     
-    {selectedEvent && (
-    
-      <div ref={videoRef} className="workout-details">
-        <h2 className="workout-title">{selectedEvent.title} Workout</h2>
-        {currentVideoUrl && (
-          <div className="video-section">
-            <h3>Walkthrough Video:</h3>
-            <video controls width="250">
-              <source src={currentVideoUrl} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-            <button className="close-video-btn" onClick={() => setCurrentVideoUrl(null)}>Close Video</button>
-          </div>
-          
-        )}
-        
-        {selectedWorkout && (
-          <div ref={workoutRef} className="exercise-list">
-            
-            <ol>
-              {selectedWorkout.exercises.map((exercise, index) => (
-                <div key={exercise.exercise._id} className="exercise-item">
-                  <h2 className="exercise-name">{index + 1}. {exercise.exercise.name}</h2>
-                  <p className="exercise-info">Sets: {exercise.sets}, Reps: {exercise.targetReps}</p>
-                  <p className="exercise-notes">Notes: {exercise.exercise.notes}</p>
-                  <div className="exercise-video-container">
-  {exercise.exercise.videoUrl ? (
-    <img 
-      src={placeholderImage} 
-      width="250"
-      alt="Walkthrough Video" 
-      className="exercise-video-placeholder"
-      onClick={() => handleImageClick(exercise.exercise.videoUrl)}
-    />
-  ) : (
-    <p>Video coming soon</p>
-  )}
-</div>
-                  <button className='track-button' onClick={() => handleTrackClick(exercise)}>Track</button>
-                  {showForm && selectedExercise.exercise._id === exercise.exercise._id &&(
-        <LogWorkoutForm
-          exercise={selectedExercise}
-          onSubmit={handleSubmit}
-          date={selectedEvent}
-          userData={userData.user}
-        />
-      )}
-                </div>
-              ))} 
-            </ol>
-            
-          </div>
-        )}
-        {selectedEvent && (
-  <button onClick={markDayAsCompleted}>
-  {selectedEvent && isWorkoutCompleted
-    ? "Mark Workout Incomplete"
-    : "Mark Workout Complete"
-  }
-</button>
+  console.log(userData.user)
+  return (
+    <div className='calendar-page'>
+      <div className="calendar-container">
+        <h1 id="user-name">{userData?.user?.firstname}'s Calendar</h1>
+        <h2>Program Progress</h2>
+        <ProgressBar now={completedPercentage} label={`${completedPercentage}%`} />
+        <div>
+          <Link to={'/workout-trends'}>
+            <button>View Trends
+            </button>
+          </Link>
+        </div>
 
-)}
+        <div id="calendar-box" ref={calendarRef}>
+          <Calendar
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            onSelectEvent={handleEventClick}
+            onSelectSlot={markDayAsCompleted}
+            eventPropGetter={eventStyleGetter}
+            className="user-calendar"
+          />
+        </div>
       </div>
-    )}
+
+      {selectedEvent && (
+
+        <div ref={videoRef} className="workout-details">
+          <h2 className="workout-title">{selectedEvent.title} Workout</h2>
+          {currentVideoUrl && (
+            <div className="video-section">
+              <h3>Walkthrough Video:</h3>
+              <video controls width="250">
+                <source src={currentVideoUrl} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              <button className="close-video-btn" onClick={() => setCurrentVideoUrl(null)}>Close Video</button>
+            </div>
+
+          )}
+
+          {selectedWorkout && (
+            <div ref={workoutRef} className="exercise-list">
+
+              <ol>
+                {selectedWorkout.exercises.map((exercise, index) => (
+                  <div key={exercise.exercise._id} className="exercise-item">
+                    <h2 className="exercise-name">{index + 1}. {exercise.exercise.name}</h2>
+                    <p className="exercise-info">Sets: {exercise.sets}, Reps: {exercise.targetReps}</p>
+                    <p className="exercise-notes">Notes: {exercise.exercise.notes}</p>
+                    <div className="exercise-video-container">
+                      {exercise.exercise.videoUrl ? (
+                        <img
+                          src={placeholderImage}
+                          width="250"
+                          alt="Walkthrough Video"
+                          className="exercise-video-placeholder"
+                          onClick={() => handleImageClick(exercise.exercise.videoUrl)}
+                        />
+                      ) : (
+                        <p>Video coming soon</p>
+                      )}
+                    </div>
+                    <button className='track-button' onClick={() => handleTrackClick(exercise)}>Track</button>
+                    {showForm && selectedExercise.exercise._id === exercise.exercise._id && (
+                      <LogWorkoutForm
+                        exercise={selectedExercise}
+                        onSubmit={handleSubmit}
+                        date={selectedEvent}
+                        userData={userData.user}
+                      />
+                    )}
+                  </div>
+                ))}
+              </ol>
+
+            </div>
+          )}
+          {selectedEvent && (
+            <button onClick={markDayAsCompleted}>
+              {selectedEvent && isWorkoutCompleted
+                ? "Mark Workout Incomplete"
+                : "Mark Workout Complete"
+              }
+            </button>
+
+          )}
+        </div>
+      )}
     </div>
-);
+  );
 
 };
 

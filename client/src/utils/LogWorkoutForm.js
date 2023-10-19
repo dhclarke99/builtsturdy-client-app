@@ -5,11 +5,12 @@ import './css/LogWorkoutForm.css'
 const LogWorkoutForm = (props) => {
     console.log("LogWorkoutForm rendered"); // Debugging line
     console.log(props)
-  console.log(props.selectedExercise)
+  console.log(props.exercise)
   const userId = props.userData._id
   const exerciseName = props.exercise.exercise.name
   const date = props.date.start
   const setsArray = Array.from({ length: props.exercise.sets }, (_, i) => i + 1);
+  console.log(setsArray)
   // Find the completed workout for the selected exercise and date
   const completedWorkout = props.userData.completedDays.find(day => 
     day.date === props.date.start.getTime().toString() &&
@@ -22,12 +23,30 @@ const LogWorkoutForm = (props) => {
   console.log(completedWorkout)
  // Initialize state based on completedWorkout
  let initialSetData;
-if (completedWorkout) {
-  const specificWorkout = completedWorkout.workout.find(w => w.exerciseName === exerciseName);
-  initialSetData = specificWorkout ? specificWorkout.sets : setsArray.map(() => ({ actualReps: 0, weight: 0 }));
-} else {
-  initialSetData = setsArray.map(() => ({ actualReps: 0, weight: 0 }));
-}
+
+ if (completedWorkout) {
+   const specificWorkout = completedWorkout.workout.find(w => w.exerciseName === exerciseName);
+   console.log(specificWorkout);
+ 
+   if (specificWorkout.sets.length === props.exercise.sets) {
+     // If the lengths match, use specificWorkout.sets as is
+     initialSetData = specificWorkout.sets;
+   } else if (specificWorkout.sets.length > props.exercise.sets) {
+     // If specificWorkout.sets.length is greater, truncate the end to match expected length
+     initialSetData = specificWorkout.sets.slice(0, props.exercise.sets);
+   } else {
+     // If the lengths don't match, add objects to match the expected length
+     initialSetData = [...specificWorkout.sets];
+ 
+     while (initialSetData.length < props.exercise.sets) {
+       initialSetData.push({ actualReps: 0, weight: 0 });
+     }
+   }
+ } else {
+   initialSetData = setsArray.map(() => ({ actualReps: 0, weight: 0 }));
+ }
+
+console.log(initialSetData)
 
 const [setDetails, setSetDetails] = useState(initialSetData);
 console.log(setDetails)

@@ -19,6 +19,7 @@ const WorkoutTrends = () => {
   };
 
   if (data && data.user && data.user.completedDays) {
+    console.log("completed Days: ", data.user.completedDays)
     const sortedCompletedDays = [...data.user.completedDays].sort(
       (a, b) => new Date(a.date) - new Date(b.date)
     );
