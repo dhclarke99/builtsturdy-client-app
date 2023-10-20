@@ -180,6 +180,8 @@ query findSchedules {
     _id
     name
     notes
+    adminNotes
+    type
     workouts {
       day
       workoutId
@@ -194,6 +196,8 @@ query findScheduleById($scheduleId: ID!) {
     _id
     name
     notes
+    adminNotes
+    type
     workouts {
       day
       workoutId

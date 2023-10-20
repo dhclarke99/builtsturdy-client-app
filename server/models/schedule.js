@@ -8,6 +8,11 @@ const scheduleSchema = new Schema({
   },
     notes: String,
     adminNotes: String,
+    type: {  // New field to indicate the type of schedule
+      type: String,
+      enum: ['Repeating', 'Alternating'],
+      required: false,
+    },
     workouts: [
       {
         workoutId: {

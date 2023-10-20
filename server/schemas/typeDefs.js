@@ -138,6 +138,8 @@ input IngredientInput {
     _id: ID
     name: String
     notes: String
+    adminNotes: String
+    type: String
     workouts: [ScheduledWorkout]
   }
   
@@ -182,6 +184,8 @@ input IngredientInput {
   input UpdateScheduleInput {
     name: String
     notes: String
+    adminNotes: String
+    type: String
     workouts: [UpdateWorkoutInput]
   }
 

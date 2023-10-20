@@ -149,7 +149,10 @@ const AdminDashboard = () => {
               <div className="col-md-6" key={schedule._id + index}>
                 <div className="card mb-4">
                   <div className="card-header">
-                    {schedule.name}: {schedule.notes}
+                    <h5 className="card-title">{schedule.name}</h5>
+                   <p className="card-subtitle">Notes: {schedule.notes}</p>
+                   <p className="card-subtitle mb-2 text-muted">Admin Notes: {schedule.adminNotes}</p>
+                   <p className="card-subtitle mb-2 text-muted">Type: {schedule.type}</p>
                   </div>
                   
                   <div className="card-body">
@@ -214,8 +217,8 @@ const AdminDashboard = () => {
                 <div className="card mb-3">
                   <div className='card-header'>
                     <h4 className="card-title">{workout.name}</h4>
-                    <p className="card-text">User Notes: {workout.notes}</p>
-                    <p className="card-text"> Admin Notes: {workout.adminNotes}</p>
+                    <p className="card-subtitle">User Notes: {workout.notes}</p>
+                    <p className="card-subtitle mb-2 text-muted"> Admin Notes: {workout.adminNotes}</p>
                   </div>
                   <div className="card-body">
 

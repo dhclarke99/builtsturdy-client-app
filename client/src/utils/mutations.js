@@ -191,6 +191,8 @@ mutation updateSchedule($scheduleId: ID!, $input: UpdateScheduleInput!) {
     _id
     name
     notes
+    adminNotes
+    type
     workouts {
       day
       workoutId

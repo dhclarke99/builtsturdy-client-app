@@ -17,6 +17,8 @@ const EditSchedule = () => {
 
   const [name, setName] = useState('');
   const [notes, setNotes] = useState('');
+  const [adminNotes, setAdminNotes] = useState('');
+  const [type, setType] = useState('');
   const [selectedWorkout, setSelectedWorkout] = useState('');
   const [selectedWorkoutDay, setSelectedWorkoutDay] = useState('');
   const [allWorkoutIds, setAllWorkoutIds] = useState([]);
@@ -70,6 +72,8 @@ console.log(sortedWorkouts)
     if (dataSchedule) {
       setName(dataSchedule.schedule.name || '');
       setNotes(dataSchedule.schedule.notes || '');
+      setAdminNotes(dataSchedule.schedule.adminNotes || '');
+      setType(dataSchedule.schedule.type || '');
       setAllWorkoutIds(dataSchedule.schedule.workouts.map(e => e._id));
       setAllWorkouts(dataSchedule.schedule.workouts); // <-- Add this line
     }
@@ -159,6 +163,14 @@ console.log(dataSchedule)
       <label className="form-label">
         Notes:
         <input className="form-input" type="text" value={notes} onChange={(e) => setNotes(e.target.value)} />
+      </label>
+      <label className="form-label">
+        Admin Notes:
+        <input className="form-input" type="text" value={adminNotes} onChange={(e) => setAdminNotes(e.target.value)} />
+      </label>
+      <label className="form-label">
+        Type:
+        <input className="form-input" type="text" value={type} onChange={(e) => setType(e.target.value)} />
       </label>
       <label className="form-label">
         Current Workouts:
