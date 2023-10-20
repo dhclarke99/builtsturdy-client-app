@@ -1,7 +1,11 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
+import '../../utils/css/Trends.css';
 
 const WeeklyWorkoutTrendsChart = ({ weeklyExerciseProgress }) => {
+  // Days of the week
+  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
   // Chart configuration
   const options = {
     scales: {
@@ -12,6 +16,12 @@ const WeeklyWorkoutTrendsChart = ({ weeklyExerciseProgress }) => {
       x: {
         // Define your x-axis options here
         type: 'linear', // Use a linear x-axis
+        ticks: {
+          stepSize: 1,
+          color: 'white', // difference between each tick
+        },
+        min: 0,
+        max: 12,
         title: {
           display: true,
           text: 'Weeks',
@@ -37,34 +47,31 @@ const WeeklyWorkoutTrendsChart = ({ weeklyExerciseProgress }) => {
     return color;
   }
 
-  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
   return (
     <div>
       {daysOfWeek.map((dayOfWeek, index) => (
         <div key={index} className="chart">
           <h2 className="chart-header">Workout Trends for {dayOfWeek}</h2>
           <div className="chart-container">
-            <Line
-              data={{
-                labels: Object.keys(weeklyExerciseProgress).map((weekStartDate) => weekStartDate),
-                datasets: Object.keys(weeklyExerciseProgress).map((weekStartDate) => {
-                  const exerciseData = weeklyExerciseProgress[weekStartDate][dayOfWeek];
-                  const exerciseLines = Object.keys(exerciseData).map((exerciseName) => {
-                    const dataPoints = exerciseData[exerciseName];
-                    return dataPoints.reps[0] * dataPoints.weight[0];
-                  });
+          <Line
+  data={{
+    labels: Object.keys(weeklyExerciseProgress).map((weekStartDate) => weekStartDate),
+    datasets: Object.keys(weeklyExerciseProgress).map((weekStartDate) => {
+      const exerciseData = weeklyExerciseProgress[weekStartDate][dayOfWeek];
+      if (exerciseData && exerciseData.length > 0) {
+        return {
+          label: exerciseData.map((dataPoint) => dataPoint.exerciseName), // Use exercise names as labels
+          data: exerciseData.map((dataPoint) => dataPoint.reps), // Use reps as data points
+          borderColor: getRandomColor(),
+          fill: false,
+        };
+      }
+      return null;
+    }).filter(Boolean),
+  }}
+  options={options}
+/>
 
-                  return {
-                    label: `${exerciseData.name}`, // Corrected to use exerciseName
-                    data: exerciseLines,
-                    borderColor: getRandomColor(),
-                    fill: false,
-                  };
-                }),
-              }}
-              options={options}
-            />
           </div>
         </div>
       ))}

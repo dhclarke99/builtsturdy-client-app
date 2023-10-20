@@ -273,7 +273,7 @@ const UserCalendar = () => {
           <h2 className="workout-title">{selectedEvent.title} Workout</h2>
           {currentVideoUrl && (
             <div className="video-section">
-              <h3>Walkthrough Video:</h3>
+              <h3>Walkthrough Video</h3>
               <video controls width="250">
                 <source src={currentVideoUrl} type="video/mp4" />
                 Your browser does not support the video tag.

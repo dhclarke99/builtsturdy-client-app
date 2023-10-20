@@ -7,7 +7,7 @@ const exerciseSchema = new Schema({
   videoUrl: String,
   tag: {
     type: String,
-    enum: ['Strength', 'Cardio', 'Abs', 'Plyometric'],
+    enum: ['Strength', 'Cardio', 'Abs', 'Plyometric', 'Warm Up'],
 },
 });
 

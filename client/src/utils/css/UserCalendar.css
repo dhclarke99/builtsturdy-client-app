@@ -44,15 +44,19 @@
   }
   
   .workout-title {
-    font-size: 1.5em;
-    margin-bottom: 10px;
+    font-size: 2.5em;
+    margin-bottom: 15px;
   }
   
   .video-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-bottom: 20px;
   }
   
   .close-video-btn {
+    margin-top: 10px;
     background-color: #c6a10d;
     color: #333; 
     border: none;
@@ -107,5 +111,13 @@
   
   .track-button {
     margin-top: 10px;
+  }
+
+  .rbc-btn-group button {
+    color: white;
+  }
+
+  .rbc-btn-group .rbc-active {
+    color: black;
   }
 

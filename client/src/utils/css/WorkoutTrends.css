@@ -1,0 +1,6 @@
+.chart-container canvas {
+    display: block;
+    box-sizing: border-box;
+    height: 400px;
+    width: 800px;
+}

@@ -111,6 +111,7 @@ console.log(formData)
                 <option value="Cardio">Cardio</option>
                 <option value="Abs">Abs</option>
                 <option value="Plyometric">Plyometric</option>
+                <option value="Warm Up">Warm Up</option>
               </select>
         
       </label>
