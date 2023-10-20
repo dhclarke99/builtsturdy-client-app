@@ -106,6 +106,8 @@ console.log(sortedWorkouts)
       const input = {
         name,
         notes,
+        adminNotes,
+        type,
         workouts: cleanedWorkouts
       };
   
@@ -127,6 +129,8 @@ console.log(sortedWorkouts)
       const input = {
         name,
         notes,
+        adminNotes,
+        type,
         workouts: cleanedWorkouts
       };
   
@@ -169,8 +173,16 @@ console.log(dataSchedule)
         <input className="form-input" type="text" value={adminNotes} onChange={(e) => setAdminNotes(e.target.value)} />
       </label>
       <label className="form-label">
+      <select type="text"
+                name="gender"
+                placeholder="Gender"
+                value={type || ''}
+                onChange={(e) => setType(e.target.value)}>
         Type:
-        <input className="form-input" type="text" value={type} onChange={(e) => setType(e.target.value)} />
+        <option value='' disabled>Select Type</option>
+        <option value='Repeating' >Repeating</option>
+        <option value='Alternating' >Alternating</option>
+        </select>
       </label>
       <label className="form-label">
         Current Workouts:
