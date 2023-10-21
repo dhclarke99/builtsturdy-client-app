@@ -54,6 +54,8 @@ query findUserById($userId: String!) {
       _id
       name
       notes
+      adminNotes
+      type
       workouts {
         day
         workoutId
@@ -128,6 +130,8 @@ query findAllUsers {
       _id
       name
       notes
+      adminNotes
+      type
       workouts {
         day
         workoutId

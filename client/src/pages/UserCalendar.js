@@ -28,6 +28,7 @@ const UserCalendar = () => {
   const { loading: userLoading, error: userError, data: userData } = useQuery(QUERY_USER_by_id, {
     variables: { userId: Auth.getProfile().data._id },
   });
+  console.log(userData)
   const [currentVideoUrl, setCurrentVideoUrl] = useState(null);
   const videoRef = useRef(null);
   const workoutRef = useRef(null);
@@ -39,12 +40,14 @@ const UserCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [logCompletedWorkout, { data, loading, error }] = useMutation(LOG_COMPLETED_WORKOUT);
+  const [scheduleType, setScheduleType] = useState(null);
+
 
 
 
 
   const handleTrackClick = (exercise) => {
-    console.log("Track button clicked"); // Add this line
+
     setSelectedExercise(exercise);
     if (showForm === false) {
       setShowForm(true);
@@ -54,14 +57,10 @@ const UserCalendar = () => {
 
   };
 
-  console.log(showForm, selectedExercise); // Debugging line
+
 
 
   const handleSubmit = async (userId, date, workoutData) => {
-    console.log("userId: ", userId);
-    console.log("date: ", date);
-    console.log("workoutData: ", workoutData);
-
     try {
       const { data } = await logCompletedWorkout({
         variables: {
@@ -78,17 +77,59 @@ const UserCalendar = () => {
   };
 
 
+  const generateAlternatingEvents = (startDate, weeks, userData, calendarEvents) => {
+    const workoutDays = ['Monday', 'Wednesday', 'Friday'];
+    const restDays = ['Tuesday', 'Thursday', 'Saturday', 'Sunday'];
+    const workouts = userData.user.schedule.workouts;
+  
+    for (let i = 0; i < weeks; i++) {
+      workoutDays.forEach((day, index) => {
+        let workoutDate = moment(startDate).add(i, 'weeks').day(day);
+  
+        // Determine which workout to use based on the week number (i)
+        let workoutIndex = i % 2 === 0 ? index : (index + 1) % workouts.length;
+        let workout = workouts[workoutIndex];
+  
+        if (workoutDate.isSameOrAfter(startDate, 'day')) {
+          calendarEvents.push({
+            workoutId: workout.workoutId,
+            id: workoutIndex,
+            title: workout?.name,
+            notes: workout?.notes,
+            start: workoutDate.toDate(),
+            end: workoutDate.toDate(),
+            allDay: true,
+          });
+        }
+      });
+  
+      // Add rest days
+      restDays.forEach((day) => {
+        let restDate = moment(startDate).add(i, 'weeks').day(day);
+        if (restDate.isSameOrAfter(startDate, 'day')) {
+          calendarEvents.push({
+            id: 'rest',
+            title: 'Rest',
+            start: restDate.toDate(),
+            end: restDate.toDate(),
+            allDay: true,
+          });
+        }
+      });
+    }
+  };
 
   useEffect(() => {
+    
     const fetchWorkouts = async () => {
+      
       if (userData && userData.user && userData.user.schedule) {
+        console.log("schedule: ", userData.user.schedule)
+      setScheduleType(userData.user.schedule.type);
         const roughDate = new Date(parseInt(userData.user.startDate))
         const startDate = moment(roughDate); // Make sure this is in the correct format
         const weeks = userData.user.weeks; // Number of weeks
-        console.log("Start Date:", startDate);
-        console.log("Weeks:", weeks);
         setCompletedDays(userData.user.completedDays)
-        console.log("completed Days: ", completedDays)
         const workoutIds = userData.user.schedule.workouts.map(w => w.workoutId);
 
         const workouts = await Promise.all(workoutIds.map(async id => {
@@ -100,7 +141,11 @@ const UserCalendar = () => {
         }));
 
         const calendarEvents = [];
+       
+        
 
+        if (scheduleType === "Repeating" || scheduleType === null) {
+          console.log(scheduleType)
         for (let i = 0; i < weeks; i++) {
           workouts.forEach((workout, index) => {
             let workoutDate = moment(startDate).add(i, 'weeks').day(userData.user.schedule.workouts[index].day);
@@ -119,24 +164,27 @@ const UserCalendar = () => {
             }
           });
         }
+      } else if (scheduleType === "Alternating") {
+        console.log(scheduleType)
+        generateAlternatingEvents(startDate, weeks, userData, calendarEvents);
+      }
 
-
-        console.log("Calendar Events:", calendarEvents);
         setEvents(calendarEvents);
       }
     };
 
-    fetchWorkouts();
+     fetchWorkouts();
+    console.log("Events after useEffect:", events);
   }, [userData, client]);
 
-  console.log(events)
+
 
 
 
 
 
   const markDayAsCompleted = async () => {
-    console.log(selectedEvent);
+    console.log("Events before marking day:", events);
     const selectedDate = new Date(selectedEvent.start);
     const selectedDateUnix = selectedDate.setUTCHours(0, 0, 0, 0); // Set time to midnight
 
@@ -147,11 +195,7 @@ const UserCalendar = () => {
 
       return completedDate.getTime() === selectedDateUnix;
     });
-    console.log(selectedDate);
-    console.log(completedDays);
-    console.log(selectedDateUnix);
-    console.log(completedDays[0].date)
-    console.log(dayToCompleteIndex);
+
 
     if (dayToCompleteIndex !== -1) {
       const { workout, ...dayToComplete } = { ...completedDays[dayToCompleteIndex] };
@@ -169,8 +213,7 @@ const UserCalendar = () => {
       updatedCompletedDays[dayToCompleteIndex] = cleanedDayToComplete;
       setCompletedDays(updatedCompletedDays);
       setIsWorkoutCompleted(dayToComplete.completed);
-      console.log(isWorkoutCompleted)
-      console.log(dayToComplete)
+
 
       // Scroll back to the calendar
       if (calendarRef.current) {
@@ -184,9 +227,7 @@ const UserCalendar = () => {
   const eventStyleGetter = (event) => {
     const selectedDateUnix = event.start.getTime().toString();
     const dayToComplete = completedDays.find((day) => day.date === selectedDateUnix);
-    console.log("Completed DAys: ", completedDays)
-    console.log("selectedDateUnix:", selectedDateUnix);
-    console.log("dayToComplete:", dayToComplete);
+
 
     // Check if the day is completed and apply different styling
     if (dayToComplete && dayToComplete.completed) {
@@ -220,13 +261,11 @@ const UserCalendar = () => {
     } else {
       setIsWorkoutCompleted(false);
     }
-    console.log(selectedEvent);
     const { data } = await client.query({
       query: FETCH_WORKOUT_BY_ID,
       variables: { workoutId: event?.workoutId?._id },
     });
     setSelectedWorkout(data.workout);
-    console.log(data.workout);
     workoutRef.current.scrollIntoView({ behavior: 'smooth' });
   };
   const handleImageClick = async (videoUrl) => {
