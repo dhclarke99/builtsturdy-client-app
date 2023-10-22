@@ -25,6 +25,7 @@ import Verification from './pages/Verification';
 import Account from './pages/Account'
 import CreateRecipe from './pages/CreateRecipe';
 
+console.log('app.js rendering')
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -67,6 +68,7 @@ const isAdmin = Auth.isLoggedInAndAdmin();
 const isLoggedIn = Auth.loggedIn();
 
 const App = () => {
+ 
   return (
     <ApolloProvider client={client}>
       <Router>
@@ -107,6 +109,7 @@ const HomeRedirect = () => {
   useEffect(() => {
     if (isLoggedIn) {
       navigate('/calendar');
+      console.log("redirect to /calendar")
     } else {
       navigate('/login');
     }

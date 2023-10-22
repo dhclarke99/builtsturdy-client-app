@@ -21,6 +21,7 @@ moment.updateLocale('en', {
 });
 
 const UserCalendar = () => {
+  console.log("component mounted")
   const [events, setEvents] = useState([]);
   const client = useApolloClient();
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -120,9 +121,9 @@ const UserCalendar = () => {
   };
 
   useEffect(() => {
-    
+    console.log("useEffect firing")
     const fetchWorkouts = async () => {
-      
+      console.log("fetchWorkout firing")
       if (userData && userData.user && userData.user.schedule) {
         console.log("schedule: ", userData.user.schedule)
       setScheduleType(userData.user.schedule.type);
@@ -173,7 +174,9 @@ const UserCalendar = () => {
       }
     };
 
-     fetchWorkouts();
+  
+      fetchWorkouts();
+    
     console.log("Events after useEffect:", events);
   }, [userData, client]);
 
@@ -278,7 +281,7 @@ const UserCalendar = () => {
 
   if (userLoading) return <p>Loading...</p>;
   if (userError) return <p>Error: {userError.message}</p>;
-  console.log(userData.user)
+
   return (
     <div className='calendar-page'>
       <div className="calendar-container">
