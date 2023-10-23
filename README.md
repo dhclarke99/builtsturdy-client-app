@@ -36,10 +36,10 @@ APIs: Custom Nutrition and Recipe APIs
 Other Tools: EmailJs for client-side email verification
 
 ## Installation
-Clone the GitHub repository: git clone https://github.com/yourusername/builtsturdy-client-portal.git
+Clone the GitHub repository: git clone https://github.com/dhclarke99/builtsturdy-client-portal.git
 Navigate to the project directory: cd builtsturdy-client-portal
 Install dependencies: npm install
-Start the development server: npm start
+Start the development server: npm run develop
 
 ## Usage
 Personal Trainers: Email below for inquiries about application usage.
