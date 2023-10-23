@@ -145,7 +145,7 @@ const UserCalendar = () => {
        
         
 
-        if (scheduleType === "Repeating" || scheduleType === null) {
+        // if (scheduleType === "Repeating" || scheduleType === null) {
           console.log(scheduleType)
         for (let i = 0; i < weeks; i++) {
           workouts.forEach((workout, index) => {
@@ -165,10 +165,10 @@ const UserCalendar = () => {
             }
           });
         }
-      } else if (scheduleType === "Alternating") {
-        console.log(scheduleType)
-        generateAlternatingEvents(startDate, weeks, userData, calendarEvents);
-      }
+      // } else if (scheduleType === "Alternating") {
+      //   console.log(scheduleType)
+      //   generateAlternatingEvents(startDate, weeks, userData, calendarEvents);
+      // }
 
         setEvents(calendarEvents);
       }
@@ -199,7 +199,7 @@ const UserCalendar = () => {
       return completedDate.getTime() === selectedDateUnix;
     });
 
-
+console.log(dayToCompleteIndex)
     if (dayToCompleteIndex !== -1) {
       const { workout, ...dayToComplete } = { ...completedDays[dayToCompleteIndex] };
       dayToComplete.completed = !dayToComplete.completed; // Toggle the completion status
@@ -230,7 +230,6 @@ const UserCalendar = () => {
   const eventStyleGetter = (event) => {
     const selectedDateUnix = event.start.getTime().toString();
     const dayToComplete = completedDays.find((day) => day.date === selectedDateUnix);
-
 
     // Check if the day is completed and apply different styling
     if (dayToComplete && dayToComplete.completed) {

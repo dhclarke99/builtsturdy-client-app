@@ -1,10 +1,7 @@
 # BuiltSturdy-Client-Portal
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 ## Table of Contents
-
-## Introduction
+Introduction
 Features
 Tech Stack
 Installation
@@ -14,27 +11,29 @@ Sample User Login
 Contributors
 Contact
 
+## Introduction
+The BuiltSturdy Client Portal is a robust web application designed to empower personal trainers to manage their clients effectively. This platform is an all-in-one solution for custom workout planning, meal planning, and accountability/progress tracking. It is an essential tool for personal trainers who aim to provide a comprehensive and personalized service to their clients.
+
 ## Features
 ### For Personal Trainers
 Client Management: Easily add, remove, or update client profiles.
 Custom Workout Planning: Create and assign custom workout plans for each client.
-Meal Planning: Develop custom meal plans with real-time nutritional analysis.
+Meal Planning (still in development): Develop custom meal plans with real-time nutritional analysis.
 Accountability Tracking: Monitor client check-ins, completed workouts, and dietary adherence.
 Progress Tracking: Track key performance indicators like weight, body measurements, and fitness milestones.
-Communication: In-app messaging for quick and easy communication with clients.
 
 ### For Clients
 Personal Dashboard: View assigned workout plans, meal plans, and track your progress.
 Check-ins: Mark workouts as complete and log dietary adherence.
-Support: Access to 1-on-1 support via in-app messaging.
+Meal Plans: View sample meal plans with full recipes that adhere to macronutrient goals.
 
 ## Tech Stack
 Frontend: React.js, CSS
 Backend: Node.js, Express
 Database: MongoDB
 Authentication: JWT, OAuth
-APIs: Custom Nutrition and Exercise APIs
-Other Tools: High Level for marketing automation
+APIs: Custom Nutrition and Recipe APIs
+Other Tools: EmailJs for client-side email verification
 
 ## Installation
 Clone the GitHub repository: git clone https://github.com/yourusername/builtsturdy-client-portal.git
