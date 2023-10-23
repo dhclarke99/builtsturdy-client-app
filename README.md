@@ -42,11 +42,16 @@ Install dependencies: npm install
 Start the development server: npm start
 
 ## Usage
-Personal Trainers: Sign up to create an account and start adding clients.
+Personal Trainers: Email below for inquiries about application usage.
 Clients: After your personal trainer adds you, log in to access your dashboard.
 
 ## Demo
-A demo video from the admin perspective will be available soon.
+Login with the sample user credentials using at [https://www.portal.builtsturdyblueprint.com/](https://www.portal.builtsturdyblueprint.com/)
+
+Demo from the admin perspective
+[Demo Video](https://drive.google.com/file/d/1zfOPTbJqNbLmVLG-UvCiQHcfwil-N7oA/view)
+
+
 
 ## Sample User Login
 We provide a sample user login for the public to test the application as a user. The credentials are:
@@ -56,7 +61,6 @@ Password: password123
 
 ## Contributors
 David Clarke
-
 
 ## Contact
 For more information, feel free to contact me at dhclarke99@gmail.com
