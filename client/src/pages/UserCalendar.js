@@ -21,7 +21,7 @@ moment.updateLocale('en', {
 });
 
 const UserCalendar = () => {
-  console.log("component mounted")
+ 
   const [events, setEvents] = useState([]);
   const client = useApolloClient();
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -29,7 +29,7 @@ const UserCalendar = () => {
   const { loading: userLoading, error: userError, data: userData } = useQuery(QUERY_USER_by_id, {
     variables: { userId: Auth.getProfile().data._id },
   });
-  console.log(userData)
+  
   const [currentVideoUrl, setCurrentVideoUrl] = useState(null);
   const videoRef = useRef(null);
   const workoutRef = useRef(null);
@@ -41,11 +41,7 @@ const UserCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [logCompletedWorkout, { data, loading, error }] = useMutation(LOG_COMPLETED_WORKOUT);
-  const [scheduleType, setScheduleType] = useState(null);
-
-
-
-
+  
 
   const handleTrackClick = (exercise) => {
 
@@ -58,9 +54,6 @@ const UserCalendar = () => {
 
   };
 
-
-
-
   const handleSubmit = async (userId, date, workoutData) => {
     try {
       const { data } = await logCompletedWorkout({
@@ -70,69 +63,24 @@ const UserCalendar = () => {
           workouts: workoutData
         }
       });
-      console.log("Mutation successful, returned data: ", data);
+     
       setShowForm(false);
     } catch (err) {
       console.error("An error occurred: ", err);
     }
   };
-
-
-  const generateAlternatingEvents = (startDate, weeks, userData, calendarEvents) => {
-    const workoutDays = ['Monday', 'Wednesday', 'Friday'];
-    const restDays = ['Tuesday', 'Thursday', 'Saturday', 'Sunday'];
-    const workouts = userData.user.schedule.workouts;
-  
-    for (let i = 0; i < weeks; i++) {
-      workoutDays.forEach((day, index) => {
-        let workoutDate = moment(startDate).add(i, 'weeks').day(day);
-  
-        // Determine which workout to use based on the week number (i)
-        let workoutIndex = i % 2 === 0 ? index : (index + 1) % workouts.length;
-        let workout = workouts[workoutIndex];
-  
-        if (workoutDate.isSameOrAfter(startDate, 'day')) {
-          calendarEvents.push({
-            workoutId: workout.workoutId,
-            id: workoutIndex,
-            title: workout?.name,
-            notes: workout?.notes,
-            start: workoutDate.toDate(),
-            end: workoutDate.toDate(),
-            allDay: true,
-          });
-        }
-      });
-  
-      // Add rest days
-      restDays.forEach((day) => {
-        let restDate = moment(startDate).add(i, 'weeks').day(day);
-        if (restDate.isSameOrAfter(startDate, 'day')) {
-          calendarEvents.push({
-            id: 'rest',
-            title: 'Rest',
-            start: restDate.toDate(),
-            end: restDate.toDate(),
-            allDay: true,
-          });
-        }
-      });
-    }
-  };
-
+   
   useEffect(() => {
-    console.log("useEffect firing")
+    
     const fetchWorkouts = async () => {
-      console.log("fetchWorkout firing")
+      
       if (userData && userData.user && userData.user.schedule) {
-        console.log("schedule: ", userData.user.schedule)
-      setScheduleType(userData.user.schedule.type);
+
         const roughDate = new Date(parseInt(userData.user.startDate))
         const startDate = moment(roughDate); // Make sure this is in the correct format
         const weeks = userData.user.weeks; // Number of weeks
         setCompletedDays(userData.user.completedDays)
         const workoutIds = userData.user.schedule.workouts.map(w => w.workoutId);
-
         const workouts = await Promise.all(workoutIds.map(async id => {
           const { data } = await client.query({
             query: FETCH_WORKOUT_BY_ID,
@@ -143,10 +91,6 @@ const UserCalendar = () => {
 
         const calendarEvents = [];
        
-        
-
-        // if (scheduleType === "Repeating" || scheduleType === null) {
-          console.log(scheduleType)
         for (let i = 0; i < weeks; i++) {
           workouts.forEach((workout, index) => {
             let workoutDate = moment(startDate).add(i, 'weeks').day(userData.user.schedule.workouts[index].day);
@@ -165,29 +109,15 @@ const UserCalendar = () => {
             }
           });
         }
-      // } else if (scheduleType === "Alternating") {
-      //   console.log(scheduleType)
-      //   generateAlternatingEvents(startDate, weeks, userData, calendarEvents);
-      // }
 
         setEvents(calendarEvents);
       }
     };
-
-  
-      fetchWorkouts();
-    
-    console.log("Events after useEffect:", events);
+      fetchWorkouts();  
   }, [userData, client]);
 
 
-
-
-
-
-
   const markDayAsCompleted = async () => {
-    console.log("Events before marking day:", events);
     const selectedDate = new Date(selectedEvent.start);
     const selectedDateUnix = selectedDate.setUTCHours(0, 0, 0, 0); // Set time to midnight
 
@@ -199,7 +129,6 @@ const UserCalendar = () => {
       return completedDate.getTime() === selectedDateUnix;
     });
 
-console.log(dayToCompleteIndex)
     if (dayToCompleteIndex !== -1) {
       const { workout, ...dayToComplete } = { ...completedDays[dayToCompleteIndex] };
       dayToComplete.completed = !dayToComplete.completed; // Toggle the completion status
@@ -276,11 +205,9 @@ console.log(dayToCompleteIndex)
     videoRef.current.scrollIntoView({ behavior: 'smooth' }); // Scroll to the video section
   };
 
-
-
   if (userLoading) return <p>Loading...</p>;
   if (userError) return <p>Error: {userError.message}</p>;
-
+ 
   return (
     <div className='calendar-page'>
       <div className="calendar-container">

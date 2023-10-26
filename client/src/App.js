@@ -25,8 +25,6 @@ import Verification from './pages/Verification';
 import Account from './pages/Account'
 import CreateRecipe from './pages/CreateRecipe';
 
-console.log('app.js rendering')
-
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -39,10 +37,6 @@ const authLink = new ApolloLink((operation, forward) => {
   const refreshtoken = localStorage.getItem('refreshToken');
   const authorizationToken = localStorage.getItem('id_token'); // Assuming 'id_token' is the key where you store the authorization token
 
-  console.log("Token from Local Storage:", token);
-  console.log("Refresh Token from Local Storage:", refreshtoken);
-  console.log("Authorization Token from Local Storage:", authorizationToken);
-
   // Use the setContext method to set the HTTP headers.
   operation.setContext({
     headers: {
@@ -51,9 +45,6 @@ const authLink = new ApolloLink((operation, forward) => {
       'authorization': authorizationToken ? `Bearer ${authorizationToken}` : ""
     }
   });
-
-  // Log the entire operation context to see what headers are being sent
-  console.log("Operation Context after setContext:", operation.getContext());
 
   return forward(operation);
 });

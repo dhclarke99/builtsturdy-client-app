@@ -40,7 +40,6 @@ const AdminDashboard = () => {
     return workoutsCopy.sort((a, b) => daysOfWeek.indexOf(a.day) - daysOfWeek.indexOf(b.day));
   };
 
-  console.log(dataSchedules)
   useEffect(() => {
     if (dataSchedules) {
 
@@ -107,10 +106,6 @@ const AdminDashboard = () => {
     }
   };
   
-
-  console.log(dataSchedules)
-  console.log(dataUsers)
-  console.log(dataWorkouts)
   if (loadingWorkouts || loadingUsers || loadingExercises || loadingSchedules) return <p>Loading...</p>;
   if (errorWorkouts || errorUsers || errorExercises || errorSchedules) return <p>Error: {errorWorkouts?.message || errorUsers?.message || errorExercises?.message || errorSchedules?.message}</p>;
 
