@@ -32,9 +32,7 @@ const EditWorkout = () => {
       setAllExercises(data.workout.exercises); // Updated to hold more details
     }
   }, [data]);
-  console.log(allExercises)
 
-  console.log(data)
 
   if (loading || loadingExercises) return <p>Loading...</p>;
   if (error || errorExercises) return <p>Error: {error?.message || errorExercises?.message}</p>;
@@ -143,13 +141,6 @@ const EditWorkout = () => {
       }
     }
   };
-
-
-
-
-
-
-  console.log(data)
 
   return (
     <div className='edit-form-container'>

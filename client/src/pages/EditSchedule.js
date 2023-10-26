@@ -30,7 +30,6 @@ const EditSchedule = () => {
 
 const [workoutDetails, setWorkoutDetails] = useState([]);
 const [sortedWorkouts, setSortedWorkouts] = useState([]);
-console.log("data:", dataSchedule)
 
 useEffect(() => {
     if (dataSchedule && dataSchedule.schedule && Array.isArray(dataSchedule.schedule.workouts)) {
@@ -54,7 +53,7 @@ useEffect(() => {
   useEffect(() => {
     
       if (dataSchedule && dataSchedule.schedule &&dataSchedule.schedule.workouts) {
-    console.log(dataSchedule)
+
 
         const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   
@@ -66,7 +65,7 @@ useEffect(() => {
       }
     
   }, [dataSchedule]);
-console.log(sortedWorkouts)
+
   // Initialize state variables once data is available
   useEffect(() => {
     if (dataSchedule) {
@@ -140,21 +139,7 @@ console.log(sortedWorkouts)
       console.error(err);
     }
   };
-  
-  
-  
 
-  const handleEditWorkout = async (workoutIdToEdit) => {
-    console.log(workoutIdToEdit)
-  }
-
-
-  
-
-  
-
-  
-console.log(dataSchedule)
   return (
     <div className='edit-form-container'>
       <h1 className='form-title'>Edit Schedule</h1>

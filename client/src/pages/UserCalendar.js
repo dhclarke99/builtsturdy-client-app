@@ -214,12 +214,12 @@ const UserCalendar = () => {
         <h1 id="user-name">{userData?.user?.firstname}'s Calendar</h1>
         <h2>Program Progress</h2>
         <ProgressBar now={completedPercentage} label={`${completedPercentage}%`} />
-        <div>
+        {/* <div>
           <Link to={'/workout-trends'}>
             <button>View Trends
             </button>
           </Link>
-        </div>
+        </div> */}
 
         <div id="calendar-box" ref={calendarRef}>
           <Calendar

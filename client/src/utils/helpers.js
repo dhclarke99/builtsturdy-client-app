@@ -24,7 +24,6 @@ export const swapArrayElements = (arr, index1, index2) => {
   
       emailjs.send('service_bg8lqmf', 'template_nbn67je', templateParams, '3Mc2Gyl0Fense4EqS')
         .then((response) => {
-          console.log('Email sent:', response.status, response.text);
           resolve(response);
         }, (error) => {
           console.log('Email error:', error);

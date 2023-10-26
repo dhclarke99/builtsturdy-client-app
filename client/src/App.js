@@ -100,7 +100,6 @@ const HomeRedirect = () => {
   useEffect(() => {
     if (isLoggedIn) {
       navigate('/calendar');
-      console.log("redirect to /calendar")
     } else {
       navigate('/login');
     }

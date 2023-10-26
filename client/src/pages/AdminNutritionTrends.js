@@ -20,7 +20,6 @@ const { loading, error, data } = useQuery(QUERY_USER_by_id, {
   };
 
  
-console.log(id)
   const groupedByWeek = {};
   const weeklyAverages = {};
   if (data && data.user && data.user.dailyTracking) {
@@ -69,9 +68,7 @@ console.log(id)
 
       // Calculate Daily Averages
     data.user.dailyTracking.forEach((day) => {
-      console.log(day);
       const date = new Date(parseInt(day.date)).toDateString(); // Convert Unix timestamp to Date
-      console.log("date", date);
     
       if (!dailyAverages[date]) {
         dailyAverages[date] = {
@@ -107,8 +104,7 @@ console.log(id)
       if (average.countProtein) average.averageProtein /= average.countProtein;
     });
   }
-  console.log(groupedByWeek)
-  console.log(weeklyAverages)
+
 
 // Step 4: Prepare Data for Charting
 // You can now use `weeklyAverages` to create your charts

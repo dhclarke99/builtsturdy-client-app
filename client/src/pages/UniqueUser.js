@@ -74,15 +74,15 @@ const UniqueUser = () => {
       const startDateString = new Date(parseInt(dataUser.user.startDate))
       const formattedStartDateString = `${startDateString.getMonth() + 1}/${startDateString.getDate()}/${startDateString.getFullYear()}`;
       const { schedule, startDate, ...restOfUserData } = dataUser.user;
-      console.log(restOfUserData)
+  
       const formattedUser = {
         ...restOfUserData,
         schedule: schedule ? schedule._id : null, // set only the ID
         startDate: formattedStartDateString 
       };
-      console.log(formattedUser)
+
       setFormData(prevState => ({ ...prevState, ...formattedUser }));
-      console.log("FormData has been set: ", formData)
+
     }
   }, [dataUser]);
 
@@ -92,8 +92,6 @@ const UniqueUser = () => {
         const roughDate = new Date(parseInt(dataUser.user.startDate))
         const startDate = moment(roughDate); // Make sure this is in the correct format
         const weeks = dataUser.user.weeks; // Number of weeks
-        console.log("Start Date:", startDate);
-        console.log("Weeks:", weeks);
         setCompletedDays(dataUser.user.completedDays)
   
         const workoutIds = dataUser.user.schedule.workouts.map(w => w.workoutId);
@@ -127,8 +125,6 @@ const UniqueUser = () => {
           });
         }
         
-  
-        console.log("Calendar Events:", calendarEvents);
         setEvents(calendarEvents);
       }
     };
@@ -138,7 +134,6 @@ const UniqueUser = () => {
 
   useEffect(() => {
     if (dataUser && dataUser.user && dataUser.user.schedule && dataUser.user.schedule.workouts) {
-      console.log("dataUser", dataUser.user.schedule.workouts);
 
       const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
@@ -152,8 +147,7 @@ const UniqueUser = () => {
 
   const createNewMealPlanTemplate = async (formattedData) => {
     try {
-      console.log("template being created...");
-      console.log(formattedData);
+
   
       const proteinPerc = Math.round(((formattedData.proteinTarget * 4) / formattedData.caloricTarget) * 100);
       const carbsPerc = Math.round(((formattedData.carbohydrateTarget * 4) / formattedData.caloricTarget) * 100);
@@ -195,7 +189,6 @@ const UniqueUser = () => {
       }
   
       const data = await response.json();
-      console.log(data);
   
       const templateResponse = await fetch('/api/suggesticMutation', {
         method: 'POST',
@@ -211,16 +204,13 @@ const UniqueUser = () => {
       }
   
       const templateData = await templateResponse.json();
-      console.log(templateData);
-  
+
       const checkDescription = `${firstname}'s ${description} meal plan template at ${formattedData.currentWeight} and ${formattedData.caloricTarget} calories`;
       const trimmedDescription = checkDescription.trim();
   
       const idToGenerate = templateData.data.mealPlanTemplates.edges.findIndex(plan => plan.node.description.trim() === trimmedDescription);
       const matchingTemplateId = templateData.data.mealPlanTemplates.edges[idToGenerate].node.id;
-  
-      console.log(matchingTemplateId);
-  
+
       return matchingTemplateId;
   
     } catch (error) {
@@ -287,14 +277,12 @@ const UniqueUser = () => {
     }
   }
   const handleSubmit = async (event) => {
-    console.log(formData)
     event.preventDefault();
     try {
 
       const cleanedDailyTracking = formData.dailyTracking.map(({ __typename, ...rest }) => rest);
       const { __typename, _id, completedDays, emailVerificationToken, ...cleanedFormData } = {...formData, dailyTracking: cleanedDailyTracking}; // Remove __typename
-  
-      console.log(cleanedFormData)
+
       const formattedData = {
         ...cleanedFormData,
         height: parseFloat(cleanedFormData.height),
@@ -308,9 +296,7 @@ const UniqueUser = () => {
         weeks: parseFloat(cleanedFormData.weeks),
         startDate: stringToUnix(formData.startDate).toString(),
       };
-      console.log(formData.startDate)
-      console.log(stringToUnix(formData.startDate).toString())
-      console.log(formattedData)
+
        // Check if the macronutrient targets add up to 100% of the caloric target
     const { caloricTarget, proteinTarget, carbohydrateTarget, fatTarget } = formattedData;
     const proteinPercentage = (proteinTarget * 4) / caloricTarget;
@@ -338,14 +324,11 @@ const UniqueUser = () => {
     if (shouldUpdateMealPlan) {
       const newMealPlanTemplateID = await createNewMealPlanTemplate(formattedData);
       formattedData.mealPlanTemplate = newMealPlanTemplateID;
-      console.log("New Meal Plan ID: ", newMealPlanTemplateID)
     }
 
     await updateUser({
       variables: { userId: id, input: formattedData },
     });
-    console.log(formattedData)
-      console.log("data User: ", dataUser)
       window.location.reload()
 
     } catch (err) {
@@ -354,7 +337,6 @@ const UniqueUser = () => {
   };
 
   useEffect(() => {
-    console.log(dataUser)
     if (dataUser && dataUser.user.schedule && Array.isArray(dataUser.user.schedule.workouts)) {
       const workoutIds = dataUser.user.schedule.workouts.map(w => w.workoutId);
 
@@ -380,8 +362,6 @@ const UniqueUser = () => {
 
     const sortedDailyTracking = [...dataUser.user.dailyTracking].sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    console.log(sortedDailyTracking)
-
     sortedDailyTracking.forEach((day, index) => {
       const dateUnix = day.date
       const weekNumber = Math.floor(index / 7) + 1;
@@ -389,7 +369,7 @@ const UniqueUser = () => {
       weeks[weekNumber][dateUnix] = day; // Use Unix timestamp as a key
     });
   }
-  console.log(weeks)
+
 
   const calculateWeekStartDate = (startDate, weekNumber) => {
     const date = new Date(startDate);
@@ -431,12 +411,9 @@ const UniqueUser = () => {
   const stringToUnix = (str) => {
     
     const [month, day, year] = str.split('/');
-    console.log(new Date(`${month}/${day}/${year}`).getTime())
     return new Date(`${month}/${day}/${year}`).getTime();
   };
  
-
-  console.log(formData)
   return (
 
     <div className="container mt-5">

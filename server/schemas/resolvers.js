@@ -24,11 +24,7 @@ const resolvers = {
   
     },
     workout: async (_parent, { workoutId }, context) => {
-      // console.log("workouts resolver starting")
-      // console.log("context user role: ", context.user.role)
-      // if (context.user.role !== 'Admin') {
-      //   throw new AuthenticationError('You are not authorized to access this resource.');
-      // }
+   
       return await Workout.findOne({ _id: workoutId }).populate('exercises.exercise');
     },
     exercises: async () => {
@@ -89,7 +85,6 @@ const resolvers = {
         await user.save(); 
         // user = await User.findById(user._id).select('+emailVerificationToken')
         const token = signToken(user);
-        console.log(token, user)
         return {
           token,
           user: {
@@ -108,7 +103,6 @@ const resolvers = {
         const updateFields = Object.fromEntries(
           Object.entries(input).filter(([_, value]) => value != null)
         );
-        console.log(updateFields)
         // Find the user by ID and update it
         const updatedUser = await User.findByIdAndUpdate(
           userId,
@@ -119,7 +113,7 @@ const resolvers = {
             context: 'query'  // This ensures that the pre-save middleware runs
           }
         );
-        console.log(updatedUser)
+        
   
         // If the user doesn't exist, throw an error
         if (!updatedUser) {
@@ -133,7 +127,7 @@ const resolvers = {
       }
     },
     updateUserMealTemplate: async (_, { userId, mealPlanTemplate }) => {
-      console.log(mealPlanTemplate)
+
       try {
         // Filter out any fields that are null or undefined
       
@@ -146,7 +140,7 @@ const resolvers = {
             runValidators: true, 
           }
         );
-        console.log(updatedUser)
+
   
         // If the user doesn't exist, throw an error
         if (!updatedUser) {
@@ -191,7 +185,6 @@ const resolvers = {
     },
     createExercise: async (_, { name, notes, adminNotes, videoUrl, tag }) => {
       try {
-        console.log(name, notes, adminNotes, videoUrl, tag )
         return await Exercise.create({ name, notes, adminNotes, videoUrl, tag });
       } catch (error) {
         console.error("Error in createExercise:", error);
@@ -278,14 +271,13 @@ const resolvers = {
         const updateFields = Object.fromEntries(
           Object.entries(input).filter(([_, value]) => value != null)
         );
-        console.log(updateFields)
+
         // Find the user by ID and update it
         const updatedExercise = await Exercise.findByIdAndUpdate(
           exerciseId,
           { $set: updateFields },
           { new: true, runValidators: true }
         );
-        console.log(updatedExercise)
   
         // If the user doesn't exist, throw an error
         if (!updatedExercise) {
@@ -381,9 +373,6 @@ const resolvers = {
 
     // Find the index of the object that has the specified date
     const index = user.completedDays.findIndex(day => day.date.toISOString() === inputDateIsoString);
-        console.log("input date: ", input.date)
-        console.log("User Completed Days: ", user.completedDays)
-        console.log("index: ", index)
         if (index === -1) {
           // If the object doesn't exist, throw an error
           throw new Error('Specified date not found in completedDays');
@@ -432,9 +421,6 @@ const resolvers = {
       }
     },
     changePassword: async (_, { userId, oldPassword, newPassword }) => {
-      console.log("old password: ", oldPassword)
-      console.log("new password: ", newPassword)
-      console.log("userId: ", userId)
       const user = await User.findById(userId);
       if (!user) {
         throw new Error('User not found');

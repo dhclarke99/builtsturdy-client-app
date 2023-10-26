@@ -124,32 +124,6 @@ app.get('/api/verify-email/:token', async (req, res) => {
 });
 
 
-// app.get('/verify-email/:token', async (req, res) => {
-//   const { token } = req.params;
-//   console.log("Received token:", token); // Existing Debugging line
-
-//   try {
-//     console.log("Attempting to find user with token:", token); // New Debugging line
-//     const user = await User.findOne({ emailVerificationToken: token });
-
-//     if (!user) {
-//       console.log("User not found for token:", token); // New Debugging line
-//       console.log(res.status)
-//       return res.status(400).json({ message: 'Invalid token.' });
-//     }
-
-//     console.log("User found, verifying email for user:", user._id); // New Debugging line
-//     user.isEmailVerified = true;
-//     await user.updateOne({ $unset: { emailVerificationToken: 1 } });
-
-//     console.log("Email verified successfully for user:", user._id); // New Debugging line
-//     console.log(res.status)
-//     res.json({ message: 'Email verified successfully.', userId: user._id });
-//   } catch (error) {
-//     console.error('Verification failed:', error);
-//     res.status(500).json({ message: 'Internal Server Error' });
-//   }
-// });
 
 
 app.get('*', (req, res) => {

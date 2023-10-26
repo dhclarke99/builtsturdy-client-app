@@ -3,30 +3,24 @@ import React, { useEffect, useState, useRef } from 'react';
 import './css/LogWorkoutForm.css'
 
 const LogWorkoutForm = (props) => {
-    console.log("LogWorkoutForm rendered"); // Debugging line
-    console.log(props)
-  console.log(props.exercise)
+
   const userId = props.userData._id
   const exerciseName = props.exercise.exercise.name
   const date = props.date.start
   const setsArray = Array.from({ length: props.exercise.sets }, (_, i) => i + 1);
-  console.log(setsArray)
+
   // Find the completed workout for the selected exercise and date
   const completedWorkout = props.userData.completedDays.find(day => 
     day.date === props.date.start.getTime().toString() &&
     day.workout.some(w => w.exerciseName === exerciseName)
   );
 
-  console.log(props.userData.completedDays)
-  console.log(props.date.start.getTime().toString())
-  console.log(exerciseName)
-  console.log(completedWorkout)
  // Initialize state based on completedWorkout
  let initialSetData;
 
  if (completedWorkout) {
    const specificWorkout = completedWorkout.workout.find(w => w.exerciseName === exerciseName);
-   console.log(specificWorkout);
+
  
    if (specificWorkout.sets.length === props.exercise.sets) {
      // If the lengths match, use specificWorkout.sets as is
@@ -46,11 +40,7 @@ const LogWorkoutForm = (props) => {
    initialSetData = setsArray.map(() => ({ actualReps: 0, weight: 0 }));
  }
 
-console.log(initialSetData)
-
 const [setDetails, setSetDetails] = useState(initialSetData);
-console.log(setDetails)
-console.log("Date: ", date)
 
 const handleChange = (index, event) => {
   const { name, value } = event.target;
@@ -68,7 +58,6 @@ const handleChange = (index, event) => {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-  console.log("form contacted");
 
   const cleanedSetDetails = setDetails.map(set => {
     const {__typename, ...cleanedSet} = set;

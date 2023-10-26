@@ -46,9 +46,6 @@ const WorkoutTrends = () => {
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
-    
-    // Log the reorganized exercise progress data
-    console.log(reorganizedExerciseProgress);
 
     return (
         <div>

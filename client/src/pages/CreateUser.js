@@ -51,7 +51,6 @@ const AdminCreateUser = () => {
         variables: { input: { ...formattedData, password: tempPassword } }, // Use tempPassword here
       });
 
-      console.log('User created:', data);
       await sendVerificationEmail(
         data.createUser.user.email,
         data.createUser.user.emailVerificationToken,

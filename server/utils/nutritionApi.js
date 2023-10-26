@@ -12,7 +12,7 @@ async function searchIngredient(query) {
 async function searchInstant(query) {
   try {
     const response = await makeApiCall(NUTRITIONIX_API_ENDPOINT_SEARCH, query, 'GET');
-    console.log("Response from searchInstant:", response);
+
     return response;
   } catch (error) {
     console.error("Error in searchInstant:", error);
@@ -21,15 +21,13 @@ async function searchInstant(query) {
 }
 
 async function makeApiCall(endpoint, query, method = 'POST') {
-  console.log("Starting API call function");
+ 
   
   // Check if query is undefined or null
   if (!query) {
     console.error("Query is undefined or null");
     throw new Error("Query is undefined or null");
   }
-
-  console.log("Query received:", query);
 
   const headers = {
     'Content-Type': 'application/json',
@@ -69,9 +67,6 @@ async function makeApiCall(endpoint, query, method = 'POST') {
     console.log(`About to fetch data from Nutritionix API: ${endpoint}`);
     const response = await fetch(endpoint, requestOptions);
 
-    console.log("Received response from Nutritionix API");
-    console.log("Response status:", response.status);
-    console.log("Response status text:", response.statusText);
 
     if (!response.ok) {
       console.log("Response was not ok, throwing error");

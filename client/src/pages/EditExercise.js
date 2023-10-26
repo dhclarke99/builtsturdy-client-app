@@ -30,7 +30,6 @@ const EditExercise = () => {
       setTag(data.exercise.tag || '');
     }
   }, [data]);
-console.log(data)
   useEffect(() => {
     if (data) {
       const dataExercise = data.exercise;
@@ -46,14 +45,14 @@ console.log(data)
       [name]: value,
     });
   };
-console.log(formData)
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error?.message}</p>;
 
 
   const handleUpdate = async () => {
     try {
-      console.log(formData)
+   
       const { __typename, _id,  ...cleanedFormData } = formData; // Remove __typename
 
       const formattedData = {
