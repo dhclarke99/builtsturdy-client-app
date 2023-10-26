@@ -1,15 +1,23 @@
 # BuiltSturdy-Client-Portal
 
 ## Table of Contents
-[Introduction](##Introduction)
-[Features](##Features)
-[Tech Stack](##Tech Stack)
-[Installation](##Installation)
-[Usage](##Usage)
-[Demo](##Demo)
-[Sample User Login](##Sample User Login)
-[Contributors](##Contributers)
-[Contact](##Contact)
+-[Introduction](#introduction)
+
+-[Features](#features)
+
+-[Tech Stack](#tech-stack)
+
+-[Installation](#installation)
+
+-[Usage](#usage)
+
+-[Demo](#demo)
+
+-[Sample User Login](#sample-user-login)
+
+-[Contributors](#contributers)
+
+-[Contact](#contact)
 
 ## Introduction
 The BuiltSturdy Client Portal is a robust web application designed to empower personal trainers to manage their clients effectively. This platform is an all-in-one solution for custom workout planning, meal planning, and accountability/progress tracking. It is an essential tool for personal trainers who aim to provide a comprehensive and personalized service to their clients.
