@@ -24,8 +24,6 @@ const Nutrition = () => {
   });
   const [updatedTracking, setUpdatedTracking] = useState({});
   const [currentStartWeek, setCurrentStartWeek] = useState(1);
-  console.log(Auth.getProfile())
-  console.log(Auth.getProfile().data._id)
   const { loading, error, data } = useQuery(QUERY_USER_by_id, {
     variables: { userId: Auth.getProfile().data._id },
 
@@ -74,11 +72,7 @@ const Nutrition = () => {
     }
   }, [data]);
 
-  console.log(data)
   const [addDailyTracking] = useMutation(ADD_DAILY_TRACKING);
-
-
-
 
   const calculateDailyCalories = (currentWeight, estimatedBodyFat, mainPhysiqueGoal, gender, height, age, trainingExperience) => {
     const mass = currentWeight * 0.453592
@@ -113,14 +107,10 @@ const Nutrition = () => {
       caloriesRounded = Math.round(calories)
 
     }
-    console.log(caloriesRounded)
+
     return caloriesRounded; // Round to the nearest whole number
 
   };
-
-
-
-  console.log(data)
 
   const handleInputChange = (dateUnix, week, type, value) => {
     const newTracking = { ...updatedTracking };
@@ -128,21 +118,18 @@ const Nutrition = () => {
     if (!newTracking[week][dateUnix]) newTracking[week][dateUnix] = {};
     newTracking[week][dateUnix][type] = value !== "" ? parseFloat(value) : null;
     setUpdatedTracking(newTracking);
-    console.log(updatedTracking)
   };
 
 
   const calculateProteinPerc = async (calorieTarget, data) => {
-    console.log(data.user.currentWeight)
-    console.log(calorieTarget)
+
     if ((calorieTarget * .25) / 4 >= data.user.currentWeight) {
       const proteinPerc = 25
-      console.log(proteinPerc)
+
       return proteinPerc
     } else {
       const proteinPercFull = (data.user.currentWeight * 4) / calorieTarget;
       const proteinPerc = Math.round(proteinPercFull)
-      console.log(proteinPerc)
       return proteinPerc
     }
 
@@ -151,7 +138,6 @@ const Nutrition = () => {
   const handleSave = async () => {
     // Create a new array to hold the updated tracking data
     const newTrackingData = [];
-    console.log(updatedTracking)
     // Loop through each week
     Object.keys(weeks).forEach((weekNumber) => {
       // Loop through each day in the week
@@ -169,9 +155,6 @@ const Nutrition = () => {
       });
     });
 
-    // Now, newTrackingData is a complete array that includes all fields, whether they were edited or not
-    console.log(newTrackingData);
-
     // Call your mutation to update the user's dailyTracking data
     await addDailyTracking({
       variables: { userId: Auth.getProfile().data._id, trackingData: newTrackingData }
@@ -186,8 +169,6 @@ const Nutrition = () => {
 
     const sortedDailyTracking = [...data.user.dailyTracking].sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    console.log(sortedDailyTracking)
-
     sortedDailyTracking.forEach((day, index) => {
       const dateUnix = day.date
       const weekNumber = Math.floor(index / 7) + 1;
@@ -195,7 +176,6 @@ const Nutrition = () => {
       weeks[weekNumber][dateUnix] = day; // Use Unix timestamp as a key
     });
   }
-  console.log(weeks)
 
   const getTypeKey = (type) => {
     if (type === 'Weight') return 'weight';
@@ -204,10 +184,8 @@ const Nutrition = () => {
   };
 
   const assignToUser = async (id) => {
-    console.log("assigning to user")
-    console.log(id)
+
     const userId = Auth.getProfile().data._id
-    console.log(userId)
 
     try {
       const updatedUserData = await updateMealPlan({ variables: { userId: userId, mealPlanTemplate: id } });
@@ -220,8 +198,6 @@ const Nutrition = () => {
 
   const createMealPlanTemplate = async () => {
     try {
-      console.log("template being created...");
-      console.log(data);
 
       const proteinPerc = Math.round(((data.user.proteinTarget * 4) / data.user.caloricTarget) * 100);
       const carbsPerc = Math.round(((data.user.carbohydrateTarget * 4) / data.user.caloricTarget) * 100);
@@ -262,8 +238,6 @@ const Nutrition = () => {
       }
 
       const returnData = await response.json();
-      console.log(returnData);
-
       const templateResponse = await fetch('/api/suggesticMutation', {
         method: 'POST',
         headers: {
@@ -278,15 +252,12 @@ const Nutrition = () => {
       }
 
       const templateData = await templateResponse.json();
-      console.log(templateData);
 
       const checkDescription = `${firstname}'s ${description} meal plan template at ${data.user.currentWeight} and ${data.user.caloricTarget} calories`;
       const trimmedDescription = checkDescription.trim();
 
       const idToGenerate = templateData.data.mealPlanTemplates.edges.findIndex(plan => plan.node.description.trim() === trimmedDescription);
       const matchingTemplateId = templateData.data.mealPlanTemplates.edges[idToGenerate].node.id;
-
-      console.log(matchingTemplateId);
 
       await assignToUser(matchingTemplateId)
       return matchingTemplateId;
@@ -298,12 +269,9 @@ const Nutrition = () => {
 
   const generateMealPlan = async () => {
     if (data.user.mealPlanTemplate === null) {
-      console.log("need to generate template")
       await createMealPlanTemplate();
 
     }
-    console.log("meal plan generating...")
-    console.log(data.user.mealPlanTemplate)
     const generateMeals = `
     mutation {
       generateMealPlan(
@@ -352,7 +320,6 @@ const Nutrition = () => {
     })
       .then(response => response.json())
       .then(mealPlan => {
-        console.log(mealPlan);
         setMealPlanData(mealPlan.data.generateMealPlan.mealPlan);
         setShowTab('mealPlan')
         mealPlanRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -381,12 +348,7 @@ const Nutrition = () => {
       })
       .then(response => response.json())
       .then(programData => {
-        console.log(programData)
         const programId = programData.data.myProfile.program.id
-        console.log(programId)
-
-
-
 
       })
       .catch(error => console.error('Error:', error));

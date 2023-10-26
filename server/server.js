@@ -59,7 +59,6 @@ app.post('/api/suggesticQuery', async (req, res) => {
       },
       body: JSON.stringify({ query })
     });
-console.log(response.headers)
     const data = await response.json();
     res.json(data);
   } catch (error) {

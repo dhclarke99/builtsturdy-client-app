@@ -4,7 +4,6 @@ import '../../utils/css/WorkoutTrends.css'
 
 const WeeklyTrendsChart = ({ weeklyAverages, currentWeight, caloricTarget }) => {
   // Prepare data for the charts
-  console.log(weeklyAverages)
   const labels = Object.keys(weeklyAverages);
   const avgWeightData = labels.map((week) => weeklyAverages[week].averageWeight);
   const avgCaloriesData = labels.map((week) => weeklyAverages[week].averageCalories);
