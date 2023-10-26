@@ -69,8 +69,11 @@ const NutritionTrends = () => {
 
     // Calculate Daily Averages
     data.user.dailyTracking.forEach((day) => {
-
-      const date = new Date(parseInt(day.date)).toDateString(); // Convert Unix timestamp to Date
+      const roughDate = new Date(parseInt(day.date));
+      const date = roughDate.toLocaleDateString(undefined, {
+        month: 'long',
+        day: 'numeric',
+      });
     
       if (!dailyAverages[date]) {
         dailyAverages[date] = {
