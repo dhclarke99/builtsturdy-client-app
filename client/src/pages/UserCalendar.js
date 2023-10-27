@@ -35,6 +35,7 @@ const UserCalendar = () => {
   const workoutRef = useRef(null);
   const calendarRef = useRef(null);
   const [completedDays, setCompletedDays] = useState([]);
+  const [scheduleType, setScheduleType] = useState(null);
   const [updateUserCompletion] = useMutation(UPDATE_USER_COMPLETION);
   const [isWorkoutCompleted, setIsWorkoutCompleted] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -69,53 +70,128 @@ const UserCalendar = () => {
       console.error("An error occurred: ", err);
     }
   };
+
+  const generateAlternatingEvents = async (workouts, startDate, weeks, userData, calendarEvents) => {
+    console.log(userData);
+
+  // Dynamically generate workoutDays and restDays based on the workouts array
+  const workoutDays = [];
+  const restDays = [];
+
+  console.log(workouts)
+  workouts.forEach((workoutInfo) => {
+    console.log(workoutInfo.name)
+    const { name } = workoutInfo.name;
+    
+    // Check if the workout is a rest day or not
+    if (name === 'Rest') {
+      restDays.push(workoutInfo.day); // Store the ID of rest days
+    } else {
+      workoutDays.push(workoutInfo.day); // Store the ID of workout days
+    }
+  });
+
+    for (let i = 0; i < weeks; i++) {
+      workoutDays.forEach((day, index) => {
+        let workoutDate = moment(startDate).add(i, 'weeks').day(day);
+  
+        // Determine which workout to use based on the week number (i)
+        let workoutIndex = i % 2 === 0 ? index : (index + 1) % workouts.length;
+        let workout = workouts[workoutIndex];
+  
+        if (workoutDate.isSameOrAfter(startDate, 'day')) {
+          calendarEvents.push({
+            workoutId: workout,
+            id: workoutIndex,
+            title: workout?.name,
+            notes: workout?.notes,
+            start: workoutDate.toDate(),
+            end: workoutDate.toDate(),
+            allDay: true,
+          });
+        }
+      });
+  
+      // Add rest days
+      restDays.forEach((day) => {
+        let restDate = moment(startDate).add(i, 'weeks').day(day);
+        if (restDate.isSameOrAfter(startDate, 'day')) {
+          calendarEvents.push({
+            id: 'rest',
+            title: 'Rest',
+            start: restDate.toDate(),
+            end: restDate.toDate(),
+            allDay: true,
+          });
+        }
+      });
+    }
+  };
+
    
   useEffect(() => {
-    
     const fetchWorkouts = async () => {
-      
       if (userData && userData.user && userData.user.schedule) {
-
-        const roughDate = new Date(parseInt(userData.user.startDate))
+        const type = userData.user.schedule.type;
+        setScheduleType(type);
+  
+        const roughDate = new Date(parseInt(userData.user.startDate));
         const startDate = moment(roughDate); // Make sure this is in the correct format
         const weeks = userData.user.weeks; // Number of weeks
-        setCompletedDays(userData.user.completedDays)
-        const workoutIds = userData.user.schedule.workouts.map(w => w.workoutId);
+        setCompletedDays(userData.user.completedDays);
+        const workoutIds = userData.user.schedule.workouts.map(w => ({
+          workoutId: w.workoutId,
+          day: w.day,
+        }));
+        console.log(workoutIds)
         const workouts = await Promise.all(workoutIds.map(async id => {
           const { data } = await client.query({
             query: FETCH_WORKOUT_BY_ID,
-            variables: { workoutId: id },
+            variables: { workoutId: id.workoutId },
           });
-          return data.workout;
+          return { ...data.workout, day: id.day};
         }));
+        console.log(workouts)
+  
+        let calendarEvents = [];
 
-        const calendarEvents = [];
-       
-        for (let i = 0; i < weeks; i++) {
-          workouts.forEach((workout, index) => {
-            let workoutDate = moment(startDate).add(i, 'weeks').day(userData.user.schedule.workouts[index].day);
-
-            // Only add the workout to the calendar if it's on or after the startDate
-            if (workoutDate.isSameOrAfter(startDate, 'day')) {
-              calendarEvents.push({
-                workoutId: workout,
-                id: index,
-                title: workout?.name,
-                notes: workout?.notes,
-                start: workoutDate.toDate(),
-                end: workoutDate.toDate(),
-                allDay: true,
-              });
-            }
-          });
+        console.log(type)
+        if (type === 'Repeating') {
+          // Use your existing logic for repeating schedules
+          for (let i = 0; i < weeks; i++) {
+            workouts.forEach((workout, index) => {
+              let workoutDate = moment(startDate).add(i, 'weeks').day(userData.user.schedule.workouts[index].day);
+  
+              // Only add the workout to the calendar if it's on or after the startDate
+              if (workoutDate.isSameOrAfter(startDate, 'day')) {
+                calendarEvents.push({
+                  workoutId: workout,
+                  id: index,
+                  title: workout?.name,
+                  notes: workout?.notes,
+                  start: workoutDate.toDate(),
+                  end: workoutDate.toDate(),
+                  allDay: true,
+                });
+              }
+            });
+          }
+        } else if (type === 'Alternating') {
+          console.log("this one")
+         
+           await generateAlternatingEvents(workouts, startDate, weeks, userData, calendarEvents); // Implement your logic or function here
+            
+          
         }
-
+  
         setEvents(calendarEvents);
+        console.log(calendarEvents)
       }
     };
-      fetchWorkouts();  
+  
+    fetchWorkouts();
   }, [userData, client]);
-
+  
 
   const markDayAsCompleted = async () => {
     const selectedDate = new Date(selectedEvent.start);
@@ -178,6 +254,7 @@ const UserCalendar = () => {
 
 
   const handleEventClick = async (event) => {
+    console.log(event)
     await setCurrentVideoUrl(null);
     setShowForm(false);
     setSelectedEvent(event);
@@ -205,6 +282,7 @@ const UserCalendar = () => {
     videoRef.current.scrollIntoView({ behavior: 'smooth' }); // Scroll to the video section
   };
 
+  console.log(scheduleType)
   if (userLoading) return <p>Loading...</p>;
   if (userError) return <p>Error: {userError.message}</p>;
  
