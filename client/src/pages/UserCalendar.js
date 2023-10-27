@@ -72,15 +72,12 @@ const UserCalendar = () => {
   };
 
   const generateAlternatingEvents = async (workouts, startDate, weeks, userData, calendarEvents) => {
-    console.log(userData);
 
   // Dynamically generate workoutDays and restDays based on the workouts array
   const workoutDays = [];
   const restDays = [];
 
-  console.log(workouts)
   workouts.forEach((workoutInfo) => {
-    console.log(workoutInfo.name)
     const { name } = workoutInfo.name;
     
     // Check if the workout is a rest day or not
@@ -143,7 +140,6 @@ const UserCalendar = () => {
           workoutId: w.workoutId,
           day: w.day,
         }));
-        console.log(workoutIds)
         const workouts = await Promise.all(workoutIds.map(async id => {
           const { data } = await client.query({
             query: FETCH_WORKOUT_BY_ID,
@@ -151,11 +147,9 @@ const UserCalendar = () => {
           });
           return { ...data.workout, day: id.day};
         }));
-        console.log(workouts)
   
         let calendarEvents = [];
 
-        console.log(type)
         if (type === 'Repeating') {
           // Use your existing logic for repeating schedules
           for (let i = 0; i < weeks; i++) {
@@ -176,16 +170,12 @@ const UserCalendar = () => {
               }
             });
           }
-        } else if (type === 'Alternating') {
-          console.log("this one")
-         
+        } else if (type === 'Alternating') {     
            await generateAlternatingEvents(workouts, startDate, weeks, userData, calendarEvents); // Implement your logic or function here
             
-          
         }
   
         setEvents(calendarEvents);
-        console.log(calendarEvents)
       }
     };
   
@@ -254,7 +244,6 @@ const UserCalendar = () => {
 
 
   const handleEventClick = async (event) => {
-    console.log(event)
     await setCurrentVideoUrl(null);
     setShowForm(false);
     setSelectedEvent(event);
@@ -282,7 +271,6 @@ const UserCalendar = () => {
     videoRef.current.scrollIntoView({ behavior: 'smooth' }); // Scroll to the video section
   };
 
-  console.log(scheduleType)
   if (userLoading) return <p>Loading...</p>;
   if (userError) return <p>Error: {userError.message}</p>;
  
