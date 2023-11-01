@@ -271,7 +271,7 @@ const UserCalendar = () => {
     videoRef.current.scrollIntoView({ behavior: 'smooth' }); // Scroll to the video section
   };
 
-  console.log(userData)
+  // console.log(userData)
   if (userLoading) return <p>Loading...</p>;
   if (userError) return <p>Error: {userError.message}</p>;
  
