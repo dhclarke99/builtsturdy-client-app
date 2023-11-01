@@ -86,52 +86,115 @@ const UniqueUser = () => {
     }
   }, [dataUser]);
 
-  useEffect(() => {
-    const fetchWorkouts = async () => {
-      if (dataUser && dataUser.user && dataUser.user.schedule) {
-        const roughDate = new Date(parseInt(dataUser.user.startDate))
-        const startDate = moment(roughDate); // Make sure this is in the correct format
-        const weeks = dataUser.user.weeks; // Number of weeks
-        setCompletedDays(dataUser.user.completedDays)
+  const generateAlternatingEvents = async (workouts, startDate, weeks, userData, calendarEvents) => {
+
+    // Dynamically generate workoutDays and restDays based on the workouts array
+    const workoutDays = [];
+    const restDays = [];
   
-        const workoutIds = dataUser.user.schedule.workouts.map(w => w.workoutId);
+    workouts.forEach((workoutInfo) => {
+      const { name } = workoutInfo.name;
+      
+      // Check if the workout is a rest day or not
+      if (name === 'Rest') {
+        restDays.push(workoutInfo.day); // Store the ID of rest days
+      } else {
+        workoutDays.push(workoutInfo.day); // Store the ID of workout days
+      }
+    });
   
-        const workouts = await Promise.all(workoutIds.map(async id => {
-          const { data } = await client.query({
-            query: FETCH_WORKOUT_BY_ID,
-            variables: { workoutId: id },
-          });
-          return data.workout;
-        }));
-  
-        const calendarEvents = [];
-  
-        for (let i = 0; i < weeks; i++) {
-          workouts.forEach((workout, index) => {
-            let workoutDate = moment(startDate).add(i, 'weeks').day(dataUser.user.schedule.workouts[index].day);
-        
-            // Only add the workout to the calendar if it's on or after the startDate
-            if (workoutDate.isSameOrAfter(startDate, 'day')) {
-              calendarEvents.push({
-                workoutId: workout,
-                id: index,
-                title: workout?.name,
-                notes: workout?.notes,
-                start: workoutDate.toDate(),
-                end: workoutDate.toDate(),
-                allDay: true,
-              });
-            }
-          });
-        }
-        
-        setEvents(calendarEvents);
+      for (let i = 0; i < weeks; i++) {
+        workoutDays.forEach((day, index) => {
+          let workoutDate = moment(startDate).add(i, 'weeks').day(day);
+    
+          // Determine which workout to use based on the week number (i)
+          let workoutIndex = i % 2 === 0 ? index : (index + 1) % workouts.length;
+          let workout = workouts[workoutIndex];
+    
+          if (workoutDate.isSameOrAfter(startDate, 'day')) {
+            calendarEvents.push({
+              workoutId: workout,
+              id: workoutIndex,
+              title: workout?.name,
+              notes: workout?.notes,
+              start: workoutDate.toDate(),
+              end: workoutDate.toDate(),
+              allDay: true,
+            });
+          }
+        });
+    
+        // Add rest days
+        restDays.forEach((day) => {
+          let restDate = moment(startDate).add(i, 'weeks').day(day);
+          if (restDate.isSameOrAfter(startDate, 'day')) {
+            calendarEvents.push({
+              id: 'rest',
+              title: 'Rest',
+              start: restDate.toDate(),
+              end: restDate.toDate(),
+              allDay: true,
+            });
+          }
+        });
       }
     };
-
-    fetchWorkouts();
-  }, [dataUser, client]);
-
+  
+     
+    useEffect(() => {
+      const fetchWorkouts = async () => {
+        if (dataUser && dataUser.user && dataUser.user.schedule) {
+          const type = dataUser.user.schedule.type;
+    
+          const roughDate = new Date(parseInt(dataUser.user.startDate));
+          const startDate = moment(roughDate); // Make sure this is in the correct format
+          const weeks = dataUser.user.weeks; // Number of weeks
+          setCompletedDays(dataUser.user.completedDays);
+          const workoutIds = dataUser.user.schedule.workouts.map(w => ({
+            workoutId: w.workoutId,
+            day: w.day,
+          }));
+          const workouts = await Promise.all(workoutIds.map(async id => {
+            const { data } = await client.query({
+              query: FETCH_WORKOUT_BY_ID,
+              variables: { workoutId: id.workoutId },
+            });
+            return { ...data.workout, day: id.day};
+          }));
+    
+          let calendarEvents = [];
+  
+          if (type === 'Repeating') {
+            // Use your existing logic for repeating schedules
+            for (let i = 0; i < weeks; i++) {
+              workouts.forEach((workout, index) => {
+                let workoutDate = moment(startDate).add(i, 'weeks').day(dataUser.user.schedule.workouts[index].day);
+    
+                // Only add the workout to the calendar if it's on or after the startDate
+                if (workoutDate.isSameOrAfter(startDate, 'day')) {
+                  calendarEvents.push({
+                    workoutId: workout,
+                    id: index,
+                    title: workout?.name,
+                    notes: workout?.notes,
+                    start: workoutDate.toDate(),
+                    end: workoutDate.toDate(),
+                    allDay: true,
+                  });
+                }
+              });
+            }
+          } else if (type === 'Alternating') {     
+             await generateAlternatingEvents(workouts, startDate, weeks, dataUser, calendarEvents); // Implement your logic or function here
+              
+          }
+    
+          setEvents(calendarEvents);
+        }
+      };
+    
+      fetchWorkouts();
+    }, [dataUser, client]);
   useEffect(() => {
     if (dataUser && dataUser.user && dataUser.user.schedule && dataUser.user.schedule.workouts) {
 
@@ -499,7 +562,7 @@ const UniqueUser = () => {
       )}
       {activeTab === 'view nutrition' && (
         <div>
-          <h2>Daily Tracking</h2>
+          <h2>{user.firstname} {user.lastname}'s Daily Tracking</h2>
       <button onClick={() => setCurrentStartWeek(Math.max(1, currentStartWeek - 4))}>Previous 4 Weeks</button>
       <button onClick={() => setCurrentStartWeek(currentStartWeek + 4)}>Next 4 Weeks</button>
       <Link to={`/admin/user/${user._id}/nutrition-trends`}>
@@ -549,7 +612,7 @@ const UniqueUser = () => {
       )}
       {activeTab === 'view progress' && (
         <div className="calendar-container">
-          <h2>User Progress</h2>
+          <h2>{user.firstname} {user.lastname}'s Progress</h2>
           <div id="calendar-box">
             <Calendar
               localizer={localizer}
