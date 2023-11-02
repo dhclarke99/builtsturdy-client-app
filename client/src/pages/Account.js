@@ -56,8 +56,8 @@ const Account = () => {
   const unixToString = (startDate) => {
 
     const convertedStartDate = new Date(parseInt(startDate))
-    return `${convertedStartDate.getMonth() + 1}/${convertedStartDate.getDate()}/${convertedStartDate.getFullYear()}`;
-
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'UTC'  };
+    return convertedStartDate.toLocaleDateString('en-US', options);
   };
 
   if (loading) return <p>Loading...</p>;

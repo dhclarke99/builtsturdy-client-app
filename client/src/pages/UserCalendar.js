@@ -72,50 +72,64 @@ const UserCalendar = () => {
   };
 
   const generateAlternatingEvents = async (workouts, startDate, weeks, userData, calendarEvents) => {
+    // Dynamically generate workoutDays and restDays based on the workouts array
+    const workoutDays = [];
+    const restDays = [];
+  
+    workouts.forEach((workoutInfo) => {
+      const { name } = workoutInfo;
+  
+      // Check if the workout is a rest day or not
+      if (name === 'Rest') {
+        restDays.push(workoutInfo.day); // Store the ID of rest days
+      } else {
+        workoutDays.push(workoutInfo.day); // Store the ID of workout days
+      }
+    });
 
-  // Dynamically generate workoutDays and restDays based on the workouts array
-  const workoutDays = [];
-  const restDays = [];
 
-  workouts.forEach((workoutInfo) => {
-    const { name } = workoutInfo.name;
-    
-    // Check if the workout is a rest day or not
-    if (name === 'Rest') {
-      restDays.push(workoutInfo.day); // Store the ID of rest days
-    } else {
-      workoutDays.push(workoutInfo.day); // Store the ID of workout days
-    }
-  });
-
+    console.log(workoutDays)
+    console.log(restDays)
     for (let i = 0; i < weeks; i++) {
+      const dayCounters = {}; // Create a counter for each day of the week
+  
       workoutDays.forEach((day, index) => {
         let workoutDate = moment(startDate).add(i, 'weeks').day(day);
+        const workoutInfo = workouts.find((info) => info.day === day);
   
-        // Determine which workout to use based on the week number (i)
-        let workoutIndex = i % 2 === 0 ? index : (index + 1) % workouts.length;
-        let workout = workouts[workoutIndex];
+        // Initialize the counter for this day if it doesn't exist
+        if (!dayCounters[day]) {
+          dayCounters[day] = 0;
+        }
   
-        if (workoutDate.isSameOrAfter(startDate, 'day')) {
+        // Check if it's a workout day for this week
+        if (dayCounters[day] % 2 === 0) {
           calendarEvents.push({
-            workoutId: workout,
-            id: workoutIndex,
-            title: workout?.name,
-            notes: workout?.notes,
+            workoutId: workoutInfo,
+            id: index,
+            title: workoutInfo?.name,
+            notes: workoutInfo?.notes,
             start: workoutDate.toDate(),
             end: workoutDate.toDate(),
             allDay: true,
           });
         }
+  
+        // Increment the counter for this day
+        dayCounters[day]++;
       });
   
       // Add rest days
       restDays.forEach((day) => {
         let restDate = moment(startDate).add(i, 'weeks').day(day);
+        const restWorkout = workouts.find((info) => info.day === day);
+  
         if (restDate.isSameOrAfter(startDate, 'day')) {
           calendarEvents.push({
+            workoutId: restWorkout,
             id: 'rest',
-            title: 'Rest',
+            title: restWorkout?.name,
+            notes: restWorkout?.notes,
             start: restDate.toDate(),
             end: restDate.toDate(),
             allDay: true,
@@ -124,6 +138,7 @@ const UserCalendar = () => {
       });
     }
   };
+  
 
    
   useEffect(() => {
@@ -244,6 +259,7 @@ const UserCalendar = () => {
 
 
   const handleEventClick = async (event) => {
+    console.log(event)
     await setCurrentVideoUrl(null);
     setShowForm(false);
     setSelectedEvent(event);
@@ -271,7 +287,8 @@ const UserCalendar = () => {
     videoRef.current.scrollIntoView({ behavior: 'smooth' }); // Scroll to the video section
   };
 
-  // console.log(userData)
+  console.log(userData)
+  console.log(events)
   if (userLoading) return <p>Loading...</p>;
   if (userError) return <p>Error: {userError.message}</p>;
  
