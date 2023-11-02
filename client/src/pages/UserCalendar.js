@@ -75,7 +75,7 @@ const UserCalendar = () => {
     // Dynamically generate workoutDays and restDays based on the workouts array
     const workoutDays = [];
     const restDays = [];
-  
+  console.log("startDate alternating: ", startDate)
     workouts.forEach((workoutInfo) => {
       const { name } = workoutInfo;
   
@@ -147,8 +147,13 @@ const UserCalendar = () => {
         const type = userData.user.schedule.type;
         setScheduleType(type);
   
-        const roughDate = new Date(parseInt(userData.user.startDate));
-        const startDate = moment(roughDate); // Make sure this is in the correct format
+        const roughDate = new Date(parseInt(userData.user.startDate)).toUTCString();
+console.log(roughDate)
+        // Create a moment object with the provided UNIX timestamp and set it to UTC
+        const startDate = moment(roughDate);
+        // startDate.utc();
+        console.log("Start Date: ", startDate)
+     
         const weeks = userData.user.weeks; // Number of weeks
         setCompletedDays(userData.user.completedDays);
         const workoutIds = userData.user.schedule.workouts.map(w => ({
@@ -169,10 +174,13 @@ const UserCalendar = () => {
           // Use your existing logic for repeating schedules
           for (let i = 0; i < weeks; i++) {
             workouts.forEach((workout, index) => {
-              let workoutDate = moment(startDate).add(i, 'weeks').day(userData.user.schedule.workouts[index].day);
-  
+              let workoutDate = moment(roughDate).add(i, 'weeks').day(userData.user.schedule.workouts[index].day);
+              // workoutDate = workoutDate.utc();
+              // if (workoutDate.isBefore(startDate, 'day')) {
+              //   return;
+              // }
               // Only add the workout to the calendar if it's on or after the startDate
-              if (workoutDate.isSameOrAfter(startDate, 'day')) {
+              if (workoutDate.isAfter(roughDate, 'day')) {
                 calendarEvents.push({
                   workoutId: workout,
                   id: index,
