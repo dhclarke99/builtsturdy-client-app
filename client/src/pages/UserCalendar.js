@@ -72,64 +72,63 @@ const UserCalendar = () => {
   };
 
   const generateAlternatingEvents = async (workouts, startDate, weeks, userData, calendarEvents) => {
-    // Dynamically generate workoutDays and restDays based on the workouts array
+    console.log(workouts);
     const workoutDays = [];
     const restDays = [];
-  console.log("startDate alternating: ", startDate)
+    console.log("startDate alternating: ", startDate);
+  
+    // Separate the workout days and rest days into two arrays
     workouts.forEach((workoutInfo) => {
       const { name } = workoutInfo;
-  
-      // Check if the workout is a rest day or not
-      if (name === 'Rest') {
-        restDays.push(workoutInfo.day); // Store the ID of rest days
+      if (name.toLowerCase() === 'rest') {
+        restDays.push(workoutInfo);
       } else {
-        workoutDays.push(workoutInfo.day); // Store the ID of workout days
+        workoutDays.push(workoutInfo);
+      }
+    });
+  
+    console.log(workoutDays);
+    console.log(restDays);
+  
+    // Iterate over the number of weeks
+    for (let week = 0; week < weeks; week++) {
+      // Flip the assignment of workout IDs for Monday and Friday every week
+    // Flip the assignment of workout IDs for Monday and Friday every week
+    let isEvenWeek = week % 2 === 0;
+    let mondayFridayWorkout = isEvenWeek ? workoutDays[0] : workoutDays[1];
+    let wednesdayWorkout = isEvenWeek ? workoutDays[1] : workoutDays[0];
+
+    // Assign workouts to Monday, Wednesday, and Friday
+    let workoutInfoMonday = {...mondayFridayWorkout, day: 'Monday'};
+    let workoutInfoWednesday = {...wednesdayWorkout, day: 'Wednesday'};
+    let workoutInfoFriday = {...mondayFridayWorkout, day: 'Friday'};
+
+    // Schedule the workouts for Monday, Wednesday, and Friday
+    [workoutInfoMonday, workoutInfoWednesday, workoutInfoFriday].forEach((workoutInfo) => {
+      let workoutDate = moment(startDate).add(week, 'weeks').day(workoutInfo.day);
+      if (moment(workoutDate).isValid()) {
+        calendarEvents.push({
+          workoutId: workoutInfo,
+          id: `${workoutInfo.id}-${week}-${workoutInfo.day}`,
+          title: workoutInfo.name,
+          notes: workoutInfo.notes,
+          start: workoutDate.toDate(),
+          end: workoutDate.toDate(),
+          allDay: true,
+        });
       }
     });
 
-
-    console.log(workoutDays)
-    console.log(restDays)
-    for (let i = 0; i < weeks; i++) {
-      const dayCounters = {}; // Create a counter for each day of the week
   
-      workoutDays.forEach((day, index) => {
-        let workoutDate = moment(startDate).add(i, 'weeks').day(day);
-        const workoutInfo = workouts.find((info) => info.day === day);
-  
-        // Initialize the counter for this day if it doesn't exist
-        if (!dayCounters[day]) {
-          dayCounters[day] = 0;
-        }
-  
-        // Check if it's a workout day for this week
-        if (dayCounters[day] % 2 === 0) {
+      // Schedule rest days
+      restDays.forEach((restInfo) => {
+        let restDate = moment(startDate).add(week, 'weeks').day(restInfo.day);
+        if (moment(restDate).isValid() && restDate.isAfter(startDate, 'day')) {
           calendarEvents.push({
-            workoutId: workoutInfo,
-            id: index,
-            title: workoutInfo?.name,
-            notes: workoutInfo?.notes,
-            start: workoutDate.toDate(),
-            end: workoutDate.toDate(),
-            allDay: true,
-          });
-        }
-  
-        // Increment the counter for this day
-        dayCounters[day]++;
-      });
-  
-      // Add rest days
-      restDays.forEach((day) => {
-        let restDate = moment(startDate).add(i, 'weeks').day(day);
-        const restWorkout = workouts.find((info) => info.day === day);
-  
-        if (restDate.isSameOrAfter(startDate, 'day')) {
-          calendarEvents.push({
-            workoutId: restWorkout,
-            id: 'rest',
-            title: restWorkout?.name,
-            notes: restWorkout?.notes,
+            workoutId: restInfo,
+            id: `rest-${week}-${restInfo.day}`,
+            title: restInfo.name,
+            notes: restInfo.notes,
             start: restDate.toDate(),
             end: restDate.toDate(),
             allDay: true,
@@ -138,6 +137,7 @@ const UserCalendar = () => {
       });
     }
   };
+  
   
 
    
