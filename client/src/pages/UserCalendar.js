@@ -72,50 +72,63 @@ const UserCalendar = () => {
   };
 
   const generateAlternatingEvents = async (workouts, startDate, weeks, userData, calendarEvents) => {
-
-  // Dynamically generate workoutDays and restDays based on the workouts array
-  const workoutDays = [];
-  const restDays = [];
-
-  workouts.forEach((workoutInfo) => {
-    const { name } = workoutInfo.name;
-    
-    // Check if the workout is a rest day or not
-    if (name === 'Rest') {
-      restDays.push(workoutInfo.day); // Store the ID of rest days
-    } else {
-      workoutDays.push(workoutInfo.day); // Store the ID of workout days
-    }
-  });
-
-    for (let i = 0; i < weeks; i++) {
-      workoutDays.forEach((day, index) => {
-        let workoutDate = moment(startDate).add(i, 'weeks').day(day);
+    console.log(workouts);
+    const workoutDays = [];
+    const restDays = [];
+    console.log("startDate alternating: ", startDate);
   
-        // Determine which workout to use based on the week number (i)
-        let workoutIndex = i % 2 === 0 ? index : (index + 1) % workouts.length;
-        let workout = workouts[workoutIndex];
+    // Separate the workout days and rest days into two arrays
+    workouts.forEach((workoutInfo) => {
+      const { name } = workoutInfo;
+      if (name.toLowerCase() === 'rest') {
+        restDays.push(workoutInfo);
+      } else {
+        workoutDays.push(workoutInfo);
+      }
+    });
   
-        if (workoutDate.isSameOrAfter(startDate, 'day')) {
+    console.log(workoutDays);
+    console.log(restDays);
+  
+    // Iterate over the number of weeks
+    for (let week = 0; week < weeks; week++) {
+      // Flip the assignment of workout IDs for Monday and Friday every week
+    // Flip the assignment of workout IDs for Monday and Friday every week
+    let isEvenWeek = week % 2 === 0;
+    let mondayFridayWorkout = isEvenWeek ? workoutDays[0] : workoutDays[1];
+    let wednesdayWorkout = isEvenWeek ? workoutDays[1] : workoutDays[0];
+
+    // Assign workouts to Monday, Wednesday, and Friday
+    let workoutInfoMonday = {...mondayFridayWorkout, day: 'Monday'};
+    let workoutInfoWednesday = {...wednesdayWorkout, day: 'Wednesday'};
+    let workoutInfoFriday = {...mondayFridayWorkout, day: 'Friday'};
+
+    // Schedule the workouts for Monday, Wednesday, and Friday
+    [workoutInfoMonday, workoutInfoWednesday, workoutInfoFriday].forEach((workoutInfo) => {
+      let workoutDate = moment(startDate).add(week, 'weeks').day(workoutInfo.day);
+      if (moment(workoutDate).isValid()) {
+        calendarEvents.push({
+          workoutId: workoutInfo,
+          id: `${workoutInfo.id}-${week}-${workoutInfo.day}`,
+          title: workoutInfo.name,
+          notes: workoutInfo.notes,
+          start: workoutDate.toDate(),
+          end: workoutDate.toDate(),
+          allDay: true,
+        });
+      }
+    });
+
+  
+      // Schedule rest days
+      restDays.forEach((restInfo) => {
+        let restDate = moment(startDate).add(week, 'weeks').day(restInfo.day);
+        if (moment(restDate).isValid() && restDate.isAfter(startDate, 'day')) {
           calendarEvents.push({
-            workoutId: workout,
-            id: workoutIndex,
-            title: workout?.name,
-            notes: workout?.notes,
-            start: workoutDate.toDate(),
-            end: workoutDate.toDate(),
-            allDay: true,
-          });
-        }
-      });
-  
-      // Add rest days
-      restDays.forEach((day) => {
-        let restDate = moment(startDate).add(i, 'weeks').day(day);
-        if (restDate.isSameOrAfter(startDate, 'day')) {
-          calendarEvents.push({
-            id: 'rest',
-            title: 'Rest',
+            workoutId: restInfo,
+            id: `rest-${week}-${restInfo.day}`,
+            title: restInfo.name,
+            notes: restInfo.notes,
             start: restDate.toDate(),
             end: restDate.toDate(),
             allDay: true,
@@ -124,6 +137,8 @@ const UserCalendar = () => {
       });
     }
   };
+  
+  
 
    
   useEffect(() => {
@@ -132,8 +147,13 @@ const UserCalendar = () => {
         const type = userData.user.schedule.type;
         setScheduleType(type);
   
-        const roughDate = new Date(parseInt(userData.user.startDate));
-        const startDate = moment(roughDate); // Make sure this is in the correct format
+        const roughDate = new Date(parseInt(userData.user.startDate)).toUTCString();
+console.log(roughDate)
+        // Create a moment object with the provided UNIX timestamp and set it to UTC
+        const startDate = moment(roughDate);
+        // startDate.utc();
+        console.log("Start Date: ", startDate)
+     
         const weeks = userData.user.weeks; // Number of weeks
         setCompletedDays(userData.user.completedDays);
         const workoutIds = userData.user.schedule.workouts.map(w => ({
@@ -154,10 +174,13 @@ const UserCalendar = () => {
           // Use your existing logic for repeating schedules
           for (let i = 0; i < weeks; i++) {
             workouts.forEach((workout, index) => {
-              let workoutDate = moment(startDate).add(i, 'weeks').day(userData.user.schedule.workouts[index].day);
-  
+              let workoutDate = moment(roughDate).add(i, 'weeks').day(userData.user.schedule.workouts[index].day);
+              // workoutDate = workoutDate.utc();
+              // if (workoutDate.isBefore(startDate, 'day')) {
+              //   return;
+              // }
               // Only add the workout to the calendar if it's on or after the startDate
-              if (workoutDate.isSameOrAfter(startDate, 'day')) {
+              if (workoutDate.isAfter(roughDate, 'day')) {
                 calendarEvents.push({
                   workoutId: workout,
                   id: index,
@@ -244,6 +267,7 @@ const UserCalendar = () => {
 
 
   const handleEventClick = async (event) => {
+    console.log(event)
     await setCurrentVideoUrl(null);
     setShowForm(false);
     setSelectedEvent(event);
@@ -271,7 +295,8 @@ const UserCalendar = () => {
     videoRef.current.scrollIntoView({ behavior: 'smooth' }); // Scroll to the video section
   };
 
-  // console.log(userData)
+  console.log(userData)
+  console.log(events)
   if (userLoading) return <p>Loading...</p>;
   if (userError) return <p>Error: {userError.message}</p>;
  
