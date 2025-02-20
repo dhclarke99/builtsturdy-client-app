@@ -1,34 +1,31 @@
 const db = require('../config/connection');
 const { User, Exercise } = require('../models');
 const userData = require('./userData.json');
-const exerciseData = require('./exerciseData.json');
+const bcrypt = require('bcrypt');
 
 const seedDatabase = async () => {
   try {
-    // Check if admin user already exists
-    const adminUser = await User.findOne({ role: 'Admin' });
-    
-    if (!adminUser) {
-      await User.create(userData[0]);
-      console.log('Admin user seeded!');
+    // Find and delete the existing Admin user
+    const deletedAdmin = await User.findOneAndDelete({ role: 'Admin' });
+
+    if (deletedAdmin) {
+      console.log(`Deleted existing Admin user: ${deletedAdmin.email}`);
     } else {
-      console.log('Admin user already exists.');
+      console.log('No existing Admin user found.');
     }
 
-    const existingExerciseData = await Exercise.find({});
-    
-    if (existingExerciseData.length === 0) {
-      await Exercise.insertMany(exerciseData);
-      console.log('Exercise data seeded!');
-    } else {
-      console.log('Exercise data already exists.');
-    }
+    // Hash the new Admin user's password before inserting
+    const saltRounds = 10;
+    userData[0].password = await bcrypt.hash(userData[0].password, saltRounds);
 
-    console.log('all done!');
-    db.close();  // Close the database connection
+    await User.create(userData[0]);
+    console.log('New Admin user seeded!');
+
+    console.log('All done!');
+    db.close(); // Close the database connection
   } catch (error) {
     console.error('An error occurred while seeding:', error);
   }
 };
 
-seedDatabase();  // Run the seed function
+seedDatabase(); // Run the seed function
