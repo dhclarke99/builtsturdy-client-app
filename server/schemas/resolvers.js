@@ -1,6 +1,7 @@
 const { AuthenticationError } = require('apollo-server-express');
 const { User, Workout, Exercise, Schedule, Recipe} = require('../models');
 const { signToken } = require('../utils/auth');
+const bcrypt = require('bcrypt');
 
 const resolvers = {
   Query: {
@@ -155,26 +156,34 @@ const resolvers = {
     },
     login: async (_parent, { email, password }) => {
       try {
-        const user = await User.findOne({ email });
-        if (!user) {
-          throw new AuthenticationError('Invalid email');
-        }
-        
-
-        const correctPassword = await user.isCorrectPassword(password);
-
-        
-
-        if (!correctPassword) {
-          throw new AuthenticationError('Invalid password');
-        }
-        const token = signToken(user);
-        return { token, user };
+          const user = await User.findOne({ email });
+          if (!user) {
+              console.log("🚨 No user found for email:", email);
+              throw new AuthenticationError('Invalid email');
+          }
+  
+          console.log("✅ Found User:", user.email);
+          console.log("🔒 Stored Hashed Password:", user.password);
+          console.log("🔑 Entered Plain Password:", password);
+  
+          // Perform password comparison
+          const correctPassword = await bcrypt.compare(password, user.password);
+          console.log("🔍 Password Match Result:", correctPassword);
+  
+          if (!correctPassword) {
+              console.log("🚨 Password mismatch error.");
+              throw new AuthenticationError('Invalid password');
+          }
+  
+          const token = signToken(user);
+          console.log("✅ Login successful! Token generated.");
+          return { token, user };
       } catch (err) {
-        console.log(err);
-        throw new Error('Failed to login');
+          console.log("🔥 Login error:", err);
+          throw new Error('Failed to login');
       }
-    },
+  },
+  
     logout: (_, __, context) => {
       // If using cookies
       context.res.clearCookie('token');

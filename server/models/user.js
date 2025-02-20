@@ -221,8 +221,13 @@ userSchema.pre('save', async function (next) {
 
 userSchema.pre('save', async function (next) {
     if (this.isNew || this.isModified('password')) {
-        const saltRounds = 10;
-        this.password = await bcrypt.hash(this.password, saltRounds);
+        // Check if the password is already hashed
+        if (!this.password.startsWith('$2b$')) { // Only hash if it's not already hashed
+            console.log("🔄 Hashing password before saving:", this.password);
+            const saltRounds = 10;
+            this.password = await bcrypt.hash(this.password, saltRounds);
+            console.log("✅ Hashed Password:", this.password);
+        }
     }
     next();
 });
